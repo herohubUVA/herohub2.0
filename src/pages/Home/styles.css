@@ -110,12 +110,32 @@ header .container {
   color: var(--lightTwo);
   margin-left: 4.5rem;
   display: inline-block;
-  transition: 0.3s;
+  transition: color 0.3s, transform 0.3s;
+  position: relative;
+  padding: 0.3rem 1.3rem;
+  overflow: hidden;
+}
+
+.links a::after {
+  content: "";
+  width: 0%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 20px;
+  background-color: #C8EBB1;
+  z-index: -1;
+  transition: width 0.5s;
 }
 
 .links a:hover {
   color: var(--hoverColor);
   transform: scale(1.05);
+}
+
+.links a:hover::after {
+  width: 100%;
 }
 
 .btn {
