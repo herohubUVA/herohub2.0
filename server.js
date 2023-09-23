@@ -16,6 +16,16 @@ app.use(express.static('public'));
 // Middleware to serve static files from 'src/pages/CharacterEncyclopedia' directory
 app.use('/CharacterEncyclopedia', express.static(path.resolve(__dirname, 'src/pages/CharacterEncyclopedia')));
 
+// Middleware to serve static files from 'src/pages/HeroMetrics' directory
+app.use('/HeroMetrics', express.static(path.resolve(__dirname, 'src/pages/HeroMetrics')));
+
+// Middleware to serve static files from 'src/pages/StoryOfTheDay' directory
+app.use('/StoryOfTheDay', express.static(path.resolve(__dirname, 'src/pages/StoryOfTheDay')));
+
+// Middleware to serve static files from 'src/pages/CharacterBookmark' directory
+app.use('/CharacterBookmark', express.static(path.resolve(__dirname, 'src/pages/CharacterBookmark')));
+
+
 // Middleware to serve static files from 'src' directory
 app.use(express.static(__dirname + '/src'));
 
