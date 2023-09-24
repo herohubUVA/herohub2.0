@@ -23,7 +23,7 @@ app.use('/HeroMetrics', express.static(path.resolve(__dirname, 'src/pages/HeroMe
 app.use('/StoryOfTheDay', express.static(path.resolve(__dirname, 'src/pages/StoryOfTheDay')));
 
 // Middleware to serve static files from 'src/pages/CharacterBookmark' directory
-app.use('/CharacterBookmark', express.static(path.resolve(__dirname, 'src/pages/CharacterBookmark')));
+app.use('/CharacterBookmarks', express.static(path.resolve(__dirname, 'src/pages/CharacterBookmarks')));
 
 
 // Middleware to serve static files from 'src' directory

@@ -279,7 +279,8 @@ header .container {
   z-index: 0;
   width: 500px;
   bottom: -180px;
-  left: -50px;
+  left: -60px;
+  top: 350px;
   opacity: 0.1;
 }
 
