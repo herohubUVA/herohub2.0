@@ -49,3 +49,21 @@ function events() {
 }
 
 events();
+
+
+
+const playButton = document.querySelector('.play-button');
+const audio = document.getElementById('homePageSong1');
+let isPlaying = false;
+
+playButton.addEventListener('click', function() {
+  if (!isPlaying) {
+      audio.play();
+      playButton.src = '/assets/images/pause.png';  // Switch to pause icon
+  } else {
+      audio.pause();
+      playButton.src = '/assets/images/play.png';  // Switch back to play icon
+  }
+  isPlaying = !isPlaying;
+});
+

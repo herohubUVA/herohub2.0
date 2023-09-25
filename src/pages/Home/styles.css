@@ -412,3 +412,19 @@ header .container {
     font-size: 0.8rem;
   }
 }
+
+
+.play-button {
+  position: fixed;
+  bottom: 2%;
+  left: 50%; 
+  transform: translateX(-50%);
+  width: 40px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.play-button:hover {
+  opacity: 0.8;
+}
+
