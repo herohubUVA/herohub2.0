@@ -67,3 +67,20 @@ playButton.addEventListener('click', function() {
   isPlaying = !isPlaying;
 });
 
+
+const volumeBars = document.querySelectorAll('.volume-bar');
+
+volumeBars.forEach((bar) => {
+  bar.addEventListener('click', function() {
+    audio.volume = this.getAttribute('data-level') / (volumeBars.length - 1);
+
+    // Highlight the active bars
+    volumeBars.forEach((innerBar, index) => {
+      if (index <= this.getAttribute('data-level')) {
+        innerBar.classList.add('active');
+      } else {
+        innerBar.classList.remove('active');
+      }
+    });
+  });
+});

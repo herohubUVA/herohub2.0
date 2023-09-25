@@ -414,17 +414,45 @@ header .container {
 }
 
 
-.play-button {
+.audio-controls {
   position: fixed;
   bottom: 2%;
-  left: 50%; 
+  left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;  /* spacing between play button and volume control */
+  z-index: 1000;
+}
+
+.play-button {
   width: 40px;
   cursor: pointer;
-  z-index: 1000;
 }
 
 .play-button:hover {
   opacity: 0.8;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.volume-bar {
+  width: 5px;
+  height: 40px;
+  margin: 0 2px;
+  background-color: lightgray;
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.volume-bar:hover {
+  width: 10px;
+}
+
+.volume-bar.active {
+  background-color: #333;
 }
 
