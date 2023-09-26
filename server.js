@@ -18,6 +18,18 @@ app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia');
 });
 
+app.get('/HeroMetrics', (req, res) => {
+  res.render('heroMetrics');
+});
+
+app.get('/StoryOfTheDay', (req, res) => {
+  res.render('storyOfTheDay');
+});
+
+app.get('/CharacterBookmarks', (req, res) => {
+  res.render('characterBookmarks');
+});
+
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
