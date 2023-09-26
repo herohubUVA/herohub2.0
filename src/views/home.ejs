@@ -6,34 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing Page With Light/Dark Mode</title>
     
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/assets/css/home.css" />
+    <link rel="stylesheet" href="/assets/css/navbar.css">
   </head>
   <body>
     <main>
       <div class="big-wrapper light">
-        <img src="../../assets/images/spiderman.png" alt="" class="shape" />
+        <img src="/assets/images/spiderman.png" alt="" class="shape" />
 
         <header>
           <div class="container">
-            <div class="logo">
-              <h3>Hero Hub</h3>
-            </div>
-            
-            
-            <div class="links">
-              <ul>
-                <li><a href="/CharacterEncyclopedia">Character Encyclopedia</a></li>
-                <li><a href="/HeroMetrics">Hero Metrics</a></li>
-                <li><a href="/StoryOfTheDay">Story of the Day</a></li>
-                <li><a href="/CharacterBookmarks">Character Bookmarks</a></li>
-                <li><a href="#" class="btn">Register</a></li>
-              </ul>
-            </div>
-
-            <div class="overlay"></div>
-            <div class="hamburger-menu">
-              <div class="bar"></div>
-            </div>
+            <%- include('partials/navbar') %>
           </div>
         </header>
 
@@ -77,8 +60,6 @@
           <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
       </audio>
 
-        
-
         <div class="bottom-area">
           <div class="container">
             <button class="toggle-btn">
@@ -90,9 +71,8 @@
       </div>
     </main>
 
-    <!-- JavaScript Files -->
-
+    
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <script src="./app.js"></script>
+    <script src="/assets/js/home.js"></script>
   </body>
 </html>

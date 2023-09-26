@@ -11,15 +11,11 @@
     background-color: #171821;
     width: 90%;
     max-width: 500px;
-    margin: 0 auto;
+    margin: 2em auto;
     padding: 3em 2em;
-    position: absolute;
-    transform: translateX(-50%);
-    left: 50%;
-    right: 50%;
-    top: 1em;
     border-radius: 1em;
-  }
+}
+
   .input-container {
     display: grid;
     grid-template-columns: 9fr 3fr;
