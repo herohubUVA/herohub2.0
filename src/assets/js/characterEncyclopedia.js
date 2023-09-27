@@ -1,25 +1,41 @@
+// Access DOM elements
 let input = document.getElementById("input-box");
 let button = document.getElementById("submit-button");
 let showContainer = document.getElementById("show-container");
 let listContainer = document.querySelector(".list");
+
+// Get time stamp
 let date = new Date();
 console.log(date.getTime());
 
 const [timestamp, apiKey, hashValue] = [ts, publicKey, hashVal];
 console.log(`Timestamp: ${timestamp}, API Key: ${apiKey}, Hash: ${hashValue}`);
 
+/**
+ * Displays the selected value in the input box
+ * and removes any existing suggestions.
+ * @param {string} value - The value to be displayed
+ */
 function displayWords(value) {
   input.value = value;
   removeElements();
 }
+/**
+ * Removes elements (search suggestions) from the listContainer.
+ */
 function removeElements() {
   listContainer.innerHTML = "";
 }
+
+// Event listener for showing character suggestions while typing
 input.addEventListener("keyup", async () => {
   removeElements();
+  
+  // If input value length is less than 4, exit early
   if (input.value.length < 4) {
     return false;
   }
+
   const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&nameStartsWith=${input.value}`;
   const response = await fetch(url);
   const jsonData = await response.json();
@@ -36,6 +52,8 @@ input.addEventListener("keyup", async () => {
     listContainer.appendChild(div);
   });
 });
+
+// Event listener for fetching and displaying character details upon button click
 button.addEventListener(
   "click",
   (getRsult = async () => {
@@ -58,6 +76,8 @@ button.addEventListener(
     });
   })
 );
+
+// Fetch and display character details on page load
 window.onload = () => {
   getRsult();
 };

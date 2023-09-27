@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Exo:wght@100&display=swap');
 
+/* Defines color variables for light theme */
 .light {
   --mainColor: #F57500;
   --hoverColor: #fb9c45;
@@ -8,6 +9,7 @@
   --darkTwo: #45424b;
 }
 
+/* Defines color variables for dark theme */
 .dark {
   --mainColor: #F57500;
   --hoverColor: #fb9c45;
@@ -41,6 +43,7 @@ a {
   text-decoration: none;
 }
 
+/* Defines styling for main div container for home page */
 .big-wrapper {
   position: relative;
   padding: 1.7rem 0 2rem;
@@ -53,6 +56,7 @@ a {
   justify-content: space-between;
 }
 
+/* Defines styling for container that holds main text and large hero image */
 .container {
   position: relative;
   max-width: 81rem;
@@ -69,6 +73,7 @@ a {
   justify-content: center;
 }
 
+/* Defines styling for main text */
 .big-title {
   font-size: 1.4rem;
   color: var(--darkOne);
@@ -93,6 +98,7 @@ a {
   transform: translate(15%, 25px);
 }
 
+/* Define styling for theme-switch button */
 .toggle-btn {
   display: inline-block;
   border: none;
@@ -127,6 +133,7 @@ a {
   display: none;
 }
 
+/* Defines styling for subtle picture */
 .shape {
   position: absolute;
   z-index: 0;
@@ -137,6 +144,7 @@ a {
   opacity: 0.1;
 }
 
+/* Accessed to copy same styling when switching themes */
 .copy {
   position: absolute;
   top: 0;
@@ -145,6 +153,9 @@ a {
   animation: appear 1s 1 both;
 }
 
+/*
+Defines animation for theme switch 
+*/
 @keyframes appear {
   0% {
     clip-path: circle(30% at -25% -25%);
@@ -209,6 +220,9 @@ a {
   }
 }
 
+/* 
+Music Control Styling
+*/
 .audio-controls {
   position: fixed;
   bottom: 2%;
@@ -216,7 +230,7 @@ a {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 15px;  /* spacing between play button and volume control */
+  gap: 15px;
   z-index: 1000;
 }
 
@@ -229,6 +243,10 @@ a {
   opacity: 0.8;
 }
 
+
+/* 
+Volume Control Styling
+*/
 .volume-control {
   display: flex;
   align-items: center;

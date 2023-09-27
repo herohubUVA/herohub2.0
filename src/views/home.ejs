@@ -4,22 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Landing Page With Light/Dark Mode</title>
+    <title>Hero Hub Home Page</title>
     
+    <!-- Accesses CSS files-->
     <link rel="stylesheet" href="/assets/css/home.css" />
     <link rel="stylesheet" href="/assets/css/navbar.css">
   </head>
+
   <body>
     <main>
       <div class="big-wrapper light">
         <img src="/assets/images/spiderman.png" alt="" class="shape" />
 
+        <!-- Accesses navigation bar -->
         <header>
           <div class="container">
             <%- include('partials/navbar') %>
           </div>
         </header>
 
+        <!-- Displays main text on screen -->
         <div class="showcase-area">
           <div class="container">
             <div class="left">
@@ -41,6 +45,7 @@
           </div>
         </div>
         
+        <!-- Music Play/Pause Control and Volume Bar -->
         <div class="audio-controls">
           <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
           <div class="volume-control">
@@ -60,18 +65,20 @@
           <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
       </audio>
 
+        <!-- Theme Change Button -->
         <div class="bottom-area">
-          <div class="container">
-            <button class="toggle-btn">
-              <i class="far fa-moon"></i>
-              <i class="far fa-sun"></i>
-            </button>
-          </div>
+            <div class="container">
+              <button class="toggle-btn">
+                <i class="far fa-moon"></i>
+                <i class="far fa-sun"></i>
+              </button>
+            </div>
         </div>
+
       </div>
     </main>
 
-    
+    <!-- Access Javascript Code -->
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/home.js"></script>
   </body>
