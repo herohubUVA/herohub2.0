@@ -1,40 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Character Encyclopedia</title>
+    <title>Story of the Day</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
-
-    <!-- CSS Stylesheets -->
-    <link rel="stylesheet" href="/assets/css/characterEncyclopedia.css">
+    <!-- Accesses CSS files-->
     <link rel="stylesheet" href="/assets/css/navbar.css">
+    <link rel="stylesheet" href="/assets/css/characterEncyclopedia.css" />
 </head>
 
 <body>
+    <main>
+        <div class="big-wrapper light">
 
-    <!-- Accesses navigation bar -->
-    <header>
-      <div class="navbar-container">
-        <%- include('partials/navbar') %>
-      </div>
-    </header>
-    
-    <!-- Chracter Search Feature -->
-    <div class="container">
-        <div class="input-container">
-            <input type="text" class="input" value="iron man" id="input-box" />
-            <button class="button" id="submit-button">Submit</button>
+            <!-- Accesses navigation bar -->
+            <header>
+                <div class="container">
+                    <%- include('partials/navbar') %>
+                </div>
+            </header>
+
+            <div class="search-container">
+              <!-- All your search elements (input, button, results) go here -->
+              <div class="container">
+                <div class="input-container">
+                    <input type="text" class="input" value="iron man" id="input-box" />
+                    <button class="button" id="submit-button">Submit</button>
+                </div>
+                <div class="list"></div>
+                <div class="display-container" id="show-container"></div>
+              </div>
+           </div>
+           
+
+            <!-- Music Play/Pause Control and Volume Bar -->
+            <div class="audio-controls">
+                <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
+                <div class="volume-control">
+                  <div class="volume-bar" data-level="0"></div>
+                  <div class="volume-bar" data-level="1"></div>
+                  <div class="volume-bar" data-level="2"></div>
+                  <div class="volume-bar" data-level="3"></div>
+                  <div class="volume-bar" data-level="4"></div>
+                  <div class="volume-bar" data-level="5"></div>
+                  <div class="volume-bar" data-level="6"></div>
+                  <div class="volume-bar" data-level="7"></div>
+                  <div class="volume-bar" data-level="8"></div>
+                  <div class="volume-bar" data-level="9"></div>
+                </div>
+            </div>
+            <audio id="storyPageSong" loop>
+                <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
+            </audio>
+
+            <!-- Theme Change Button -->
+            <div class="bottom-area">
+                <div class="container">
+                    <button class="toggle-btn">
+                        <i class="far fa-moon"></i>
+                        <i class="far fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+
         </div>
-        <div class="list"></div>
-        <div class="display-container" id="show-container"></div>
-    </div>
+    </main>
 
-    <!-- Accesses API Data -->
+    <!-- Access Javascript Code -->
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <script src="/assets/js/themeToggler.js"></script>
+    <script src="/assets/js/audioControls.js"></script>
     <script src="/assets/js/characterApiData.js"></script>
-
-    <!-- Accesses JavaScript -->
     <script src="/assets/js/characterEncyclopedia.js"></script>
 </body>
+
 </html>
