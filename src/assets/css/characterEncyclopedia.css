@@ -13,6 +13,15 @@ body {
   background-color: #e01a38;
 }
 
+.navbar-container {
+  position: relative;
+  max-width: 81rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 3rem;
+  z-index: 10;
+}
+
 /* Box Container Styling */
 .container {
     background-color: #171821;

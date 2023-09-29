@@ -14,6 +14,10 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
+app.get('/Home', (req, res) => {
+  res.render('home');
+});
+
 app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia');
 });

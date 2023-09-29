@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Exo:wght@100&display=swap');
+
 /* Container styling for the navigation bar*/
 .navbar {
   display: flex;
@@ -7,12 +9,22 @@
 
 /* Defines color variables for the light theme */
 .light {
-    --mainColor: #F57500;
-    --hoverColor: #fb9c45;
-    --backgroundColor: #f1f8fc;
-    --darkOne: #312f3a;
-    --darkTwo: #45424b;
-  }
+  --mainColor: #F57500;
+  --hoverColor: #fb9c45;
+  --backgroundColor: #f1f8fc;
+  --darkOne: #312f3a;
+  --darkTwo: #45424b;
+}
+
+/* Defines color variables for dark theme */
+.dark {
+  --mainColor: #F57500;
+  --hoverColor: #fb9c45;
+  --backgroundColor: #192e3a;
+  --darkOne: #f3f3f3;
+  --darkTwo: #fff;
+}
+
   
 /* Styling for the logo */
 .logo {
@@ -247,3 +259,5 @@
     opacity: 1;
   }
 }
+
+
