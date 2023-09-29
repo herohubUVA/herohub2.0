@@ -18,6 +18,10 @@ app.get('/Home', (req, res) => {
   res.render('home');
 });
 
+app.get('/Test', (req, res) => {
+  res.render('test');
+});
+
 app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia');
 });
