@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 4000;
+const cron = require('node-cron');
+const fetch = require('node-fetch');
+const NodeCache = require('node-cache');
 
 // Use ejs as the view engine
 app.set('view engine', 'ejs');
@@ -37,6 +40,28 @@ app.get('/StoryOfTheDay', (req, res) => {
 app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks');
 });
+
+// Background job
+cron.schedule('0 0 * * *', async () => {
+  const stories = await fetchMultipleStoriesFromMarvelAPI();
+  myCache.set("stories", stories);
+});
+
+app.get('/fetch-story', async (req, res) => {
+  try {
+    const functionURL = 'https://us-east4-herohub-399200.cloudfunctions.net/fetch_stories';
+    const functionResponse = await fetch(functionURL);
+    const storyData = await functionResponse.json();
+    res.json(storyData);
+  } catch (error) {
+    console.error('Error fetching story:', error);
+    res.status(500).send('Error fetching story.');
+  }
+});
+
+const fetchMultipleStoriesFromMarvelAPI = async () => {
+  // some other function to get multiple stories
+};
 
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
