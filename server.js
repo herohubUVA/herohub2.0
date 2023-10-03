@@ -41,6 +41,11 @@ app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks');
 });
 
+app.get('/Login', (req, res) => {
+  res.render('login');
+});
+
+
 // Background job
 cron.schedule('0 0 * * *', async () => {
   const stories = await fetchMultipleStoriesFromMarvelAPI();
