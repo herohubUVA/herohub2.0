@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 4000;
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const NodeCache = require('node-cache');
+const db = require('./src/database/dbConnection');
 
 // Use ejs as the view engine
 app.set('view engine', 'ejs');
@@ -41,8 +42,8 @@ app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks');
 });
 
-app.get('/Login', (req, res) => {
-  res.render('login');
+app.get('/Auth', (req, res) => {
+  res.render('auth');
 });
 
 
