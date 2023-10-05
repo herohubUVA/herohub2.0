@@ -18,18 +18,18 @@
       <div class="forms-container">
         <div class="signin-signup">
           <!-- Sign In Form -->
-          <form action="#" class="sign-in-form">
+          <form action="/handleLogin" method="POST" class="sign-in-form">
             <h2 class="title">Sign In</h2>
             <div class="user-box">
-              <input type="text" required="">
-              <label for="">Username</label>
+                <input type="text" name="username" required="">
+                <label for="username">Username</label>
             </div>
             <div class="user-box">
-              <input type="password" required="">
-              <label for="">Password</label>
+                <input type="password" name="password" required="">
+                <label for="password">Password</label>
             </div>
 
-            <a href="#">
+            <a href="#" onclick="document.getElementById('signInForm').submit();">
               <span></span>
               <span></span>
               <span></span>
@@ -47,27 +47,28 @@
           </form>
 
           <!-- Sign Up Form -->
-          <form action="#" class="sign-up-form">
+          <form action="/handleSignup" method="POST" class="sign-up-form">
             <h2 class="title">Sign up</h2>
 
             <div class="user-box">
-              <input type="text" required="">
-              <label for="">Username</label>
+              <input type="text" name="username" required="">
+              <label for="username">Username</label>
+          </div>
+            <div class="user-box">
+                <input type="email" name="email" required="">
+                <label for="email">Email</label>
             </div>
             <div class="user-box">
-              <input type="email" required="">
-              <label for="">Email</label>
+                <input type="password" name="password" required="">
+                <label for="password">Password</label>
             </div>
-            <div class="user-box">
-              <input type="password" required="">
-              <label for="">Password</label>
-            </div>
-            <a href="#">
+          
+            <a href="#" onclick="document.getElementById('signUpForm').submit();">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
-              Login
+              Sign Up
             </a>
             <!-- Sign Up Through Google-->
             <p class="social-text">Or Sign Up Through Google</p>
