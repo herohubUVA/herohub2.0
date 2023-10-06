@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -13,6 +14,10 @@ app.set('views', path.join(__dirname, 'src', 'views'));
 
 // Middleware to serve assets directory which is inside 'src' directory
 app.use('/assets', express.static(path.join(__dirname, 'src', 'assets')));
+
+// Middleware to parse incoming request bodies from auth forms
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/', (req, res) => {
   res.render('home');
@@ -45,6 +50,62 @@ app.get('/CharacterBookmarks', (req, res) => {
 app.get('/Auth', (req, res) => {
   res.render('auth');
 });
+app.post('/handleLogin', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+      // Check if the user exists
+      const [users] = await db.execute('SELECT * FROM users WHERE username = ?', [username]);
+
+      if (users.length === 0) {
+          return res.status(400).send('User not found.');
+      }
+
+      const user = users[0];
+
+      // Check if the entered password matches the hashed password in the database
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+          return res.status(400).send('Incorrect password.');
+      }
+
+      // User is authenticated. You can create a session, issue a token, or simply redirect the user to a dashboard or home page
+      res.redirect('/Home'); // Redirecting to home page for simplicity
+
+  } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).send('Server error.');
+  }
+});
+
+
+app.post('/handleSignup', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+      // Check for existing user
+      const [existingUsers] = await db.execute('SELECT * FROM users WHERE username = ? OR email = ?', [username, email]);
+      
+      if (existingUsers.length > 0) {
+          return res.status(400).send('Username or email already exists.');
+      }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Insert new user into the database
+      await db.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
+
+      // Redirect user to auth page or somwhere else
+      res.redirect('/Auth');
+
+  } catch (error) {
+      console.error('Error during signup:', error);
+      res.status(500).send('Server error.');
+  }
+});
+
 
 
 // Background job

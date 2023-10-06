@@ -4,7 +4,7 @@ const pool = mysql.createPool({
   host: '34.145.188.12',
   user: 'gchin',
   password: 'bobthecat123',
-  database: 'hero-hub-db',
+  database: 'HeroHub',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
