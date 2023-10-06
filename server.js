@@ -26,8 +26,6 @@ passport.use(new GoogleStrategy({
   clientSecret: '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',
   callbackURL: 'http://localhost:4000/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
-  // Here, you'd typically find or create a user in your database using profile information
-  // For simplicity, we'll just pass the profile data forward
   return done(null, profile);
 }));
 
@@ -52,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get('/', (req, res) => {
-  res.render('home');
+  res.render('Auth');
 });
 
 app.get('/Home', (req, res) => {
