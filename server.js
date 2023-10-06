@@ -7,6 +7,38 @@ const cron = require('node-cron');
 const fetch = require('node-fetch');
 const NodeCache = require('node-cache');
 const db = require('./src/database/dbConnection');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+
+app.use(session({
+  secret: 'your_session_secret', // Choose a secret for session
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+  clientID: '114252243657-tv5hhi3s85u8urb38j36m6kfbc9hfmeu.apps.googleusercontent.com',
+  clientSecret: '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',
+  callbackURL: 'http://localhost:4000/auth/google/callback'
+}, (accessToken, refreshToken, profile, done) => {
+  // Here, you'd typically find or create a user in your database using profile information
+  // For simplicity, we'll just pass the profile data forward
+  return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
 
 // Use ejs as the view engine
 app.set('view engine', 'ejs');
@@ -46,6 +78,21 @@ app.get('/CharacterBookmarks', (req, res) => {
 app.get('/Auth', (req, res) => {
   res.render('auth');
 });
+
+// Route to start Google authentication
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+// Route for Google authentication callback
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/Auth' }),
+  (req, res) => {
+    // Successful authentication
+    res.redirect('/Home');
+});
+
+
 app.post('/handleLogin', async (req, res) => {
   const { username, password } = req.body;
 
