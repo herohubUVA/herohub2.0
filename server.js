@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const app = express();
 const PORT = process.env.PORT || 4000;
 const cron = require('node-cron');
@@ -22,12 +23,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
-  clientID: '114252243657-tv5hhi3s85u8urb38j36m6kfbc9hfmeu.apps.googleusercontent.com',
-  clientSecret: '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',
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: 'http://localhost:4000/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
   return done(null, profile);
 }));
+console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
+console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 passport.serializeUser((user, done) => {
   done(null, user);
