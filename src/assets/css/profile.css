@@ -283,6 +283,7 @@ Volume Control Styling
 
 
 .profile-dropdown {
+  z-index: 10002;
   position: relative;
   width: fit-content;
 }
@@ -304,8 +305,6 @@ Volume Control Styling
 .profile-dropdown-btn:hover {
   background-color: var(--secondary-light-2);
   box-shadow: var(--shadow);
-
-
 }
 
 .profile-img {
