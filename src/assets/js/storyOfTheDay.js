@@ -44,8 +44,3 @@ const fetchStoryFromServer = async () => {
     });
   }
 };
-
-// Fetch and display the story of the day when the page loads
-window.onload = () => {
-    fetchStoryFromServer();
-};

@@ -11,7 +11,7 @@ const db = require('./src/database/dbConnection');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
+const crypto = require('crypto');
 
 app.use(session({
   secret: 'your_session_secret', // Choose a secret for session
@@ -83,9 +83,27 @@ app.get('/HeroMetrics', (req, res) => {
   res.render('heroMetrics', { user: req.user });
 });
 
-app.get('/StoryOfTheDay', (req, res) => {
-  res.render('storyOfTheDay', { user: req.user });
+app.get('/StoryOfTheDay', async (req, res) => {
+  let story = await fetchMultipleStoriesFromMarvelAPI();
+  let error = null;
+
+  if (!story) {
+      // Fetch a random evergreen story from the database if no valid story from Marvel API
+      const [rows] = await db.execute('SELECT * FROM evergreen_stories ORDER BY RAND() LIMIT 1');
+      console.log("Fetched evergreen story:", rows);
+      story = rows[0];
+  }
+
+  if (!story) {
+      // If still no story, handle the error gracefully
+      console.log("Story is still not defined after fetching from DB:", story);
+      error = "Unable to fetch a story at this time.";
+  }
+  console.log("Rendering with:", {story: story, error: error});
+  res.render('storyOfTheDay', { user: req.user, story: story, error: error });
 });
+
+
 
 app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks', { user: req.user });
@@ -218,9 +236,38 @@ app.get('/fetch-story', async (req, res) => {
   }
 });
 
+const publicKey = '74bf7f7fb78ba016a3176fdd7b14f420';
+const privateKey = 'b17e64859983396bb77e7c0bd8925b43b1422d43';
+
 const fetchMultipleStoriesFromMarvelAPI = async () => {
-  // some other function to get multiple stories
+  const timestamp = Date.now().toString();
+
+  // Generate the MD5 hash
+  const hash = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+
+  // Construct the Marvel API URL
+  const url = `https://gateway.marvel.com:443/v1/public/stories?ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+
+  const storiesResponse = await fetch(url); 
+  const storiesData = await storiesResponse.json();
+
+  // Extract stories and select a random one
+  const stories = storiesData.data.results;
+  const randomStory = stories[Math.floor(Math.random() * stories.length)];
+
+  // Check if the random story is valid (has description, characters, and image)
+  if (randomStory && randomStory.description && randomStory.characters.items.length > 0) {
+      return {
+          title: randomStory.title,
+          description: randomStory.description,
+          characters: randomStory.characters.items.map(char => char.name).join(', '),
+          image_url: `${randomStory.thumbnail.path}.${randomStory.thumbnail.extension}`
+      };
+  }
+
+  return null;
 };
+
 
 // Start the server and print the port it's running on
 app.listen(PORT, () => {

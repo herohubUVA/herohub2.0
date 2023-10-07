@@ -27,12 +27,22 @@
             <div class="showcase-area">
                 <div class="container">
                     <div class="left">
-                        <div class="big-title">
-                            <h1>Story of the Day</h1>
-                        </div>
-                        <p class="text">
-                            Content
-                        </p>
+
+                        <% if (error && error !== null && error !== undefined) { %>
+                            <p>DEBUG: Error branch. Error: <%= error %></p>
+                        <% } else { %>
+                            <p>DEBUG: Story branch.</p>
+                            <!-- Display the story details -->
+                            <div class="story-container">
+                                <h2><%= story.title %></h2>
+                                <p><%= story.description %></p>
+                                <p>Characters: <%= story.characters %></p>
+                                <% if (story.image_url) { %>
+                                    <img src="<%= story.image_url %>" alt="<%= story.title %> image">
+                                <% } %>
+                            </div>
+                        <% } %>
+                        
                     </div>
 
                 </div>
