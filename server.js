@@ -99,7 +99,9 @@ app.get('/Analytics', (req, res) => {
   res.render('analytics', { user: req.user });
 });
 
-
+app.get('/Support', (req, res) => {
+  res.render('support', { user: req.user });
+});
 
 app.get('/Auth', (req, res) => {
   res.render('auth');
