@@ -95,6 +95,11 @@ app.get('/EditProfile', (req, res) => {
   res.render('editProfile', { user: req.user });
 });
 
+app.get('/Analytics', (req, res) => {
+  res.render('analytics', { user: req.user });
+});
+
+
 
 app.get('/Auth', (req, res) => {
   res.render('auth');
