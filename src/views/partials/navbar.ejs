@@ -1,3 +1,8 @@
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+/>
+
 <div class="navbar">
   <!--Main Logo Text -->
   <div class="logo">
@@ -11,9 +16,49 @@
       <li><a href="/HeroMetrics">Hero Metrics</a></li>
       <li><a href="/StoryOfTheDay">Story of the Day</a></li>
       <li><a href="/CharacterBookmarks">Character Bookmarks</a></li>
-      <li><a href="/Auth" class="btn">Register</a></li>
     </ul>
   </div>
+
+  <div class = "profile-dropdown">
+    <div class="profile-dropdown-btn" onclick="toggle()">
+      <div class="profile-img">
+        <i class="fa-solid fa-circle"></i>
+      </div>
+      <span>
+        Glendon Chin
+        <i class="fa-solid fa-angle-down"></i>
+      </span>
+    </div>
+
+    <ul class="profile-dropdown-list">
+      <li class="profile-dropdown-list-item">
+        <a href="#">
+          <i class = "fa-regular fa-user"> </i>
+          Edit Profile
+        </a>
+      </li>
+      <li class="profile-dropdown-list-item">
+        <a href="#">
+          <i class = "fa-solid fa-chart-line"> </i>
+          Analytics
+        </a>
+      </li>
+      <li class="profile-dropdown-list-item">
+        <a href="#">
+          <i class = "fa-regular fa-circle-question"> </i>
+          Help & Support
+        </a>
+      </li>
+      <hr />
+      <li class="profile-dropdown-list-item">
+        <a href="#">
+          <i class = "fa-solid fa-arrow-right-from-bracket"> </i>
+          Log out
+        </a>
+      </li>
+    </ul>
+  </div>
+
   <div class="overlay"></div>
 
   <!-- Hamburger Menu to accomodate smaller screen sizes -->

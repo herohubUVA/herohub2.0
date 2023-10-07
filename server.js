@@ -56,6 +56,10 @@ app.get('/', (req, res) => {
   res.render('Auth');
 });
 
+app.get('/Profile', (req, res) => {
+  res.render('Profile');
+});
+
 app.get('/Home', (req, res) => {
   res.render('home');
 });
