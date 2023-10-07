@@ -26,7 +26,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         <i class="fa-solid fa-circle"></i>
       </div>
       <span>
-        Glendon Chin
+        <%= user ? user.displayName : 'Guest' %> <!-- Assuming the name is in 'displayName' property -->
         <i class="fa-solid fa-angle-down"></i>
       </span>
     </div>

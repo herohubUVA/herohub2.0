@@ -19,7 +19,8 @@
         <!-- Accesses navigation bar -->
         <header>
           <div class="container">
-            <%- include('partials/navbar') %>
+            <%- include('partials/navbar', { user: user || null }) %>
+
           </div>
         </header>
 

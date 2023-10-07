@@ -33,11 +33,21 @@ console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.id);  // only store user ID in the session
 });
 
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
+passport.deserializeUser(async (id, done) => {
+  try {
+    // Fetch the user by ID from the database
+    const [users] = await db.execute('SELECT * FROM users WHERE id = ?', [id]);
+    if (users.length === 0) {
+      return done(null, false);  // No user found
+    }
+    const user = users[0];
+    done(null, { id: user.id, displayName: user.username });  // Pass user data to req.user
+  } catch (error) {
+    done(error);
+  }
 });
 
 
@@ -56,28 +66,29 @@ app.get('/', (req, res) => {
   res.render('Auth');
 });
 
-app.get('/Profile', (req, res) => {
-  res.render('Profile');
+app.get('/Home', (req, res) => {
+  res.render('Home', { user: req.user });
 });
 
-app.get('/Home', (req, res) => {
-  res.render('home');
+
+app.get('/CharacterEncyclopedia', (req, res) => {
+  res.render('characterEncyclopedia', { user: req.user });
 });
 
 app.get('/CharacterEncyclopedia', (req, res) => {
-  res.render('characterEncyclopedia');
+  res.render('characterEncyclopedia', { user: req.user });
 });
 
 app.get('/HeroMetrics', (req, res) => {
-  res.render('heroMetrics');
+  res.render('heroMetrics', { user: req.user });
 });
 
 app.get('/StoryOfTheDay', (req, res) => {
-  res.render('storyOfTheDay');
+  res.render('storyOfTheDay', { user: req.user });
 });
 
 app.get('/CharacterBookmarks', (req, res) => {
-  res.render('characterBookmarks');
+  res.render('characterBookmarks', { user: req.user });
 });
 
 app.get('/Auth', (req, res) => {
@@ -118,8 +129,21 @@ app.post('/handleLogin', async (req, res) => {
           return res.status(400).send('Incorrect password.');
       }
 
-      // User is authenticated. You can create a session, issue a token, or simply redirect the user to a dashboard or home page
-      res.redirect('/Home'); // Redirecting to home page for simplicity
+      // Set req.user to the authenticated user's data
+      req.user = {
+        id: user.id,  
+        displayName: user.username
+    };
+    
+    // Login the user and start the session
+    req.login(req.user, function(err) {
+        if (err) {
+            console.error('Error during session initiation:', err);
+            return res.status(500).send('Server error.');
+        }
+        // Redirect to the home page
+        res.redirect('/Home');
+    });
 
   } catch (error) {
       console.error('Error during login:', error);
