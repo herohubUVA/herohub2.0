@@ -236,8 +236,8 @@ app.get('/fetch-story', async (req, res) => {
   }
 });
 
-const publicKey = '74bf7f7fb78ba016a3176fdd7b14f420';
-const privateKey = 'b17e64859983396bb77e7c0bd8925b43b1422d43';
+const publicKey = process.env.MARVEL_PUBLIC_KEY;
+const privateKey = process.env.MARVEL_PRIVATE_KEY;
 
 const fetchMultipleStoriesFromMarvelAPI = async () => {
   const timestamp = Date.now().toString();
