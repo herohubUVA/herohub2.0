@@ -91,6 +91,11 @@ app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks', { user: req.user });
 });
 
+app.get('/EditProfile', (req, res) => {
+  res.render('editProfile', { user: req.user });
+});
+
+
 app.get('/Auth', (req, res) => {
   res.render('auth');
 });
