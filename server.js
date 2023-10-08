@@ -33,18 +33,18 @@ console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);  // only store user ID in the session
+  done(null, user.userID);  // only store user ID in the session
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
     // Fetch the user by ID from the database
-    const [users] = await db.execute('SELECT * FROM users WHERE id = ?', [id]);
+    const [users] = await db.execute('SELECT userID, username, dateRegistered FROM users WHERE userID = ?', [id]);
     if (users.length === 0) {
       return done(null, false);  // No user found
     }
     const user = users[0];
-    done(null, { id: user.id, displayName: user.username });  // Pass user data to req.user
+    done(null, { id: user.userID, displayName: user.username, dateRegistered: user.dateRegistered });  // Pass user data to req.user
   } catch (error) {
     done(error);
   }
@@ -75,8 +75,8 @@ app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia', { user: req.user });
 });
 
-app.get('/CharacterEncyclopedia', (req, res) => {
-  res.render('characterEncyclopedia', { user: req.user });
+app.get('/CharacterBookmarks', (req, res) => {
+  res.render('characterBookmarks', { user: req.user });
 });
 
 app.get('/HeroMetrics', (req, res) => {
@@ -161,9 +161,9 @@ app.post('/handleLogin', async (req, res) => {
 
       // Set req.user to the authenticated user's data
       req.user = {
-        id: user.id,  
+        id: user.userID,  
         displayName: user.username
-    };
+    };    
     
     // Login the user and start the session
     req.login(req.user, function(err) {
@@ -197,7 +197,7 @@ app.post('/handleSignup', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Insert new user into the database
-      await db.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
+      await db.execute('INSERT INTO users (username, email, password, dateRegistered) VALUES (?, ?, ?, NOW())', [username, email, hashedPassword]);
 
       // Redirect user to auth page or somwhere else
       res.redirect('/Auth');
