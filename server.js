@@ -33,10 +33,12 @@ console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 passport.serializeUser((user, done) => {
-  done(null, user.userID);  // only store user ID in the session
+  console.log("User:", user)
+  done(null, user.id);  // only store user ID in the session
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("DS: ", id);
   try {
     // Fetch the user by ID from the database
     const [users] = await db.execute('SELECT userID, username, dateRegistered FROM User WHERE userID = ?', [id]);
