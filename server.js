@@ -6,7 +6,6 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const cron = require('node-cron');
 const fetch = require('node-fetch');
-const NodeCache = require('node-cache');
 const db = require('./src/database/dbConnection');
 const session = require('express-session');
 const passport = require('passport');
@@ -14,7 +13,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
 
 app.use(session({
-  secret: 'your_session_secret', // Choose a secret for session
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
 }));
@@ -33,12 +32,10 @@ console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
 passport.serializeUser((user, done) => {
-  console.log("User:", user)
   done(null, user.id);  // only store user ID in the session
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log("DS: ", id);
   try {
     // Fetch the user by ID from the database
     const [users] = await db.execute('SELECT userID, username, dateRegistered FROM User WHERE userID = ?', [id]);
