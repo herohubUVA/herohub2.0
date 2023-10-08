@@ -39,7 +39,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     // Fetch the user by ID from the database
-    const [users] = await db.execute('SELECT userID, username, dateRegistered FROM users WHERE userID = ?', [id]);
+    const [users] = await db.execute('SELECT userID, username, dateRegistered FROM User WHERE userID = ?', [id]);
     if (users.length === 0) {
       return done(null, false);  // No user found
     }
@@ -144,7 +144,7 @@ app.post('/handleLogin', async (req, res) => {
 
   try {
       // Check if the user exists
-      const [users] = await db.execute('SELECT * FROM users WHERE username = ?', [username]);
+      const [users] = await db.execute('SELECT * FROM User WHERE username = ?', [username]);
 
       if (users.length === 0) {
           return res.status(400).send('User not found.');
@@ -187,7 +187,7 @@ app.post('/handleSignup', async (req, res) => {
 
   try {
       // Check for existing user
-      const [existingUsers] = await db.execute('SELECT * FROM users WHERE username = ? OR email = ?', [username, email]);
+      const [existingUsers] = await db.execute('SELECT * FROM User WHERE username = ? OR email = ?', [username, email]);
       
       if (existingUsers.length > 0) {
           return res.status(400).send('Username or email already exists.');
@@ -197,7 +197,7 @@ app.post('/handleSignup', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Insert new user into the database
-      await db.execute('INSERT INTO users (username, email, password, dateRegistered) VALUES (?, ?, ?, NOW())', [username, email, hashedPassword]);
+      await db.execute('INSERT INTO User (username, email, password, dateRegistered) VALUES (?, ?, ?, NOW())', [username, email, hashedPassword]);
 
       // Redirect user to auth page or somwhere else
       res.redirect('/Auth');
