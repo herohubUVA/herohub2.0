@@ -14,6 +14,7 @@ const crypto = require('crypto');
 app.use(express.json());
 const cors = require('cors');
 app.use(cors());
+const fs = require('fs');
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -52,6 +53,14 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+      return next();
+  }
+  else {
+    res.status(401).json({ success: false, message: "Not authenticated" });
+  }
+}
 
 // Use ejs as the view engine
 app.set('view engine', 'ejs');
@@ -62,6 +71,8 @@ app.use('/assets', express.static(path.join(__dirname, 'src', 'assets')));
 
 // Middleware to parse incoming request bodies from auth forms
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/assets/images/icons', express.static(path.join(__dirname, 'src', 'assets', 'images', 'icons')));
 
 
 app.get('/', (req, res) => {
@@ -111,9 +122,27 @@ app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks', { user: req.user });
 });
 
-app.get('/EditProfile', (req, res) => {
-  res.render('editProfile', { user: req.user });
+app.get('/EditProfile', ensureAuthenticated, async (req, res) => {
+  try {
+    // Retrieve the user's icon filename from the database
+    const userId = req.user.id; // Assuming `id` is the user's ID
+    const [rows] = await db.execute('SELECT icon FROM User WHERE userID = ?', [userId]);
+    
+    if (rows.length === 0) {
+      // Handle the case where the user's data is not found
+      return res.status(404).render('error', { message: 'User not found' });
+    }
+
+    const userIconFileName = rows[0].icon;
+    
+    // Render the 'editProfile' EJS template and pass the user's icon filename
+    res.render('editProfile', { user: req.user, userIcon: userIconFileName });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).render('error', { message: 'Server error' });
+  }
 });
+
 
 app.get('/Analytics', (req, res) => {
   res.render('analytics', { user: req.user });
@@ -270,20 +299,44 @@ const fetchMultipleStoriesFromMarvelAPI = async () => {
   return null;
 };
 
+app.get('/fetch-icons', (req, res) => {
+  const iconDir = path.join(__dirname, 'src', 'assets', 'images', 'icons');
+  fs.readdir(iconDir, (err, files) => {
+      if (err) {
+          console.error('Error reading icons directory:', err);
+          return res.status(500).send('Server error.');
+      }
+      res.json(files);  // Send the list of files (icons) to the frontend
+  });
+});
 
 
-app.post('/updateIcon', async (req, res) => {
-  const userId = req.user.id;  // Get user ID from the session
+
+app.post('/updateIcon', ensureAuthenticated, async (req, res) => {
+  console.log('Req.user object:', req.user);
+  console.log('Req.body:', req.body);
+  const userId = req.user && req.user.id;  // Get user ID from the session
   const newIcon = req.body.icon;
   
   try {
-      await db.execute('UPDATE User SET icon = ? WHERE userID = ?', [newIcon, userId]);
-      res.json({ success: true, message: "Icon updated successfully!" });
+    console.log(`newIcon: ${newIcon}, userId: ${userId}`);
+    const [result] = await db.execute('UPDATE User SET icon = ? WHERE userID = ?', [newIcon, userId]);
+    console.log('Rows affected:', result.affectedRows);
+
+    if (result.affectedRows === 0) {
+      // Handle the case where no rows were updated (possibly because the user ID doesn't exist)
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Send a success response
+    res.json({ success: true, message: "Icon updated successfully!" });
   } catch (error) {
-      console.error('Error updating icon:', error);
-      res.json({ success: false, message: "Error updating icon." });
+    console.error('Error updating icon:', error);
+    res.status(500).json({ success: false, message: "Error updating icon." });
   }
 });
+
+
 
 app.post('/updateUsername', async (req, res) => {
   console.log('updateUsername endpoint hit'); // Log when endpoint is accessed
