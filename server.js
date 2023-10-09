@@ -11,6 +11,9 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
+app.use(express.json());
+const cors = require('cors');
+app.use(cors());
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -266,6 +269,90 @@ const fetchMultipleStoriesFromMarvelAPI = async () => {
 
   return null;
 };
+
+
+
+app.post('/updateIcon', async (req, res) => {
+  const userId = req.user.id;  // Get user ID from the session
+  const newIcon = req.body.icon;
+  
+  try {
+      await db.execute('UPDATE User SET icon = ? WHERE userID = ?', [newIcon, userId]);
+      res.json({ success: true, message: "Icon updated successfully!" });
+  } catch (error) {
+      console.error('Error updating icon:', error);
+      res.json({ success: false, message: "Error updating icon." });
+  }
+});
+
+app.post('/updateUsername', async (req, res) => {
+  console.log('updateUsername endpoint hit'); // Log when endpoint is accessed
+
+  const userId = req.user.id;  // Get user ID from the session
+  const newUsername = req.body.newUsername;
+
+  console.log(`Received new username: ${newUsername}`); // Log received username
+  
+  try {
+      // Check if the username is already taken
+      console.log('Checking if username is already taken');
+      const [existingUsers] = await db.execute('SELECT * FROM User WHERE username = ?', [newUsername]);
+      
+      if (existingUsers.length > 0) {
+          console.log('Username already exists, sending response');
+          return res.json({ success: false, message: "Username already exists." });
+      }
+
+      // If username is not taken, proceed to update
+      console.log('Username is available, proceeding to update');
+      await db.execute('UPDATE User SET username = ? WHERE userID = ?', [newUsername, userId]);
+      
+      console.log('Username updated successfully in database');
+      res.json({ success: true, message: "Username updated successfully!" });
+  } catch (error) {
+      console.error('Error occurred during updateUsername:', error); // Log any errors
+      res.json({ success: false, message: "Error updating username." });
+  }
+});
+
+
+app.post('/updatePassword', async (req, res) => {
+  const userId = req.user.id;
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+
+  try {
+      const [users] = await db.execute('SELECT password FROM User WHERE userID = ?', [userId]);
+      const user = users[0];
+      
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+      if (!isMatch) {
+          return res.json({ success: false, message: "Current password is incorrect." });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await db.execute('UPDATE User SET password = ? WHERE userID = ?', [hashedPassword, userId]);
+      res.json({ success: true, message: "Password updated successfully!" });
+  } catch (error) {
+      console.error('Error updating password:', error);
+      res.json({ success: false, message: "Error updating password." });
+  }
+});
+
+app.post('/deleteAccount', async (req, res) => {
+  const userId = req.user.id;
+  
+  try {
+      await db.execute('DELETE FROM User WHERE userID = ?', [userId]);
+      req.session.destroy();  // End the session after deleting the account
+      res.json({ success: true, message: "Account deleted successfully!" });
+  } catch (error) {
+      console.error('Error deleting account:', error);
+      res.json({ success: false, message: "Error deleting account." });
+  }
+});
+
 
 
 // Start the server and print the port it's running on

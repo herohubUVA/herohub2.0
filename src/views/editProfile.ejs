@@ -23,16 +23,45 @@
                 </div>
             </header>
 
-            <!-- Unique Content for Story of the Day -->
+            <!-- Unique Content for Edit Profile -->
             <div class="showcase-area">
                 <div class="container">
                     <div class="left">
                         <div class="big-title">
                             <h1>Edit Profile</h1>
                         </div>
-                        <p class="text">
-                            Content
-                        </p>
+
+                        <!-- Change icon picture -->
+                        <div class="edit-section">
+                            <h2>Change Profile Picture</h2>
+                            <select id="profile-picture-select">
+                                <option value="ironman.png">Ironman</option>
+                                <option value="spiderman.png">Spiderman</option>
+                                <!-- Add other options as needed -->
+                            </select>
+                            <button id="update-profile-pic">Update Picture</button>
+                        </div>
+
+                        <!-- Change username -->
+                        <div class="edit-section">
+                            <h2>Change Username</h2>
+                            <input type="text" id="new-username" placeholder="Enter new username" />
+                            <button id="update-username">Update Username</button>
+                        </div>
+
+                        <!-- Change password -->
+                        <div class="edit-section">
+                            <h2>Change Password</h2>
+                            <input type="password" id="current-password" placeholder="Current Password" />
+                            <input type="password" id="new-password" placeholder="New Password" />
+                            <button id="update-password">Update Password</button>
+                        </div>
+
+                        <!-- Delete account -->
+                        <div class="edit-section">
+                            <h2>Delete Account</h2>
+                            <button id="delete-account">Delete Account</button>
+                        </div>
                     </div>
 
                 </div>
@@ -75,6 +104,7 @@
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
+    <script src="/assets/js/editProfile.js"></script>
 </body>
 
 </html>

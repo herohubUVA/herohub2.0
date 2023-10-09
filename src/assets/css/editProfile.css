@@ -268,3 +268,53 @@ Volume Control Styling
 .volume-bar.active {
   background-color: #333;
 }
+
+
+
+
+
+.edit-section {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--darkOne);
+  border-radius: 5px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1); /* Light overlay for distinction */
+}
+
+.edit-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--darkOne);
+}
+
+.edit-section select,
+.edit-section input,
+.edit-section button {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--darkOne);
+  border-radius: 5px;
+  font-family: 'Exo', sans-serif;
+  background-color: var(--backgroundColor);
+  color: var(--darkOne);
+  transition: border-color 0.3s;
+}
+
+.edit-section select:hover,
+.edit-section input:hover,
+.edit-section button:hover {
+  border-color: var(--mainColor);
+}
+
+.edit-section button {
+  cursor: pointer;
+  background-color: var(--mainColor);
+  color: var(--backgroundColor);
+  width: auto;
+  padding: 0.5rem 1rem;
+}
+
+.edit-section button:hover {
+  background-color: var(--hoverColor);
+}
