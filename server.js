@@ -42,12 +42,12 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     // Fetch the user by ID from the database
-    const [users] = await db.execute('SELECT userID, username, dateRegistered FROM User WHERE userID = ?', [id]);
+    const [users] = await db.execute('SELECT userID, username, dateRegistered, icon FROM User WHERE userID = ?', [id]);
     if (users.length === 0) {
       return done(null, false);  // No user found
     }
     const user = users[0];
-    done(null, { id: user.userID, displayName: user.username, dateRegistered: user.dateRegistered });  // Pass user data to req.user
+    done(null, { id: user.userID, displayName: user.username, dateRegistered: user.dateRegistered, icon: user.icon });  // Pass user data to req.user
   } catch (error) {
     done(error);
   }

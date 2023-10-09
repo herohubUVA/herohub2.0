@@ -3,7 +3,7 @@ rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
 />
 <link rel="stylesheet" href="/assets/css/profileDropdown.css" />
-
+<% console.log(user) %>
 <div class="navbar">
   <!--Main Logo Text -->
   <div class="logo">
@@ -23,8 +23,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
   <div class = "profile-dropdown">
     <div class="profile-dropdown-btn" onclick="toggle()">
       <div class="profile-img">
-        <i class="fa-solid fa-circle"></i>
-      </div>
+        <% if (user && user.icon) { %>
+            <img src="/assets/images/icons/<%= user.icon %>" alt="Profile Image">
+        <% } else { %>
+            <!-- Display a default image or placeholder -->
+            <img src="/assets/images/icons/spiderman.png" alt="Default Profile Image">
+        <% } %>
+    </div>
+    
       <span>
         <%= user ? user.displayName : 'Guest' %> <!-- Assuming the name is in 'displayName' property -->
         <i class="fa-solid fa-angle-down"></i>
