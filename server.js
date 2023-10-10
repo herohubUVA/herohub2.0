@@ -1,9 +1,8 @@
+// ----- Module Imports -----
 const bcrypt = require('bcrypt');
 const express = require('express');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-const app = express();
-const PORT = process.env.PORT || 4000;
+const dotenv = require('dotenv').config({ path: path.join(__dirname, '.env') });
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const db = require('./src/database/dbConnection');
@@ -11,11 +10,16 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
-app.use(express.json());
 const cors = require('cors');
-app.use(cors());
 const fs = require('fs');
 
+// ----- Server Initialization -----
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// ----- Middleware Configuration -----
+app.use(express.json());
+app.use(cors());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -25,6 +29,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ----- Passport Google OAuth2.0 Setup -----
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -32,9 +37,8 @@ passport.use(new GoogleStrategy({
 }, (accessToken, refreshToken, profile, done) => {
   return done(null, profile);
 }));
-console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
+// ----- User Serialization for Session Handling -----
 passport.serializeUser((user, done) => {
   done(null, user.id);  // only store user ID in the session
 });
@@ -53,49 +57,67 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// ----- Authentication Middleware -----
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
       return next();
-  }
-  else {
+  } else {
     res.status(401).json({ success: false, message: "Not authenticated" });
   }
 }
 
+// ----- View Engine Setup -----
 // Use ejs as the view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src', 'views'));
 
+
+// ----- Static Assets Serving -----
 // Middleware to serve assets directory which is inside 'src' directory
 app.use('/assets', express.static(path.join(__dirname, 'src', 'assets')));
 
+// Serve icons from a specific directory
+app.use('/assets/images/icons', express.static(path.join(__dirname, 'src', 'assets', 'images', 'icons')));
+
+// ----- Form Data Parsing -----
 // Middleware to parse incoming request bodies from auth forms
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/assets/images/icons', express.static(path.join(__dirname, 'src', 'assets', 'images', 'icons')));
+// ----- Route Definitions -----
 
-
+// Default Route (GET: /)
+// -----------------------
+// This route renders the authentication page
 app.get('/', (req, res) => {
   res.render('Auth');
 });
 
+// Home Page (GET: /Home)
+// ----------------------
+// This route renders the home page and passes the user's information
 app.get('/Home', (req, res) => {
   res.render('Home', { user: req.user });
 });
 
-
+// Character Encyclopedia Page (GET: /CharacterEncyclopedia)
+// --------------------------------------------------------
+// Renders the character encyclopedia page and passes the user's information
 app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia', { user: req.user });
 });
 
-app.get('/CharacterBookmarks', (req, res) => {
-  res.render('characterBookmarks', { user: req.user });
-});
-
+// Hero Metrics Page (GET: /HeroMetrics)
+// ------------------------------------
+// Renders the hero metrics page and passes the user's information
 app.get('/HeroMetrics', (req, res) => {
   res.render('heroMetrics', { user: req.user });
 });
 
+// Story of the Day Page (GET: /StoryOfTheDay)
+// -------------------------------------------
+// Renders the Story Of The Day page
+// First, it fetches a story from the Marvel API. If no valid story is retrieved,
+// it fetches a random evergreen story from the database
 app.get('/StoryOfTheDay', async (req, res) => {
   let story = await fetchMultipleStoriesFromMarvelAPI();
   let error = null;
@@ -116,12 +138,17 @@ app.get('/StoryOfTheDay', async (req, res) => {
   res.render('storyOfTheDay', { user: req.user, story: story, error: error });
 });
 
-
-
+// Character Bookmarks Page (GET: /CharacterBookmarks)
+// ---------------------------------------------------
+// Renders the character bookmarks page and passes the user's information
 app.get('/CharacterBookmarks', (req, res) => {
   res.render('characterBookmarks', { user: req.user });
 });
 
+// Edit Profile Page (GET: /EditProfile)
+// -------------------------------------
+// An authenticated route that renders the user's profile editing page
+// It fetches the user's icon filename from the database and passes it to the frontend
 app.get('/EditProfile', ensureAuthenticated, async (req, res) => {
   try {
     // Retrieve the user's icon filename from the database
@@ -144,24 +171,37 @@ app.get('/EditProfile', ensureAuthenticated, async (req, res) => {
 });
 
 
+// Analytics Page (GET: /Analytics)
+// -------------------------------
+// Renders the analytics page and passes the user's information
 app.get('/Analytics', (req, res) => {
   res.render('analytics', { user: req.user });
 });
 
+
+// Support Page (GET: /Support)
+// ---------------------------
+// Renders the support page and passes the user's information
 app.get('/Support', (req, res) => {
   res.render('support', { user: req.user });
 });
 
+// Authentication Page (GET: /Auth)
+// -------------------------------
+// Renders the authentication page (Sign Up / Log In)
 app.get('/Auth', (req, res) => {
   res.render('auth');
 });
 
-// Route to start Google authentication
+// Google Authentication Routes
+// ----------------------------
+// Initiates the Google OAuth2.0 authentication process
 app.get('/auth/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
 
-// Route for Google authentication callback
+// Handles the callback after Google authentication
+// On failure, redirects back to the authentication page
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/Auth' }),
   (req, res) => {
@@ -169,7 +209,9 @@ app.get('/auth/google/callback',
     res.redirect('/Home');
 });
 
-
+// Login Route (POST: /handleLogin)
+// -------------------------------
+// Handles user login using a POST request
 app.post('/handleLogin', async (req, res) => {
   const { username, password } = req.body;
 
@@ -212,7 +254,11 @@ app.post('/handleLogin', async (req, res) => {
   }
 });
 
-
+// Signup Route (POST: /handleSignup)
+// -----------------------------------
+// This route handles user registration
+// It checks for an existing user based on the username or email
+// Hashes the user's password, and inserts the new user into the database
 app.post('/handleSignup', async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -239,7 +285,10 @@ app.post('/handleSignup', async (req, res) => {
   }
 });
 
-// Logout route
+// Logout Route (GET: /logout)
+// ---------------------------
+// This route handles the user logout process by destroying the session
+// After successful logout, the user is redirected to the authentication page
 app.get('/logout', (req, res) => {
   req.session.destroy((err) => {
       if(err) {
@@ -249,12 +298,19 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// Background job
+// Background Job for Fetching Stories
+// -----------------------------------
+// A daily cron job that fetches stories from the Marvel API and caches them
+// This job is scheduled to run at midnight every day
 cron.schedule('0 0 * * *', async () => {
   const stories = await fetchMultipleStoriesFromMarvelAPI();
   myCache.set("stories", stories);
 });
 
+// Fetch Story Route (GET: /fetch-story)
+// -------------------------------------
+// An asynchronous route that fetches a story from an external function URL
+// This might be used for periodic story updates or fetching additional stories
 app.get('/fetch-story', async (req, res) => {
   try {
     const functionURL = 'https://us-east4-herohub-399200.cloudfunctions.net/fetch_stories';
@@ -267,16 +323,23 @@ app.get('/fetch-story', async (req, res) => {
   }
 });
 
+// Marvel API Integration Setup
+// ----------------------------
+// Constants for the public and private Marvel API keys.
+// These are used to authenticate and fetch data from the Marvel API.
 const publicKey = process.env.MARVEL_PUBLIC_KEY;
 const privateKey = process.env.MARVEL_PRIVATE_KEY;
 
+// Function: fetchMultipleStoriesFromMarvelAPI
+// -------------------------------------------
+// This function fetches multiple stories from the Marvel API.
+// It constructs the Marvel API URL with the necessary authentication parameters,
+// retrieves the stories, and selects one random story to return.
 const fetchMultipleStoriesFromMarvelAPI = async () => {
   const timestamp = Date.now().toString();
 
-  // Generate the MD5 hash
   const hash = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
 
-  // Construct the Marvel API URL
   const url = `https://gateway.marvel.com:443/v1/public/stories?ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
 
   const storiesResponse = await fetch(url); 
@@ -299,6 +362,10 @@ const fetchMultipleStoriesFromMarvelAPI = async () => {
   return null;
 };
 
+// Fetch Icons Route (GET: /fetch-icons)
+// -------------------------------------
+// This route reads the icons directory on the server
+// and sends the list of available icon filenames to the frontend
 app.get('/fetch-icons', (req, res) => {
   const iconDir = path.join(__dirname, 'src', 'assets', 'images', 'icons');
   fs.readdir(iconDir, (err, files) => {
@@ -311,7 +378,10 @@ app.get('/fetch-icons', (req, res) => {
 });
 
 
-
+// Update Icon Route (POST: /updateIcon)
+// -------------------------------------
+// This authenticated route updates the user's profile icon in the database
+// It retrieves the new icon filename from the request body and updates the corresponding user record
 app.post('/updateIcon', ensureAuthenticated, async (req, res) => {
   console.log('Req.user object:', req.user);
   console.log('Req.body:', req.body);
@@ -337,7 +407,11 @@ app.post('/updateIcon', ensureAuthenticated, async (req, res) => {
 });
 
 
-
+// Update Username Route (POST: /updateUsername)
+// ---------------------------------------------
+// This route allows users to update their username.
+// It first checks if the new username is already taken in the database.
+// If the username is available, it updates the user's record in the database.
 app.post('/updateUsername', async (req, res) => {
   console.log('updateUsername endpoint hit'); // Log when endpoint is accessed
 
@@ -368,7 +442,11 @@ app.post('/updateUsername', async (req, res) => {
   }
 });
 
-
+// Update Password Route (POST: /updatePassword)
+// ---------------------------------------------
+// This route allows users to update their password.
+// It verifies the user's current password against the stored hash in the database.
+// If the current password matches, it hashes the new password and updates the database.
 app.post('/updatePassword', async (req, res) => {
   const userId = req.user.id;
   const currentPassword = req.body.currentPassword;
@@ -393,6 +471,10 @@ app.post('/updatePassword', async (req, res) => {
   }
 });
 
+// Delete Account Route (POST: /deleteAccount)
+// -------------------------------------------
+// This route allows users to delete their account from the database.
+// After successful deletion, the user's session is destroyed.
 app.post('/deleteAccount', async (req, res) => {
   const userId = req.user.id;
   
