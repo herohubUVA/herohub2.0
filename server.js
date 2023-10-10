@@ -1,9 +1,8 @@
+// ----- Module Imports -----
 const bcrypt = require('bcrypt');
 const express = require('express');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-const app = express();
-const PORT = process.env.PORT || 4000;
+const dotenv = require('dotenv').config({ path: path.join(__dirname, '.env') });
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const db = require('./src/database/dbConnection');
@@ -11,11 +10,16 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
-app.use(express.json());
 const cors = require('cors');
-app.use(cors());
 const fs = require('fs');
 
+// ----- Server Initialization -----
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// ----- Middleware Configuration -----
+app.use(express.json());
+app.use(cors());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -25,6 +29,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ----- Passport Google OAuth2.0 Setup -----
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -32,9 +37,8 @@ passport.use(new GoogleStrategy({
 }, (accessToken, refreshToken, profile, done) => {
   return done(null, profile);
 }));
-console.log("Client ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("Client Secret:", process.env.GOOGLE_CLIENT_SECRET);
 
+// ----- User Serialization for Session Handling -----
 passport.serializeUser((user, done) => {
   done(null, user.id);  // only store user ID in the session
 });
@@ -53,11 +57,11 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// ----- Authentication Middleware -----
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
       return next();
-  }
-  else {
+  } else {
     res.status(401).json({ success: false, message: "Not authenticated" });
   }
 }
