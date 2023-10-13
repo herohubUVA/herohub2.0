@@ -268,3 +268,29 @@ Volume Control Styling
 .volume-bar.active {
   background-color: #333;
 }
+
+
+.no-bookmarks {
+  font-size: 2em;
+  color: #777;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+
+.bookmark-slots {
+  display: flex;
+  justify-content: space-around; /* more space between icons */
+  width: 80%; /* control the total width of the icon group */
+  margin: 3em auto 0 auto; /* increased space from the message */
+}
+
+.bookmark-slot {
+  width: 70px;
+  height: 80px; /* making it more rectangular */
+  border-radius: 10px; /* slight rounding for aesthetics */
+  border: 2px solid #aaa; /* border color */
+  background-color: #f4f4f4; /* light background */
+}
