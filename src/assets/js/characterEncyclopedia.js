@@ -96,16 +96,21 @@ async function getRsult() {
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
         commentDiv.innerHTML = `
-            <div class="user-info">
-                <img src="/assets/images/icons/${comment.icon}" alt="${comment.username}'s icon">
-                <span>${comment.username}</span>
-                <span>${comment.datePosted}</span>
-            </div>
+        <div class="comment-header">
+            <img class="comment-icon" src="/assets/images/icons/${comment.icon}" alt="${comment.username}'s icon">
+            <span class="comment-username">${comment.username}</span>
+            <span class="comment-date">${new Date(comment.datePosted).toLocaleString()}</span>
+        </div>
+        <div class="comment-content">
             <p>${comment.commentContent}</p>
+        </div>
+        <div class="comment-footer">
             <button class="upvote-btn" data-comment-id="${comment.commentID}">Upvote (${comment.upvotes})</button>
             ${comment.userID === loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}">Edit</button>' : ''}
             ${comment.userID === loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}">Delete</button>' : ''}
-        `;
+        </div>
+    `;
+    
         commentListContainer.appendChild(commentDiv);
     });
   } else {
