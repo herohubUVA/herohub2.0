@@ -92,9 +92,12 @@
     <script src="/assets/js/audioControls.js"></script>
     <script src="/assets/js/characterApiData.js"></script>
     <script src="/assets/js/characterEncyclopedia.js"></script>
-    <script>
-        var loggedInUserId = "<%= user.userID %>";
-    </script>
+    <% if (user) { %>
+        <script>
+            var loggedInUserId = "<%= user.userID %>";
+        </script>
+    <% } %>
+    
     
       
 </body>

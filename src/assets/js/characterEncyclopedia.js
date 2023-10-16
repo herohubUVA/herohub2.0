@@ -97,7 +97,7 @@ async function getRsult() {
         commentDiv.classList.add('comment');
         commentDiv.innerHTML = `
             <div class="user-info">
-                <img src="${comment.userIcon}" alt="${comment.username}'s icon">
+                <img src="/assets/images/icons/${comment.icon}" alt="${comment.username}'s icon">
                 <span>${comment.username}</span>
                 <span>${comment.datePosted}</span>
             </div>
@@ -208,7 +208,7 @@ document.addEventListener('click', async (event) => {
                 <div class="user-info">
                     <img src="${data.userIcon}" alt="${data.username}'s icon">
                     <span>${data.username}</span>
-                    <span>${data.datePosted}</span>
+                    <span>${new Date(comment.datePosted).toLocaleString()}</span>
                 </div>
                 <p>${newContent}</p>
                 <button class="upvote-btn" data-comment-id="${commentId}">Upvote (${data.upvotes})</button>

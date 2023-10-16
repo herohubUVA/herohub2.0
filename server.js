@@ -542,7 +542,19 @@ app.get('/comments/:characterID', async (req, res) => {
   const characterID = req.params.characterID;
 
   try {
-    const [comments] = await db.execute('SELECT * FROM Comments WHERE characterID = ? ORDER BY datePosted DESC', [characterID]);
+      const [comments] = await db.execute(`
+      SELECT 
+          c.commentID, c.datePosted, c.commentContent, c.upvotes,
+          u.username, u.icon
+      FROM 
+          Comments c
+      JOIN 
+          User u ON c.userID = u.userID
+      WHERE 
+          c.characterID = ? 
+      ORDER BY 
+          c.datePosted DESC
+    `, [characterID]);
     console.log('Fetched comments:', comments); // Add this line
     res.json(comments);
 } catch (error) {
