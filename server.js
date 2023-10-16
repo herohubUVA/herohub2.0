@@ -489,6 +489,122 @@ app.post('/deleteAccount', async (req, res) => {
 });
 
 
+app.post('/comments', ensureAuthenticated, async (req, res) => {
+  const { characterID, commentContent } = req.body;
+  const userID = req.user.id;
+
+  try {
+    // Fetch the current timestamp on the server
+    const timestamp = Date.now().toString();
+
+    // Check if characterID exists in Characters table
+    let [rows] = await db.execute('SELECT characterID FROM Characters WHERE characterID = ?', [characterID]);
+
+    if (rows.length === 0) {
+      // If characterID not found, fetch the characterName from the Marvel API
+      const publicKey = process.env.MARVEL_PUBLIC_KEY;
+      const privateKey = process.env.MARVEL_PRIVATE_KEY;
+      const apiKey = publicKey; // Use the publicKey as the API key
+      const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+
+      const url = `https://gateway.marvel.com:443/v1/public/characters/${characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
+      const response = await fetch(url);
+      const jsonData = await response.json();
+
+      // Debugging: Log the response data
+      console.log("Marvel API Response:", jsonData);
+
+      // Check if the response contains the expected data structure
+      if (jsonData.data && jsonData.data.results && jsonData.data.results.length > 0) {
+        const characterName = jsonData.data.results[0].name;
+
+        // Insert the characterID and characterName into Characters table
+        await db.execute('INSERT INTO Characters (characterID, characterName) VALUES (?, ?)', [characterID, characterName]);
+      } else {
+        console.error("Marvel API response does not have the expected structure.");
+        res.json({ success: false, message: 'Error adding comment. Character not found.' });
+        return;
+      }
+    }
+
+    // Now, insert the comment
+    await db.execute('INSERT INTO Comments (characterID, userID, commentContent, datePosted, upvotes) VALUES (?, ?, ?, NOW(), 0)', [characterID, userID, commentContent]);
+    res.json({ success: true, message: 'Comment added successfully!' });
+  } catch (error) {
+    console.error("Error while adding comment:", error);
+    res.json({ success: false, message: 'Error adding comment.' });
+  }
+});
+
+
+
+app.get('/comments/:characterID', async (req, res) => {
+  const characterID = req.params.characterID;
+
+  try {
+      const [comments] = await db.execute(`
+      SELECT 
+          c.commentID, c.datePosted, c.commentContent, c.upvotes,
+          u.username, u.icon
+      FROM 
+          Comments c
+      JOIN 
+          User u ON c.userID = u.userID
+      WHERE 
+          c.characterID = ? 
+      ORDER BY 
+          c.datePosted DESC
+    `, [characterID]);
+    console.log('Fetched comments:', comments); // Add this line
+    res.json(comments);
+} catch (error) {
+    console.error(error);
+    res.json({ success: false, message: 'Error fetching comments.' });
+}
+
+});
+
+app.delete('/comments/:commentId', ensureAuthenticated, async (req, res) => {
+  const commentId = req.params.commentId;
+  const userID = req.user.id;
+
+  try {
+      await db.execute('DELETE FROM Comments WHERE commentID = ? AND userID = ?', [commentId, userID]);
+      res.json({ success: true, message: 'Comment deleted successfully!' });
+  } catch (error) {
+      console.error(error);
+      res.json({ success: false, message: 'Error deleting comment.' });
+  }
+});
+
+
+app.put('/comments/upvote/:commentId', async (req, res) => {
+  const commentId = req.params.commentId;
+
+  try {
+      await db.execute('UPDATE Comments SET upvotes = upvotes + 1 WHERE commentID = ?', [commentId]);
+      res.json({ success: true, message: 'Comment upvoted successfully!' });
+  } catch (error) {
+      res.json({ success: false, message: 'Error upvoting comment.' });
+  }
+});
+
+
+app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
+  const { content } = req.body;
+  const commentId = req.params.commentId;
+  const userID = req.user.id;
+
+  try {
+      await db.execute('UPDATE Comments SET content = ? WHERE commentID = ? AND userID = ?', [content, commentId, userID]);
+      res.json({ success: true, message: 'Comment updated successfully!' });
+  } catch (error) {
+      res.json({ success: false, message: 'Error updating comment.' });
+  }
+});
+
+
+
 
 // Start the server and print the port it's running on
 app.listen(PORT, () => {

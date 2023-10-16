@@ -37,13 +37,18 @@
                  </div>
       
                  <div class="comment-thread-container">
-                      <h3>Comment Thread</h3>
-                      <div class="comment-input">
-                          <textarea id="comment-text" placeholder="Add your comment..."></textarea>
-                          <button id="post-comment-button">Post Comment</button>
-                      </div>
-                      <div class="comment-list">
-                      </div>
+                    <h2>Comments</h2>
+
+                    <!-- Comment Input -->
+                    <div class="comment-input">
+                        <textarea id="comment-text" placeholder="Write a comment..."></textarea>
+                        <button id="post-comment-button">Post Comment</button>
+                    </div>
+                
+                    <!-- Comments Display -->
+                    <div class="comment-list">
+                        <!-- Comments will be dynamically added here using JavaScript -->
+                    </div>
                   </div>
             </div>
            
@@ -87,6 +92,14 @@
     <script src="/assets/js/audioControls.js"></script>
     <script src="/assets/js/characterApiData.js"></script>
     <script src="/assets/js/characterEncyclopedia.js"></script>
+    <% if (user) { %>
+        <script>
+            var loggedInUserId = "<%= user.userID %>";
+        </script>
+    <% } %>
+    
+    
+      
 </body>
 
 </html>
