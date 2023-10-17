@@ -61,7 +61,6 @@ input.addEventListener("keyup", async () => {
 });
 let characterID;
 async function getRsult() {
-  console.log('getRsult function called');
 
   if (input.value.trim().length < 1) {
     return alert("Input cannot be blank");
@@ -92,6 +91,7 @@ async function getRsult() {
 
   if (Array.isArray(comments)) {
     comments.forEach(comment => {
+
         // Display each comment with username, icon, timestamp, and content
         const commentDiv = document.createElement('div');
         commentDiv.classList.add('comment');
@@ -106,18 +106,17 @@ async function getRsult() {
         </div>
         <div class="comment-footer">
             <button class="upvote-btn" data-comment-id="${comment.commentID}">Upvote (${comment.upvotes})</button>
-            ${comment.userID === loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}">Edit</button>' : ''}
-            ${comment.userID === loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}">Delete</button>' : ''}
+            ${comment.userID == loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}">Edit</button>' : ''}
+            ${comment.userID == loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}">Delete</button>' : ''}
         </div>
     `;
-    
+
         commentListContainer.appendChild(commentDiv);
     });
-  } else {
+} else {
     console.error("Received unexpected data:", comments);
-  }
-  console.log('Fetching comments for characterID:', characterID);
-console.log('Fetched comments:', comments);
+}
+
 
 }
 
@@ -128,8 +127,6 @@ button.addEventListener("click", getRsult);
 document.getElementById('post-comment-button').addEventListener('click', async () => {
   const commentText = document.getElementById('comment-text').value;
   if (!commentText) return alert('Comment cannot be empty!');
-  console.log("Character Name (Client):", input.value);
-  console.log("Comment Content (Client):", commentText);
   const response = await fetch('/comments', {
       method: 'POST',
       headers: {
