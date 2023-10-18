@@ -10,6 +10,7 @@
     <!-- Accesses CSS files-->
     <link rel="stylesheet" href="/assets/css/navbar.css">
     <link rel="stylesheet" href="/assets/css/characterEncyclopedia.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.1/css/all.min.css">
 </head>
 
 <body>
@@ -94,7 +95,7 @@
     <script src="/assets/js/characterEncyclopedia.js"></script>
     <% if (user) { %>
         <script>
-            var loggedInUserId = "<%= user.userID %>";
+            var loggedInUserId = "<%= user.id %>";
         </script>
     <% } %>
     

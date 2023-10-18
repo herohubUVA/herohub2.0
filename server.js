@@ -125,7 +125,6 @@ app.get('/StoryOfTheDay', async (req, res) => {
   if (!story) {
       // Fetch a random evergreen story from the database if no valid story from Marvel API
       const [rows] = await db.execute('SELECT * FROM evergreen_stories ORDER BY RAND() LIMIT 1');
-      console.log("Fetched evergreen story:", rows);
       story = rows[0];
   }
 
@@ -134,7 +133,6 @@ app.get('/StoryOfTheDay', async (req, res) => {
       console.log("Story is still not defined after fetching from DB:", story);
       error = "Unable to fetch a story at this time.";
   }
-  console.log("Rendering with:", {story: story, error: error});
   res.render('storyOfTheDay', { user: req.user, story: story, error: error });
 });
 
@@ -269,7 +267,6 @@ app.post('/handleSignup', async (req, res) => {
       if (existingUsers.length > 0) {
           return res.status(400).send('Username or email already exists.');
       }
-
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -383,15 +380,11 @@ app.get('/fetch-icons', (req, res) => {
 // This authenticated route updates the user's profile icon in the database
 // It retrieves the new icon filename from the request body and updates the corresponding user record
 app.post('/updateIcon', ensureAuthenticated, async (req, res) => {
-  console.log('Req.user object:', req.user);
-  console.log('Req.body:', req.body);
   const userId = req.user && req.user.id;  // Get user ID from the session
   const newIcon = req.body.icon;
   
   try {
-    console.log(`newIcon: ${newIcon}, userId: ${userId}`);
     const [result] = await db.execute('UPDATE User SET icon = ? WHERE userID = ?', [newIcon, userId]);
-    console.log('Rows affected:', result.affectedRows);
 
     if (result.affectedRows === 0) {
       // Handle the case where no rows were updated (possibly because the user ID doesn't exist)
@@ -413,16 +406,10 @@ app.post('/updateIcon', ensureAuthenticated, async (req, res) => {
 // It first checks if the new username is already taken in the database.
 // If the username is available, it updates the user's record in the database.
 app.post('/updateUsername', async (req, res) => {
-  console.log('updateUsername endpoint hit'); // Log when endpoint is accessed
-
   const userId = req.user.id;  // Get user ID from the session
   const newUsername = req.body.newUsername;
-
-  console.log(`Received new username: ${newUsername}`); // Log received username
   
   try {
-      // Check if the username is already taken
-      console.log('Checking if username is already taken');
       const [existingUsers] = await db.execute('SELECT * FROM User WHERE username = ?', [newUsername]);
       
       if (existingUsers.length > 0) {
@@ -431,10 +418,8 @@ app.post('/updateUsername', async (req, res) => {
       }
 
       // If username is not taken, proceed to update
-      console.log('Username is available, proceeding to update');
       await db.execute('UPDATE User SET username = ? WHERE userID = ?', [newUsername, userId]);
       
-      console.log('Username updated successfully in database');
       res.json({ success: true, message: "Username updated successfully!" });
   } catch (error) {
       console.error('Error occurred during updateUsername:', error); // Log any errors
@@ -511,9 +496,6 @@ app.post('/comments', ensureAuthenticated, async (req, res) => {
       const response = await fetch(url);
       const jsonData = await response.json();
 
-      // Debugging: Log the response data
-      console.log("Marvel API Response:", jsonData);
-
       // Check if the response contains the expected data structure
       if (jsonData.data && jsonData.data.results && jsonData.data.results.length > 0) {
         const characterName = jsonData.data.results[0].name;
@@ -527,7 +509,6 @@ app.post('/comments', ensureAuthenticated, async (req, res) => {
       }
     }
 
-    // Now, insert the comment
     await db.execute('INSERT INTO Comments (characterID, userID, commentContent, datePosted, upvotes) VALUES (?, ?, ?, NOW(), 0)', [characterID, userID, commentContent]);
     res.json({ success: true, message: 'Comment added successfully!' });
   } catch (error) {
@@ -544,8 +525,8 @@ app.get('/comments/:characterID', async (req, res) => {
   try {
       const [comments] = await db.execute(`
       SELECT 
-          c.commentID, c.datePosted, c.commentContent, c.upvotes,
-          u.username, u.icon
+        c.commentID, c.datePosted, c.commentContent, c.upvotes, c.userID,
+        u.username, u.icon
       FROM 
           Comments c
       JOIN 
@@ -553,9 +534,8 @@ app.get('/comments/:characterID', async (req, res) => {
       WHERE 
           c.characterID = ? 
       ORDER BY 
-          c.datePosted DESC
+          c.datePosted DESC  
     `, [characterID]);
-    console.log('Fetched comments:', comments); // Add this line
     res.json(comments);
 } catch (error) {
     console.error(error);
