@@ -338,7 +338,7 @@ color: #171821;
 
 
 
-/* Make search and comment containers sit side by side */
+/* Existing Styles */
 .search-container,
 .comment-thread-container {
     width: 48%;
@@ -381,14 +381,15 @@ color: #171821;
 }
 
 .comment-list {
-    max-height: 400px; /* You can adjust this based on your preference */
+    max-height: 400px;
     overflow-y: auto;
 }
 
 .content-wrapper {
-  overflow: auto;  /* To clear the floats */
-  width: 100%;  /* Just to ensure it takes the full width */
+  overflow: auto;
+  width: 100%;
 }
+
 .comment-header {
   display: flex;
   align-items: center;
@@ -430,4 +431,45 @@ color: #171821;
 .upvote-btn:hover, .edit-btn:hover, .delete-btn:hover {
   background-color: #eee;
 }
+
+/* New Styles */
+.comment {
+    padding: 16px;
+    border-bottom: 1px solid var(--darkOne);
+    margin-bottom: 16px;
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.upvote-btn {
+    background-color: var(--mainColor);
+    color: white;
+}
+
+.upvote-btn:hover {
+    background-color: var(--hoverColor);
+}
+
+.edit-btn {
+    background-color: var(--darkTwo);
+    color: var(--mainColor);
+}
+
+.edit-btn:hover {
+    background-color: var(--darkOne);
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+
+
 
