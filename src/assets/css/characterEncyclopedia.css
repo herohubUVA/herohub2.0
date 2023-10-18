@@ -336,14 +336,11 @@ background-color: #ddd;
 color: #171821;
 }
 
-
-
-/* Existing Styles */
 .search-container,
 .comment-thread-container {
     width: 48%;
     float: left;
-    margin-right: 2%; /* Spacing between containers */
+    margin-right: 2%;
 }
 
 .comment-thread-container {
@@ -432,7 +429,6 @@ color: #171821;
   background-color: #eee;
 }
 
-/* New Styles */
 .comment {
     padding: 16px;
     border-bottom: 1px solid var(--darkOne);
@@ -448,17 +444,9 @@ color: #171821;
     color: white;
 }
 
-.upvote-btn:hover {
-    background-color: var(--hoverColor);
-}
-
 .edit-btn {
     background-color: var(--darkTwo);
     color: var(--mainColor);
-}
-
-.edit-btn:hover {
-    background-color: var(--darkOne);
 }
 
 .delete-btn {
@@ -466,8 +454,20 @@ color: #171821;
     color: white;
 }
 
+.upvote-btn:hover {
+  background-color: var(--hoverColor);
+}
+
+.edit-btn:hover {
+  background-color: var(--darkOne);
+}
+
 .delete-btn:hover {
-    background-color: darkred;
+  background-color: darkred;
+}
+
+.upvote-btn i, .edit-btn i, .delete-btn i {
+  margin-right: 5px;
 }
 
 

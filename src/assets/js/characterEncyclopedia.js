@@ -105,11 +105,11 @@ async function getRsult() {
             <p>${comment.commentContent}</p>
         </div>
         <div class="comment-footer">
-            <button class="upvote-btn" data-comment-id="${comment.commentID}">Upvote (${comment.upvotes})</button>
-            ${comment.userID == loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}">Edit</button>' : ''}
-            ${comment.userID == loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}">Delete</button>' : ''}
+            <button class="upvote-btn" data-comment-id="${comment.commentID}"><i class="fas fa-thumbs-up"></i> (${comment.upvotes})</button>
+            ${comment.userID == loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}"><i class="fas fa-pencil-alt"></i></button>' : ''}
+            ${comment.userID == loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}"><i class="fas fa-trash"></i></button>' : ''}
         </div>
-    `;
+        `;
 
         commentListContainer.appendChild(commentDiv);
     });
