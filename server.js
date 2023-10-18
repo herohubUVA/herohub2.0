@@ -473,7 +473,12 @@ app.post('/deleteAccount', async (req, res) => {
   }
 });
 
-
+// Add Comment Route (POST: /comments)
+// -----------------------------------
+// This authenticated route allows users to add a comment related to a specific Marvel character
+// It first checks if the characterID exists in the local database. If not, it fetches the character's name
+// from the Marvel API and adds it to the Characters table
+// After verifying the character, it then inserts the comment into the Comments table
 app.post('/comments', ensureAuthenticated, async (req, res) => {
   const { characterID, commentContent } = req.body;
   const userID = req.user.id;
@@ -518,7 +523,11 @@ app.post('/comments', ensureAuthenticated, async (req, res) => {
 });
 
 
-
+// Get Comments Route (GET: /comments/:characterID)
+// -----------------------------------------------
+// This route fetches all the comments related to a specific Marvel character
+// The comments are joined with the User table to retrieve details about the user who posted the comment
+// The results are sorted by the date of posting in descending order
 app.get('/comments/:characterID', async (req, res) => {
   const characterID = req.params.characterID;
 
@@ -544,6 +553,10 @@ app.get('/comments/:characterID', async (req, res) => {
 
 });
 
+// Delete Comment Route (DELETE: /comments/:commentId)
+// --------------------------------------------------
+// This authenticated route allows users to delete their own comment
+// It checks both the commentID and userID to ensure the user is deleting their own comment
 app.delete('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   const commentId = req.params.commentId;
   const userID = req.user.id;
@@ -557,7 +570,10 @@ app.delete('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   }
 });
 
-
+// Upvote Comment Route (PUT: /comments/upvote/:commentId)
+// -------------------------------------------------------
+// This route allows users to upvote a comment
+// It increments the upvote count for the specified commentID
 app.put('/comments/upvote/:commentId', async (req, res) => {
   const commentId = req.params.commentId;
 
@@ -570,6 +586,10 @@ app.put('/comments/upvote/:commentId', async (req, res) => {
 });
 
 
+// Update Comment Route (PUT: /comments/:commentId)
+// ------------------------------------------------
+// This authenticated route allows users to update the content of their own comment
+// It checks both the commentID and userID to ensure the user is updating their own comment
 app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   const { content } = req.body;
   const commentId = req.params.commentId;
@@ -582,9 +602,6 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
       res.json({ success: false, message: 'Error updating comment.' });
   }
 });
-
-
-
 
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
