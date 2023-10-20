@@ -473,7 +473,6 @@ app.post('/deleteAccount', async (req, res) => {
   }
 });
 
-
 // Add Comment Route (POST: /comments)
 // -----------------------------------
 // This authenticated route allows users to add a comment related to a specific Marvel character
