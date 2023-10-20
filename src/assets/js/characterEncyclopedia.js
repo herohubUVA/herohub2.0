@@ -206,24 +206,15 @@ document.addEventListener('click', async (event) => {
 
         const data = await response.json();
         if (data.success) {
-            // Replace the edit form with the updated comment content
-            commentDiv.innerHTML = `
-                <div class="user-info">
-                    <img src="${data.userIcon}" alt="${data.username}'s icon">
-                    <span>${data.username}</span>
-                    <span>${new Date(comment.datePosted).toLocaleString()}</span>
-                </div>
-                <p>${newContent}</p>
-                <button class="upvote-btn" data-comment-id="${commentId}">Upvote (${data.upvotes})</button>
-                ${data.userID === loggedInUserId ? '<button class="edit-btn" data-comment-id="${commentId}">Edit</button>' : ''}
-                ${data.userID === loggedInUserId ? '<button class="delete-btn" data-comment-id="${commentId}">Delete</button>' : ''}
-            `;
+            // Restore the original comment structure (before editing)
+            commentDiv.innerHTML = originalCommentContent;
+            // Update the comment content with the new content
+            commentDiv.querySelector('p').textContent = newContent;
         } else {
             alert('Error editing comment. Please try again.');
         }
     }
 });
-
 // Event listener for cancelling the comment edit
 document.addEventListener('click', (event) => {
     if (event.target.classList.contains('cancel-edit-btn')) {
