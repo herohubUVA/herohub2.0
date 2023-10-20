@@ -106,8 +106,8 @@ async function getRsult() {
         </div>
         <div class="comment-footer">
             <button class="upvote-btn" data-comment-id="${comment.commentID}"><i class="fas fa-thumbs-up"></i> (${comment.upvotes})</button>
-            ${comment.userID == loggedInUserId ? '<button class="edit-btn" data-comment-id="${comment.commentID}"><i class="fas fa-pencil-alt"></i></button>' : ''}
-            ${comment.userID == loggedInUserId ? '<button class="delete-btn" data-comment-id="${comment.commentID}"><i class="fas fa-trash"></i></button>' : ''}
+            ${comment.userID == loggedInUserId ? `<button class="edit-btn" data-comment-id="${comment.commentID}"><i class="fas fa-pencil-alt"></i></button>` : ''}
+            ${comment.userID == loggedInUserId ? `<button class="delete-btn" data-comment-id="${comment.commentID}"><i class="fas fa-trash"></i></button>` : ''}
         </div>
         `;
 
@@ -150,7 +150,7 @@ document.getElementById('post-comment-button').addEventListener('click', async (
   }
 });
 
-
+// Event listener for upvoting comments
 document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('upvote-btn')) {
         const commentId = event.target.getAttribute('data-comment-id');
@@ -175,11 +175,12 @@ document.addEventListener('click', async (event) => {
     if (event.target.classList.contains('edit-btn')) {
         const commentId = event.target.getAttribute('data-comment-id');
         const commentDiv = event.target.closest('.comment');
-        const originalContent = commentDiv.querySelector('p').textContent;
+        originalCommentContent = commentDiv.innerHTML;  // Store the original content
+        const originalText = commentDiv.querySelector('p').textContent;
 
         // Show an edit form in place of the original comment content
         commentDiv.innerHTML = `
-            <textarea class="edit-comment-text">${originalContent}</textarea>
+            <textarea class="edit-comment-text">${originalText}</textarea>
             <button class="save-edit-btn" data-comment-id="${commentId}">Save</button>
             <button class="cancel-edit-btn">Cancel</button>
         `;
@@ -205,30 +206,21 @@ document.addEventListener('click', async (event) => {
 
         const data = await response.json();
         if (data.success) {
-            // Replace the edit form with the updated comment content
-            commentDiv.innerHTML = `
-                <div class="user-info">
-                    <img src="${data.userIcon}" alt="${data.username}'s icon">
-                    <span>${data.username}</span>
-                    <span>${new Date(comment.datePosted).toLocaleString()}</span>
-                </div>
-                <p>${newContent}</p>
-                <button class="upvote-btn" data-comment-id="${commentId}">Upvote (${data.upvotes})</button>
-                ${data.userID === loggedInUserId ? '<button class="edit-btn" data-comment-id="${commentId}">Edit</button>' : ''}
-                ${data.userID === loggedInUserId ? '<button class="delete-btn" data-comment-id="${commentId}">Delete</button>' : ''}
-            `;
+            // Restore the original comment structure (before editing)
+            commentDiv.innerHTML = originalCommentContent;
+            // Update the comment content with the new content
+            commentDiv.querySelector('p').textContent = newContent;
         } else {
             alert('Error editing comment. Please try again.');
         }
     }
 });
-
 // Event listener for cancelling the comment edit
 document.addEventListener('click', (event) => {
     if (event.target.classList.contains('cancel-edit-btn')) {
         const commentDiv = event.target.closest('.comment');
         // Restore the original comment content (before editing)
-        commentDiv.innerHTML = commentDiv.getAttribute('data-original-content');
+        commentDiv.innerHTML = originalCommentContent;
     }
 });
 

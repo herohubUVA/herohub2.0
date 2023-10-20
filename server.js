@@ -594,12 +594,20 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   const { content } = req.body;
   const commentId = req.params.commentId;
   const userID = req.user.id;
+  console.log(typeof commentId, commentId);
 
   try {
-      await db.execute('UPDATE Comments SET content = ? WHERE commentID = ? AND userID = ?', [content, commentId, userID]);
-      res.json({ success: true, message: 'Comment updated successfully!' });
+      const [result] = await db.execute('UPDATE Comments SET commentContent = ? WHERE commentID = ? AND userID = ?', [content, commentId, userID]);
+      
+      // Check if any rows were affected
+      if (result.affectedRows === 0) {
+          res.status(400).json({ success: false, message: 'No matching comment found or you do not have permission to edit this comment.' });
+      } else {
+          res.json({ success: true, message: 'Comment updated successfully!' });
+      }
   } catch (error) {
-      res.json({ success: false, message: 'Error updating comment.' });
+      console.error("Error updating comment:", error);
+      res.status(500).json({ success: false, message: 'Error editing comment. Please try again.', errorDetail: error.message });
   }
 });
 
