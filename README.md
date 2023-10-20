@@ -7,5 +7,5 @@ In order to run,
 4) add .env file with required credentials
 5) run the program through 'npm start'
 
-To login/sign-up, make sure that your current IP is registered under the list of Authorized Networks on GCP for HeroHub.
+To login/sign-up, make sure that your current IP is registered under the list of Authorized Networks on GCP for HeroHub
 Else, you can navigate manually as a guest by searching for http://localhost:4000/Home in the search bar
