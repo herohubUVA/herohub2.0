@@ -27,14 +27,16 @@
             <div class="showcase-area">
                 <div class="container">
                     <div class="left">
-                        <div class="no-bookmarks">
-                            No characters bookmarked yet. Explore the encyclopedia to add some!
-                            <div class="bookmark-slots">
-                                <div class="bookmark-slot"></div>
-                                <div class="bookmark-slot"></div>
-                                <div class="bookmark-slot"></div>
-                            </div>
-                        </div>
+                        <div class="bookmarks-container">
+                            <% bookmarks.forEach(bookmark => { %>
+                                <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
+                                    <!-- Display the character details for each bookmarked character -->
+                                    Character ID: <%= bookmark.characterID %>
+                                    <!-- You can add more details as required -->
+                                    <button class="remove-bookmark-button">Remove Bookmark</button>
+                                </div>
+                            <% }) %>
+                        </div>                        
                     </div>
 
                 </div>
@@ -77,6 +79,10 @@
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
+    <script src="/assets/js/characterBookmarks.js"></script>
 </body>
+<script>
+    var userID = '<%= user.id %>'; // Assuming you pass the user object to your EJS render function
+</script>
 
 </html>

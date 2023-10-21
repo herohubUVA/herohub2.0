@@ -139,9 +139,16 @@ app.get('/StoryOfTheDay', async (req, res) => {
 // Character Bookmarks Page (GET: /CharacterBookmarks)
 // ---------------------------------------------------
 // Renders the character bookmarks page and passes the user's information
-app.get('/CharacterBookmarks', (req, res) => {
-  res.render('characterBookmarks', { user: req.user });
+app.get('/characterBookmarks', async (req, res) => {
+  const userID = req.user ? req.user.id : null;
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+  const fetchQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
+  const [bookmarks] = await db.query(fetchQuery, [userID]);
+  res.render('characterBookmarks', { bookmarks: bookmarks, user: req.user });
 });
+
 
 // Edit Profile Page (GET: /EditProfile)
 // -------------------------------------
@@ -678,6 +685,73 @@ app.get('/getUserRating/:characterID', async (req, res) => {
 });
 
 
+// Endpoint to add a character to bookmarks
+app.post('/addBookmark', async (req, res) => {
+  const { characterID } = req.body;
+  const userID = req.user ? req.user.id : null;
+
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Check if user already has 3 bookmarks
+  const bookmarkCountQuery = "SELECT COUNT(*) as count FROM Bookmarks WHERE userID = ?";
+  const [results] = await db.query(bookmarkCountQuery, [userID]);
+  
+  if (results[0].count >= 3) {
+      return res.status(400).json({ error: 'User can only have 3 bookmarks at once.' });
+  }
+
+  // Insert new bookmark
+  const insertQuery = "INSERT INTO Bookmarks (dateAdded, characterID, userID) VALUES (NOW(), ?, ?)";
+  try {
+      await db.query(insertQuery, [characterID, userID]);
+      res.status(200).json({ message: 'Character bookmarked successfully!' });
+  } catch (error) {
+      console.error("Detailed Error:", error);
+      res.status(500).json({ error: "Error adding bookmark" });
+  }
+});
+
+// Endpoint to remove a character from bookmarks
+app.delete('/removeBookmark', async (req, res) => {
+  const { characterID } = req.body;
+  const userID = req.user ? req.user.id : null;
+
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Delete the bookmark
+  const deleteQuery = "DELETE FROM Bookmarks WHERE userID = ? AND characterID = ?";
+  try {
+      await db.query(deleteQuery, [userID, characterID]);
+      res.status(200).json({ message: 'Character removed from bookmarks successfully!' });
+  } catch (error) {
+      console.error("Detailed Error:", error);
+      res.status(500).json({ error: "Error removing bookmark" });
+  }
+});
+
+
+// Endpoint to fetch user's bookmarks
+app.get('/fetchBookmarks', async (req, res) => {
+  const userID = req.user ? req.user.id : null;
+
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Fetch the bookmarks
+  const fetchQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
+  try {
+      const [results] = await db.query(fetchQuery, [userID]);
+      res.status(200).json({ bookmarks: results });
+  } catch (error) {
+      console.error("Detailed Error:", error);
+      res.status(500).json({ error: "Error fetching bookmarks" });
+  }
+});
 
 
 // Start the server and print the port it's running on

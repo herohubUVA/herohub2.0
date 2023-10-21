@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }"/></div>
         <div class="character-name">${element.name}</div>
         <div class="character-description">${element.description}</div>
+        <button id="bookmark-button">Bookmark</button>
         </div>`;
 
         // Setting the character ID to the showContainer
@@ -371,6 +372,43 @@ function fetchAndDisplayUserRating(characterID) {
       console.error("Error fetching user rating:", error);
     });
 }
+
+showContainer.addEventListener('click', function() {
+  if (event.target.id === 'bookmark-button') {
+    console.log("Bookmark button clicked!");
+
+
+    const characterID = showContainer.getAttribute("data-character-id");
+    if (!characterID) {
+        console.error("No character ID found for bookmarking");
+        return;
+    }
+    console.log("Sending bookmark for characterID:", characterID, "and userID:", userID);
+    // Send a request to your server to save the bookmark
+    fetch('/addBookmark', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            characterID: characterID,
+            userID: userID
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);
+        } else {
+            console.error("Error bookmarking character");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+    
+});
 
 
   
