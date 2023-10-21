@@ -619,7 +619,12 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
 });
 
 
-// Endpoint to submit a rating
+// Submit Rating Route (POST: /submitRating)
+// -----------------------------------------
+// This route allows authenticated users to submit a rating for a specific Marvel character
+// The route expects a characterID and a rating in the request body
+// It checks if the user is authenticated and if the necessary information is provided in the request
+// If everything is valid, it inserts the rating into the Review table or updates it if it already exists
 app.post('/submitRating', async (req, res) => {
   const { characterID, rating } = req.body;
   const userID = req.user ? req.user.id : null;
@@ -642,7 +647,12 @@ app.post('/submitRating', async (req, res) => {
 });
 
 
-// Endpoint to fetch average rating for a particular character
+
+// Fetch Average Rating Route (GET: /getRating/:characterID)
+// ----------------------------------------------------------
+// This route fetches the average rating of a specific Marvel character based on all user ratings
+// It expects a characterID as a URL parameter
+// The route queries the Review table to calculate and return the average rating
 app.get('/getRating/:characterID', async (req, res) => {
   const { characterID } = req.params;
   try {
@@ -655,6 +665,12 @@ app.get('/getRating/:characterID', async (req, res) => {
   }
 });
 
+
+// Get Current User ID Route (GET: /getCurrentUserID)
+// ---------------------------------------------------
+// This route fetches the userID of the currently authenticated user
+// It is useful for front-end applications to determine the current user's state and ID
+// If the user is not authenticated, it returns an error message
 app.get('/getCurrentUserID', (req, res) => {
   if (req.user && req.user.id) {
       res.json({ userID: req.user.id });
@@ -663,6 +679,13 @@ app.get('/getCurrentUserID', (req, res) => {
   }
 });
 
+
+// Fetch User Rating Route (GET: /getUserRating/:characterID)
+// -----------------------------------------------------------
+// This route fetches the rating that the currently authenticated user has given to a specific Marvel character
+// It expects a characterID as a URL parameter
+// If the user is authenticated, it queries the Review table to fetch and return the user's rating
+// If no rating is found or the user is not authenticated, it returns an error message
 app.get('/getUserRating/:characterID', async (req, res) => {
   const { characterID } = req.params;
   const userID = req.user ? req.user.id : null;
@@ -685,7 +708,13 @@ app.get('/getUserRating/:characterID', async (req, res) => {
 });
 
 
-// Endpoint to add a character to bookmarks
+// Add Bookmark Route (POST: /addBookmark)
+// ---------------------------------------
+// This route allows authenticated users to add a specific Marvel character to their bookmarks
+// The route expects a characterID in the request body
+// It checks if the user is authenticated and if the characterID is provided
+// The route also checks if the user already has 3 bookmarks, as that is the maximum allowed
+// If everything is valid, it inserts the bookmark into the Bookmarks table
 app.post('/addBookmark', async (req, res) => {
   const { characterID } = req.body;
   const userID = req.user ? req.user.id : null;
@@ -713,7 +742,12 @@ app.post('/addBookmark', async (req, res) => {
   }
 });
 
-// Endpoint to remove a character from bookmarks
+// Remove Bookmark Route (DELETE: /removeBookmark)
+// ------------------------------------------------
+// This route allows authenticated users to remove a specific Marvel character from their bookmarks
+// The route expects a characterID in the request body
+// It checks if the user is authenticated and if the characterID is provided
+// If everything is valid, it removes the bookmark from the Bookmarks table
 app.delete('/removeBookmark', async (req, res) => {
   const { characterID } = req.body;
   const userID = req.user ? req.user.id : null;
@@ -734,7 +768,11 @@ app.delete('/removeBookmark', async (req, res) => {
 });
 
 
-// Endpoint to fetch user's bookmarks
+// Fetch Bookmarks Route (GET: /fetchBookmarks)
+// --------------------------------------------
+// This route fetches all bookmarked Marvel characters of the currently authenticated user
+// It checks if the user is authenticated
+// If the user is authenticated, it queries the Bookmarks table to fetch and return all bookmarks
 app.get('/fetchBookmarks', async (req, res) => {
   const userID = req.user ? req.user.id : null;
 
