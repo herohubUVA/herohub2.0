@@ -611,6 +611,75 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   }
 });
 
+
+// Endpoint to submit a rating
+app.post('/submitRating', async (req, res) => {
+  const { characterID, rating } = req.body;
+  const userID = req.user ? req.user.id : null;
+  if (!characterID) {
+    return res.status(400).json({ error: "Character ID is required" });
+}
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+  try {
+      // Insert rating into the Review table
+      const insertQuery = "INSERT INTO Review (rating, reviewDate, characterID, userID) VALUES (?, NOW(), ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating);";
+      await db.query(insertQuery, [rating, characterID, userID]);
+
+      res.status(200).json({ message: "Rating submitted successfully!" });
+    } catch (error) {
+      console.error("Detailed Error:", error); // This will log the detailed error on the server side
+      res.status(500).json({ message: "Error submitting rating", error: error.message });
+  }  
+});
+
+
+// Endpoint to fetch average rating for a particular character
+app.get('/getRating/:characterID', async (req, res) => {
+  const { characterID } = req.params;
+  try {
+      const fetchRatingQuery = "SELECT AVG(rating) as averageRating FROM Review WHERE characterID = ?";
+      const [rows] = await db.query(fetchRatingQuery, [characterID]);
+      
+      res.status(200).json(rows[0]);
+  } catch (error) {
+      res.status(500).json({ message: "Error fetching rating", error });
+  }
+});
+
+app.get('/getCurrentUserID', (req, res) => {
+  if (req.user && req.user.id) {
+      res.json({ userID: req.user.id });
+  } else {
+      res.json({ error: 'User not logged in' });
+  }
+});
+
+app.get('/getUserRating/:characterID', async (req, res) => {
+  const { characterID } = req.params;
+  const userID = req.user ? req.user.id : null;
+  if (!userID) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  try {
+    const query = 'SELECT rating FROM Review WHERE characterID = ? AND userID = ?';
+    const [rows] = await db.query(query, [characterID, userID]);
+
+    if (rows.length > 0) {
+      res.status(200).json({ rating: rows[0].rating });
+    } else {
+      res.status(404).json({ error: 'No rating found for this user and character' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching user rating' });
+  }
+});
+
+
+
+
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
