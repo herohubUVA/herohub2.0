@@ -797,7 +797,7 @@ app.get('/fetchBookmarks', async (req, res) => {
 app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   try {
     const [highestRated] = await db.query(`
-      SELECT c.characterName, AVG(r.rating) as averageRating
+      SELECT c.characterID, c.characterName, AVG(r.rating) as averageRating
       FROM Characters c
       JOIN Review r ON c.characterID = r.characterID
       GROUP BY c.characterID
@@ -806,7 +806,7 @@ app.get('/api/highest-lowest-rated-characters', async (req, res) => {
     `);
     
     const [lowestRated] = await db.query(`
-      SELECT c.characterName, AVG(r.rating) as averageRating
+      SELECT c.characterID, c.characterName, AVG(r.rating) as averageRating
       FROM Characters c
       JOIN Review r ON c.characterID = r.characterID
       GROUP BY c.characterID
@@ -820,6 +820,7 @@ app.get('/api/highest-lowest-rated-characters', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 app.get('/api/most-commented-characters', async (req, res) => {
   try {
@@ -848,8 +849,10 @@ app.get('/api/most-bookmarked-characters', async (req, res) => {
   }
 });
 
+
 app.get('/api/ratings-over-time/:characterID', async (req, res) => {
   const { characterID } = req.params;
+  console.log('Fetching ratings over time for character ID:', characterID);
 
   try {
     const [results] = await db.execute(`
@@ -860,13 +863,13 @@ app.get('/api/ratings-over-time/:characterID', async (req, res) => {
       ORDER BY date;
     `, [characterID]);
 
+    console.log('Results:', results);
     res.json(results);
   } catch (error) {
     console.error('Error fetching ratings over time:', error);
     res.status(500).json({ message: 'Error fetching ratings over time' });
   }
 });
-
 
 
 // Start the server and print the port it's running on

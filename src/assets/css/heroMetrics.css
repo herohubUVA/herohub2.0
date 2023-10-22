@@ -268,3 +268,54 @@ Volume Control Styling
 .volume-bar.active {
   background-color: #333;
 }
+
+
+/*Chart Styling*/
+.showcase-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/* CSS for the chart container */
+.chart-container {
+  width: 45%;
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer; /* Add a pointer cursor for the chart */
+  transition: all 0.3s; /* Add smooth transition for resizing */
+}
+
+/* CSS for full-screen mode */
+.chart-container.full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+canvas {
+  width: 100% !important;
+  max-width: 600px;
+  height: auto !important;
+}
+
+/* CSS for small screens */
+@media screen and (max-width: 768px) {
+  canvas {
+    max-width: 100%;
+  }
+}
+
+/* CSS for larger screens */
+@media screen and (min-width: 769px) {
+  canvas {
+    max-width: 400px; /* Adjust the max width as needed */
+  }
+}
+

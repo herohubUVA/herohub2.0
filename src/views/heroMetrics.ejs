@@ -23,18 +23,24 @@
                 </div>
             </header>
 
-            <!-- Unique Content for Story of the Day -->
+            <!-- Unique Content for Hero Metrics -->
             <div class="showcase-area">
                 <div class="container">
-                    <div class="left">
-                        <canvas id="ratingsChart" width="400" height="200"></canvas>
-                        <canvas id="mostSearchedChart" width="400" height="200"></canvas>
-                        <canvas id="mostCommentedChart" width="400" height="200"></canvas>
-                        <canvas id="mostBookmarkedChart" width="400" height="200"></canvas>
-                        <canvas id="ratingsOverTimeChart" width="400" height="200"></canvas>
+                    <div class="chart-container">
+                        <canvas id="ratingsChart"></canvas>
                     </div>
+                    <div class="chart-container">
+                        <canvas id="mostCommentedChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mostBookmarkedChart"></canvas>
+                    </div>
+                    <div id="ratingsOverTimeChartContainer">
+                        <canvas id="ratingsOverTimeChart"></canvas>
+                    </div>                
                 </div>
             </div>
+
 
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
