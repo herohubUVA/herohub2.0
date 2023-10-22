@@ -792,6 +792,57 @@ app.get('/fetchBookmarks', async (req, res) => {
 });
 
 
+
+
+app.get('/api/highest-lowest-rated-characters', async (req, res) => {
+  try {
+    const [highestRated] = await db.query(`
+      SELECT c.characterName, AVG(r.rating) as averageRating
+      FROM Characters c
+      JOIN Review r ON c.characterID = r.characterID
+      GROUP BY c.characterID
+      ORDER BY averageRating DESC
+      LIMIT 1
+    `);
+    
+    const [lowestRated] = await db.query(`
+      SELECT c.characterName, AVG(r.rating) as averageRating
+      FROM Characters c
+      JOIN Review r ON c.characterID = r.characterID
+      GROUP BY c.characterID
+      ORDER BY averageRating ASC
+      LIMIT 1
+    `);
+    
+    res.json({ highestRated, lowestRated });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/api/most-searched-characters', async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT c.characterName, COUNT(*) as searchCount FROM CharacterSearchMetrics csm JOIN Characters c ON csm.characterID = c.characterID GROUP BY c.characterID ORDER BY searchCount DESC LIMIT 5');
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/api/most-commented-characters', async (req, res) => {
+  try {
+    const [results] = await db.query('SELECT c.characterName, COUNT(*) as commentCount FROM Comments com JOIN Characters c ON com.characterID = c.characterID GROUP BY c.characterID ORDER BY commentCount DESC LIMIT 5');
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
