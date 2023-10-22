@@ -831,6 +831,43 @@ app.get('/api/most-commented-characters', async (req, res) => {
   }
 });
 
+app.get('/api/most-bookmarked-characters', async (req, res) => {
+  try {
+    const [results] = await db.execute(`
+      SELECT Characters.characterName, COUNT(Bookmarks.characterID) as bookmarkCount
+      FROM Bookmarks
+      JOIN Characters ON Bookmarks.characterID = Characters.characterID
+      GROUP BY Bookmarks.characterID
+      ORDER BY bookmarkCount DESC
+      LIMIT 10;
+    `);
+    res.json(results);
+  } catch (error) {
+    console.error('Error fetching most bookmarked characters:', error);
+    res.status(500).json({ message: 'Error fetching most bookmarked characters' });
+  }
+});
+
+app.get('/api/ratings-over-time/:characterID', async (req, res) => {
+  const { characterID } = req.params;
+
+  try {
+    const [results] = await db.execute(`
+      SELECT DATE_FORMAT(reviewDate, '%Y-%m-%d') as date, AVG(rating) as averageRating
+      FROM Review
+      WHERE characterID = ?
+      GROUP BY date
+      ORDER BY date;
+    `, [characterID]);
+
+    res.json(results);
+  } catch (error) {
+    console.error('Error fetching ratings over time:', error);
+    res.status(500).json({ message: 'Error fetching ratings over time' });
+  }
+});
+
+
 
 // Start the server and print the port it's running on
 app.listen(PORT, () => {
