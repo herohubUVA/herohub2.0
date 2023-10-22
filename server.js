@@ -821,17 +821,6 @@ app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   }
 });
 
-
-app.get('/api/most-searched-characters', async (req, res) => {
-  try {
-    const [results] = await db.query('SELECT c.characterName, COUNT(*) as searchCount FROM CharacterSearchMetrics csm JOIN Characters c ON csm.characterID = c.characterID GROUP BY c.characterID ORDER BY searchCount DESC LIMIT 5');
-    res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
 app.get('/api/most-commented-characters', async (req, res) => {
   try {
     const [results] = await db.query('SELECT c.characterName, COUNT(*) as commentCount FROM Comments com JOIN Characters c ON com.characterID = c.characterID GROUP BY c.characterID ORDER BY commentCount DESC LIMIT 5');

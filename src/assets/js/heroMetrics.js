@@ -47,13 +47,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
         .catch(error => console.error('Error fetching search data:', error));
 
-    // Fetch and create chart for most commented characters
-    fetch('/api/most-commented-characters')
-        .then(response => response.json())
-        .then(data => {
-            const labels = data.map(character => character.characterName);
-            const comments = data.map(character => character.commentCount);
-            createBarChart(ctxCommented, labels, comments, 'Comment Counts');
-        })
-        .catch(error => console.error('Error fetching comment data:', error));
 });
