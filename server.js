@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 4000;
 
 // ----- Middleware Configuration -----
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -862,14 +863,29 @@ app.get('/api/ratings-over-time/:characterID', async (req, res) => {
       GROUP BY date
       ORDER BY date;
     `, [characterID]);
-
-    console.log('Results:', results);
     res.json(results);
   } catch (error) {
     console.error('Error fetching ratings over time:', error);
     res.status(500).json({ message: 'Error fetching ratings over time' });
   }
 });
+
+
+
+app.post('/support', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    const [results] = await db.execute(
+      'INSERT INTO SupportRequests (name, email, message) VALUES (?, ?, ?)',
+      [name, email, message]
+    );
+    res.status(200).send('Support request submitted successfully');
+  } catch (error) {
+    console.error('Error handling support request:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 
 // Start the server and print the port it's running on

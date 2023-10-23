@@ -295,17 +295,3 @@ Volume Control Styling
     border-radius: 4px;
     font-size: 1rem;
 }
-
-.input-group button {
-    padding: 0.7rem 1.5rem;
-    background-color: var(--mainColor);
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.input-group button:hover {
-    background-color: var(--hoverColor);
-}
