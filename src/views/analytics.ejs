@@ -26,15 +26,18 @@
             <!-- Unique Content for Analytics -->
             <div class="showcase-area">
                 <div class="container">
-                    <div class="left">
-                        <div class="big-title">
-                            <h1>Analytics</h1>
-                        </div>
-                        <p class="text">
-                            Content
-                        </p>
+                    <div class="chart-container" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;">
+                        <canvas id="highestLowestRatedCharactersChart"></canvas>
                     </div>
-
+                    <div class="chart-container" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;">
+                        <canvas id="topRatedCharactersChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;">
+                        <canvas id="userActivityChart"></canvas>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;">
+                        <canvas id="userUpvotesChart"></canvas>
+                    </div>                    
                 </div>
             </div>
 
@@ -72,9 +75,16 @@
     </main>
 
     <!-- Access Javascript Code -->
+    <script>
+        const userID = '<%= user.id %>';
+      </script>
+      
+
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/analytics.js"></script>
 </body>
 
 </html>
