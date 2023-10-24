@@ -955,6 +955,11 @@ app.post('/support', async (req, res) => {
   }
 });
 
+// User's Highest and Lowest Rated Characters (GET: /api/user-highest-lowest-rated-characters/:userID)
+// --------------------------------------------------------------------------------------------------
+// This endpoint retrieves the highest and lowest rated Marvel characters for a specific user
+// it returns a JSON object containing two properties: highestRated and lowestRated, 
+// each with the character details and average rating
 app.get('/api/user-highest-lowest-rated-characters/:userID', async (req, res) => {
   const { userID } = req.params;
   try {
@@ -985,7 +990,10 @@ app.get('/api/user-highest-lowest-rated-characters/:userID', async (req, res) =>
   }
 });
 
-
+// User's Upvotes Over Time (GET: /api/user-upvotes-over-time/:userID)
+// -------------------------------------------------------------------
+// This endpoint provides a count of user upvotes (likes) on comments over time
+// it returns an array of objects, each with a month and count property
 app.get('/api/user-upvotes-over-time/:userID', async (req, res) => {
   const { userID } = req.params;
 
@@ -1005,7 +1013,10 @@ app.get('/api/user-upvotes-over-time/:userID', async (req, res) => {
   }
 });
 
-
+// User's Top Rated Characters (GET: /api/user-top-rated-characters/:userID)
+// ------------------------------------------------------------------------
+// This endpoint retrieves the top 5 highest rated Marvel characters by a specific user
+// it returns an array of character objects, each with a characterName and averageRating
 app.get('/api/user-top-rated-characters/:userID', async (req, res) => {
   const { userID } = req.params;
   try {
@@ -1025,7 +1036,10 @@ app.get('/api/user-top-rated-characters/:userID', async (req, res) => {
   }
 });
 
-
+// User's Activity Over Time (GET: /api/user-activity-over-time/:userID)
+// ---------------------------------------------------------------------
+// This endpoint provides a summary of a user's activity over time, including reviews, comments, and bookmarks
+// it returns a JSON object with three properties: reviews, comments, and bookmarks, each an array of objects.
 app.get('/api/user-activity-over-time/:userID', async (req, res) => {
   const { userID } = req.params;
   try {
@@ -1045,13 +1059,13 @@ app.get('/api/user-activity-over-time/:userID', async (req, res) => {
       ORDER BY month
     `, [userID]);
 
-  const [bookmarks] = await db.query(`
-    SELECT DATE_FORMAT(dateAdded, '%Y-%m') as month, COUNT(*) as count
-    FROM Bookmarks
-    WHERE userID = ?
-    GROUP BY month
-    ORDER BY month
-  `, [userID]);
+    const [bookmarks] = await db.query(`
+      SELECT DATE_FORMAT(dateAdded, '%Y-%m') as month, COUNT(*) as count
+      FROM Bookmarks
+      WHERE userID = ?
+      GROUP BY month
+      ORDER BY month
+    `, [userID]);
 
 
     res.json({ reviews, comments, bookmarks });
