@@ -793,8 +793,11 @@ app.get('/fetchBookmarks', async (req, res) => {
 });
 
 
-
-
+// Highest and Lowest Rated Characters Route (GET: /api/highest-lowest-rated-characters)
+// ---------------------------------------------------------------------------------------
+// This route fetches the Marvel character with the highest average rating and the character
+// with the lowest average rating based on user reviews
+// The route returns the characterID, characterName, and averageRating for both characters.
 app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   try {
     const [highestRated] = await db.query(`
@@ -822,7 +825,10 @@ app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   }
 });
 
-
+// Most Commented Characters Route (GET: /api/most-commented-characters)
+// ---------------------------------------------------------------------
+// This route retrieves the Marvel characters with the most user comments
+// The route returns an array of objects, each containing the characterName and commentCount
 app.get('/api/most-commented-characters', async (req, res) => {
   try {
     const [results] = await db.query('SELECT c.characterName, COUNT(*) as commentCount FROM Comments com JOIN Characters c ON com.characterID = c.characterID GROUP BY c.characterID ORDER BY commentCount DESC LIMIT 5');
@@ -850,7 +856,11 @@ app.get('/api/most-bookmarked-characters', async (req, res) => {
   }
 });
 
-
+// Ratings Over Time Route (GET: /api/ratings-over-time/:characterID)
+// -----------------------------------------------------------------
+// This route fetches the average ratings over time for a specific Marvel character
+// It expects a characterID as a URL parameter
+// It returns an array of objects, each containing a date and the averageRating for that date
 app.get('/api/ratings-over-time/:characterID', async (req, res) => {
   const { characterID } = req.params;
   console.log('Fetching ratings over time for character ID:', characterID);
@@ -871,7 +881,12 @@ app.get('/api/ratings-over-time/:characterID', async (req, res) => {
 });
 
 
-
+// Support Request Route (POST: /support)
+// --------------------------------------
+// This route allows users to submit support requests
+// It expects a JSON body with the fields: name, email, and message
+// The route inserts a new support request into the SupportRequests table
+// On success, it returns a confirmation message
 app.post('/support', async (req, res) => {
   try {
     const { name, email, message } = req.body;
