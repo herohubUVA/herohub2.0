@@ -189,7 +189,7 @@ app.get('/EditProfile', ensureAuthenticated, async (req, res) => {
 // Analytics Page (GET: /Analytics)
 // -------------------------------
 // Renders the analytics page and passes the user's information
-app.get('/Analytics', (req, res) => {
+app.get('/Analytics', ensureAuthenticated, (req, res) => {
   res.render('analytics', { user: req.user });
 });
 
@@ -628,6 +628,53 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
   }
 });
 
+// Character Details Fetching from Marvel API
+// ------------------------------------------
+// This functionality is responsible for fetching a specific Marvel character's details
+// using the Marvel API. It is used to ensure that character information is available
+// in the local database before any operations related to characters are performed
+const fetchCharacterFromMarvelAPI = async (characterID) => {
+  const timestamp = Date.now().toString();
+
+  // Create the hash using the timestamp, private key, and public key
+  const hash = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+
+  // Construct the URL to fetch the specific character by its ID
+  const url = `https://gateway.marvel.com:443/v1/public/characters/${characterID}?ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
+
+  const characterResponse = await fetch(url);
+  const characterData = await characterResponse.json();
+
+  // Extract the character details from the API response
+  const character = characterData.data.results[0];
+
+  // Return the character details
+  return {
+      name: character.name,
+      description: character.description
+  };
+};
+
+/**
+ * Function: ensureCharacterExists
+ * -------------------------------
+ * This function checks if a character exists in the local database.
+ * If the character does not exist, it fetches the character's details
+ * from the Marvel API and inserts them into the database.
+ */
+const ensureCharacterExists = async (characterID) => {
+  const [existingCharacter] = await db.query('SELECT * FROM Characters WHERE characterID = ?', [characterID]);
+  console.log('Existing Character:', existingCharacter);
+  
+  if (existingCharacter.length === 0) {
+    const characterDetails = await fetchCharacterFromMarvelAPI(characterID);
+    console.log('Fetched Character Details:', characterDetails);
+    const [result] = await db.query('INSERT INTO Characters (characterID, characterName, characterDescription) VALUES (?, ?, ?)', [characterID, characterDetails.name, characterDetails.description]);
+    console.log('Character Insertion Result:', result);
+  }
+};
+
+
 
 // Submit Rating Route (POST: /submitRating)
 // -----------------------------------------
@@ -638,22 +685,25 @@ app.put('/comments/:commentId', ensureAuthenticated, async (req, res) => {
 app.post('/submitRating', async (req, res) => {
   const { characterID, rating } = req.body;
   const userID = req.user ? req.user.id : null;
-  if (!characterID) {
-    return res.status(400).json({ error: "Character ID is required" });
-}
-  if (!userID) {
-      return res.status(401).json({ error: 'User not authenticated' });
-  }
-  try {
-      // Insert rating into the Review table
-      const insertQuery = "INSERT INTO Review (rating, reviewDate, characterID, userID) VALUES (?, NOW(), ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating);";
-      await db.query(insertQuery, [rating, characterID, userID]);
+  console.log('Character ID:', characterID, 'Type:', typeof characterID);
 
-      res.status(200).json({ message: "Rating submitted successfully!" });
-    } catch (error) {
-      console.error("Detailed Error:", error); // This will log the detailed error on the server side
-      res.status(500).json({ message: "Error submitting rating", error: error.message });
-  }  
+  if (!characterID || !rating) {
+    return res.status(400).json({ error: "Character ID and rating are required" });
+  }
+
+  if (!userID) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  try {
+    await ensureCharacterExists(characterID);
+    const insertQuery = "INSERT INTO Review (rating, reviewDate, characterID, userID) VALUES (?, NOW(), ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating);";
+    await db.query(insertQuery, [rating, characterID, userID]);
+    res.status(200).json({ message: "Rating submitted successfully!" });
+  } catch (error) {
+    console.error("Detailed Error:", error);
+    res.status(500).json({ message: "Error submitting rating", error: error.message });
+  }
 });
 
 
@@ -802,8 +852,11 @@ app.get('/fetchBookmarks', async (req, res) => {
 });
 
 
-
-
+// Highest and Lowest Rated Characters Route (GET: /api/highest-lowest-rated-characters)
+// ---------------------------------------------------------------------------------------
+// This route fetches the Marvel character with the highest average rating and the character
+// with the lowest average rating based on user reviews
+// The route returns the characterID, characterName, and averageRating for both characters.
 app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   try {
     const [highestRated] = await db.query(`
@@ -831,7 +884,10 @@ app.get('/api/highest-lowest-rated-characters', async (req, res) => {
   }
 });
 
-
+// Most Commented Characters Route (GET: /api/most-commented-characters)
+// ---------------------------------------------------------------------
+// This route retrieves the Marvel characters with the most user comments
+// The route returns an array of objects, each containing the characterName and commentCount
 app.get('/api/most-commented-characters', async (req, res) => {
   try {
     const [results] = await db.query('SELECT c.characterName, COUNT(*) as commentCount FROM Comments com JOIN Characters c ON com.characterID = c.characterID GROUP BY c.characterID ORDER BY commentCount DESC LIMIT 5');
@@ -842,6 +898,10 @@ app.get('/api/most-commented-characters', async (req, res) => {
   }
 });
 
+// Most Bookmarked Characters Route (GET: /api/most-bookmarked-characters)
+// ------------------------------------------------------------------------
+// This route fetches Marvel characters with the most bookmarks by users
+// The route returns an array of objects, each containing the characterName and bookmarkCount
 app.get('/api/most-bookmarked-characters', async (req, res) => {
   try {
     const [results] = await db.execute(`
@@ -859,7 +919,11 @@ app.get('/api/most-bookmarked-characters', async (req, res) => {
   }
 });
 
-
+// Ratings Over Time Route (GET: /api/ratings-over-time/:characterID)
+// -----------------------------------------------------------------
+// This route fetches the average ratings over time for a specific Marvel character
+// It expects a characterID as a URL parameter
+// It returns an array of objects, each containing a date and the averageRating for that date
 app.get('/api/ratings-over-time/:characterID', async (req, res) => {
   const { characterID } = req.params;
   console.log('Fetching ratings over time for character ID:', characterID);
@@ -880,7 +944,12 @@ app.get('/api/ratings-over-time/:characterID', async (req, res) => {
 });
 
 
-
+// Support Request Route (POST: /support)
+// --------------------------------------
+// This route allows users to submit support requests
+// It expects a JSON body with the fields: name, email, and message
+// The route inserts a new support request into the SupportRequests table
+// On success, it returns a confirmation message
 app.post('/support', async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -895,6 +964,111 @@ app.post('/support', async (req, res) => {
   }
 });
 
+app.get('/api/user-highest-lowest-rated-characters/:userID', async (req, res) => {
+  const { userID } = req.params;
+  try {
+    const [highestRated] = await db.query(`
+      SELECT c.characterID, c.characterName, AVG(r.rating) as averageRating
+      FROM Characters c
+      JOIN Review r ON c.characterID = r.characterID
+      WHERE r.userID = ?
+      GROUP BY c.characterID
+      ORDER BY averageRating DESC
+      LIMIT 1
+    `, [userID]);
+
+    const [lowestRated] = await db.query(`
+      SELECT c.characterID, c.characterName, AVG(r.rating) as averageRating
+      FROM Characters c
+      JOIN Review r ON c.characterID = r.characterID
+      WHERE r.userID = ?
+      GROUP BY c.characterID
+      ORDER BY averageRating ASC
+      LIMIT 1
+    `, [userID]);
+
+    res.json({ highestRated, lowestRated });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/api/user-upvotes-over-time/:userID', async (req, res) => {
+  const { userID } = req.params;
+
+  try {
+    const [upvotes] = await db.query(`
+      SELECT DATE_FORMAT(datePosted, '%Y-%m') as month, COUNT(*) as count
+      FROM Comments
+      WHERE userID = ?
+      GROUP BY month
+      ORDER BY month
+    `, [userID]);
+
+    res.json(upvotes);
+  } catch (error) {
+    console.error('Error fetching user upvotes over time:', error);
+    res.status(500).json({ message: 'Error fetching user upvotes over time' });
+  }
+});
+
+
+app.get('/api/user-top-rated-characters/:userID', async (req, res) => {
+  const { userID } = req.params;
+  try {
+    const [results] = await db.query(`
+      SELECT c.characterName, AVG(r.rating) as averageRating
+      FROM Characters c
+      JOIN Review r ON c.characterID = r.characterID
+      WHERE r.userID = ?
+      GROUP BY c.characterID
+      ORDER BY averageRating DESC
+      LIMIT 5
+    `, [userID]);
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/api/user-activity-over-time/:userID', async (req, res) => {
+  const { userID } = req.params;
+  try {
+    const [reviews] = await db.query(`
+      SELECT DATE_FORMAT(reviewDate, '%Y-%m') as month, COUNT(*) as count
+      FROM Review
+      WHERE userID = ?
+      GROUP BY month
+      ORDER BY month
+    `, [userID]);
+
+    const [comments] = await db.query(`
+      SELECT DATE_FORMAT(datePosted, '%Y-%m') as month, COUNT(*) as count
+      FROM Comments
+      WHERE userID = ?
+      GROUP BY month
+      ORDER BY month
+    `, [userID]);
+
+  const [bookmarks] = await db.query(`
+    SELECT DATE_FORMAT(dateAdded, '%Y-%m') as month, COUNT(*) as count
+    FROM Bookmarks
+    WHERE userID = ?
+    GROUP BY month
+    ORDER BY month
+  `, [userID]);
+
+
+    res.json({ reviews, comments, bookmarks });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
 // Start the server and print the port it's running on
