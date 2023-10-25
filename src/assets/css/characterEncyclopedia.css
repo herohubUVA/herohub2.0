@@ -338,9 +338,10 @@ color: #171821;
 
 .search-container,
 .comment-thread-container {
-    width: 48%;
+    width: 50%;
     float: left;
     margin-right: 2%;
+    vertical-align: top;
 }
 
 .comment-thread-container {
@@ -383,6 +384,8 @@ color: #171821;
 }
 
 .content-wrapper {
+  display: flex;
+  justify-content: space-between;
   overflow: auto;
   width: 100%;
 }
@@ -473,3 +476,50 @@ color: #171821;
 
 
 
+/* Rating stars */
+.stars i {
+  color: #ffd700; /* Gold color for stars */
+  transition: transform 0.2s ease; /* Smooth transition for transformations */
+  cursor: pointer; /* Indicate that stars are clickable */
+}
+
+/* Hover effect for stars */
+.stars i:hover {
+  transform: scale(1.2); /* Enlarge stars on hover */
+}
+
+/* Bookmark button */
+.bookmark-btn {
+  color: #ffffff; /* White color for better visibility */
+  cursor: pointer; /* Indicate that it’s clickable */
+  transition: transform 0.2s ease; /* Smooth transition for transformations */
+}
+
+/* Hover effect for bookmark button */
+.bookmark-btn:hover {
+  transform: scale(1.2); /* Enlarge bookmark icon on hover */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+
+.custom-button {
+  transition: all 0.3s ease; /* Smooth transition for state changes */
+  padding: 10px 15px; /* Adequate padding */
+  font-size: 1em; /* Appropriate font size */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Indicates that it's clickable */
+}
+
+.custom-button:hover {
+  transform: scale(1.05); /* Slightly enlarge the button */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding a subtle shadow */
+}
+
+.average-rating {
+  color: #ffffff; /* This is the hex code for white */
+}
