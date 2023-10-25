@@ -107,6 +107,14 @@ app.get('/CharacterEncyclopedia', (req, res) => {
   res.render('characterEncyclopedia', { user: req.user });
 });
 
+
+app.get('/StoryTest', (req, res) => {
+  res.render('characterEncyclopedia', { user: req.user });
+});
+
+
+
+
 // Hero Metrics Page (GET: /HeroMetrics)
 // ------------------------------------
 // Renders the hero metrics page and passes the user's information
@@ -149,6 +157,7 @@ app.get('/characterBookmarks', async (req, res) => {
   const [bookmarks] = await db.query(fetchQuery, [userID]);
   res.render('characterBookmarks', { bookmarks: bookmarks, user: req.user });
 });
+
 
 
 // Edit Profile Page (GET: /EditProfile)
