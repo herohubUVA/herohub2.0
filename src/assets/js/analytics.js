@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             scales: {
             y: {
                 beginAtZero: true,
-                max: 5 // Assuming ratings are out of 5
+                max: 5
             }
             }
         }
