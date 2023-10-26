@@ -268,3 +268,59 @@ Volume Control Styling
 .volume-bar.active {
   background-color: #333;
 }
+
+.showcase-area {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 0;
+}
+
+.media-section {
+  flex-basis: 40%;
+  text-align: center;  
+  margin-right: 20px;
+}
+
+.media-section img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-section {
+  flex-basis: 55%;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.story-title {
+  font-size: 2.5rem;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.story-description {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.characters-section {
+  margin-top: 30px;
+}
+
+.characters-section h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.characters-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #555;
+}
+

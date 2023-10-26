@@ -26,27 +26,27 @@
             <!-- Unique Content for Story of the Day -->
             <div class="showcase-area">
                 <div class="container">
-                    <div class="left">
-
-                        <% if (error && error !== null && error !== undefined) { %>
-                            <p>DEBUG: Error branch. Error: <%= error %></p>
-                        <% } else { %>
-                            <p>DEBUG: Story branch.</p>
-                            <!-- Display the story details -->
-                            <div class="story-container">
-                                <h2><%= story.title %></h2>
-                                <p><%= story.description %></p>
-                                <p>Characters: <%= story.characters %></p>
-                                <% if (story.image_url) { %>
-                                    <img src="<%= story.image_url %>" alt="<%= story.title %> image">
-                                <% } %>
+                    <% if (error && error !== null && error !== undefined) { %>
+                        <p>DEBUG: Error branch. Error: <%= error %></p>
+                    <% } else { %>
+                        <!-- Display the story details -->
+                        <div class="media-section">
+                            <% if (story.image_url) { %>
+                                <img src="<%= story.image_url %>" alt="<%= story.title %> image">
+                            <% } %>
+                        </div>
+                        <div class="content-section">
+                            <h1 class="story-title"><%= story.title %></h1>
+                            <p class="story-description"><%= story.description %></p>
+                            <div class="characters-section">
+                                <h2>Characters</h2>
+                                <p><%= story.characters %></p>
                             </div>
-                        <% } %>
-                        
-                    </div>
-
+                        </div>
+                    <% } %>
                 </div>
             </div>
+
 
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
