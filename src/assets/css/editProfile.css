@@ -271,50 +271,53 @@ Volume Control Styling
 
 
 
+.showcase-area .left .edit-section:first-child {
+  margin-top: 30px;
+}
 
 
 .edit-section {
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--darkOne);
-  border-radius: 5px;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1); /* Light overlay for distinction */
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .edit-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: var(--darkOne);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
 }
 
-.edit-section select,
-.edit-section input,
 .edit-section button {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--darkOne);
+  padding: 10px 20px;
+  border: none;
   border-radius: 5px;
-  font-family: 'Exo', sans-serif;
-  background-color: var(--backgroundColor);
-  color: var(--darkOne);
-  transition: border-color 0.3s;
-}
-
-.edit-section select:hover,
-.edit-section input:hover,
-.edit-section button:hover {
-  border-color: var(--mainColor);
-}
-
-.edit-section button {
-  cursor: pointer;
   background-color: var(--mainColor);
-  color: var(--backgroundColor);
-  width: auto;
-  padding: 0.5rem 1rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .edit-section button:hover {
   background-color: var(--hoverColor);
+}
+
+.edit-section input[type="text"],
+.edit-section input[type="password"],
+.edit-section select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+#delete-account {
+  background-color: #d9534f;
+}
+
+#delete-account:hover {
+  background-color: #c9302c;
 }
