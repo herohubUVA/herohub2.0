@@ -271,27 +271,44 @@ Volume Control Styling
 
 /* Contact Form Styles */
 .contact-form {
-    margin-top: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+  margin-top: 30px;
 }
 
-.input-group {
-    margin-bottom: 1rem;
+.contact-form h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: var(--darkOne);
 }
 
-.input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
+.contact-form form {
+  display: flex;
+  flex-direction: column;
 }
 
-.input-group input, 
-.input-group textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--darkOne);
-    border-radius: 4px;
-    font-size: 1rem;
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea,
+.contact-form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-form button {
+  background-color: var(--mainColor);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+  background-color: var(--hoverColor);
 }
