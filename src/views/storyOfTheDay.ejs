@@ -31,9 +31,14 @@
                     <% } else { %>
                         <!-- Display the story details -->
                         <div class="media-section">
-                            <% if (story.image_url) { %>
-                                <img src="<%= story.image_url %>" alt="<%= story.title %> image">
-                            <% } %>
+                            <% if (story.image_url.endsWith('.mp4')) { %>
+                                <video width="640" height="360" controls>
+                                  <source src="<%= story.image_url %>" type="video/mp4">
+                                  Your browser does not support the video tag.
+                                </video>
+                                <% } else { %>
+                                    <img src="<%= story.image_url %>" alt="<%= story.title %>">
+                                <% } %>
                         </div>
                         <div class="content-section">
                             <h1 class="story-title"><%= story.title %></h1>
