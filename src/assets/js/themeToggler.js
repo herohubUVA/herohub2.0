@@ -49,6 +49,12 @@ function toggleAnimation() {
         declareAudioElements();
         bindAudioEvents();
         initializeProfileDropdown();
+        if (typeof initializeAnalyticCharts === "function") {
+            initializeAnalyticCharts();
+        }
+        if (typeof initializeHeroCharts === "function") {
+            initializeHeroCharts();
+        }
     });
     
 }

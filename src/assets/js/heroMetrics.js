@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+function initializeHeroCharts() {
     const ctxRatings = document.getElementById('ratingsChart').getContext('2d');
     const ctxCommented = document.getElementById('mostCommentedChart').getContext('2d');
     const ctxBookmarked = document.getElementById('mostBookmarkedChart').getContext('2d');
@@ -153,4 +153,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             createBarChart(ctxBookmarked, labels, bookmarks, 'Bookmark Counts', 'rgba(153, 102, 255, 0.2)', 'rgba(153, 102, 255, 1)');
         })
         .catch(error => console.error('Error fetching bookmark data:', error));
-});
+}
+
+document.addEventListener('DOMContentLoaded', initializeHeroCharts);

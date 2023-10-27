@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+function initializeAnalyticCharts() {
     const topRatedCharactersCtx = document.getElementById('topRatedCharactersChart').getContext('2d');
     const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
     const userUpvotesCtx = document.getElementById('userUpvotesChart').getContext('2d');
@@ -147,11 +147,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
-});
-
-function createActivityData(activityData, dates) {
-    const activityMap = new Map(activityData.map(item => [item.month, item.count]));
-    return dates.map(date => activityMap.get(date) || 0);
+    function createActivityData(activityData, dates) {
+        const activityMap = new Map(activityData.map(item => [item.month, item.count]));
+        return dates.map(date => activityMap.get(date) || 0);
+    }
+       
 }
-    
+
+
+
+ 
   
+document.addEventListener('DOMContentLoaded', initializeAnalyticCharts);
