@@ -48,7 +48,9 @@ function toggleAnimation() {
         bindThemeEvents();
         declareAudioElements();
         bindAudioEvents();
+        initializeProfileDropdown();
     });
+    
 }
 
 
