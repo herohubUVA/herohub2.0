@@ -268,3 +268,61 @@ Volume Control Styling
 .volume-bar.active {
   background-color: #333;
 }
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.big-title, .text {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeInSlideUp {
+  0%, 100% { opacity: 0; transform: translateY(20px); }
+  50% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rgbEffect {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: 0 0; }
+}
+
+.big-title h1 {
+  position: relative;
+  display: inline-block;
+  color: #000; /* or any color you prefer */
+}
+
+.big-title h1::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rgbEffect 5s linear infinite;
+  z-index: 1;
+}
+
+
+
+.text, .cta {
+  animation: fadeInSlideUp 7s infinite;  /* Adjust duration as needed */
+}
+
+@keyframes rgbEffect {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 100% 0; }
+}
+
