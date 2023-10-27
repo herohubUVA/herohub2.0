@@ -29,21 +29,24 @@
                 <label for="password">Password</label>
             </div>
 
-            <a href="#" onclick="document.getElementById('signInForm').submit();">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              Login
-            </a>
 
-            <a href="/auth/google">Login with Google</a>
-            <!-- Sign In Through Google -->
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
+            <div class="btn-container">
+              <a href="#" class="action-btn" onclick="document.getElementById('signInForm').submit();">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Login
+              </a>
+              <a href="/auth/google" class="google-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Google Login
               </a>
             </div>
+            
           </form>
 
           <!-- Sign Up Form -->
@@ -62,21 +65,22 @@
                 <input type="password" name="password" required="">
                 <label for="password">Password</label>
             </div>
-          
-            <a href="#" onclick="document.getElementById('signUpForm').submit();">
+          <div class="btn-container">
+            <a href="#" class="action-btn" onclick="document.getElementById('signUpForm').submit();">
               <span></span>
               <span></span>
               <span></span>
               <span></span>
               Sign Up
             </a>
-            <!-- Sign Up Through Google-->
-            <a href="/auth/google">Sign Up Through Google</a>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-            </div>
+            <a href="/auth/google" class="google-btn">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              Google Sign Up
+            </a>            
+          </div>
           </form>
         </div>
       </div>
