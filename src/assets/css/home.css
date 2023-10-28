@@ -301,7 +301,7 @@ Volume Control Styling
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+  background: linear-gradient(90deg, rgb(226,54,54), rgb(0,0,0), rgb(80,74,74), rgb(81,140,202), rgb(247,143,63));
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
