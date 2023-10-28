@@ -1,4 +1,3 @@
-// The endpoint of your server where you've set up the caching and fetching logic
 const serverEndpoint = "/getStoryOfTheDay";
 
 const displayStory = (storyData) => {

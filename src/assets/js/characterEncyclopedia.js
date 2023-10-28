@@ -27,15 +27,15 @@ console.log(`Timestamp: ${timestamp}, API Key: ${apiKey}, Hash: ${hashValue}`);
 * @param {string} value - The value to be displayed
 */
 function displayWords(value) {
-input.value = value;
-removeElements();
+  input.value = value;
+  removeElements();
 }
 
 /**
 * Removes elements (search suggestions) from the listContainer.
 */
 function removeElements() {
-listContainer.innerHTML = "";
+  listContainer.innerHTML = "";
 }
 
 // Event listener for showing character suggestions while typing
@@ -52,16 +52,16 @@ const response = await fetch(url);
 const jsonData = await response.json();
 
 jsonData.data["results"].forEach((result) => {
-  let name = result.name;
-  let div = document.createElement("div");
-  div.style.cursor = "pointer";
-  div.classList.add("autocomplete-items");
-  div.setAttribute("onclick", "displayWords('" + name + "')");
-  let word = "<b>" + name.substr(0, input.value.length) + "</b>";
-  word += name.substr(input.value.length);
-  div.innerHTML = `<p class="item">${word}</p>`;
-  listContainer.appendChild(div);
-});
+    let name = result.name;
+    let div = document.createElement("div");
+    div.style.cursor = "pointer";
+    div.classList.add("autocomplete-items");
+    div.setAttribute("onclick", "displayWords('" + name + "')");
+    let word = "<b>" + name.substr(0, input.value.length) + "</b>";
+    word += name.substr(input.value.length);
+    div.innerHTML = `<p class="item">${word}</p>`;
+    listContainer.appendChild(div);
+  });
 });
 
 
@@ -134,81 +134,78 @@ jsonData.data["results"].forEach((element) => {
         console.error("No character ID found for bookmarking");
       return;
     }
-      console.log("Sending bookmark for characterID:", characterID, "and userID:", userID);
-      // Send a request to the server to save the bookmark
-      fetch('/addBookmark', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              characterID: characterID,
-              userID: userID
-          })
+    console.log("Sending bookmark for characterID:", characterID, "and userID:", userID);
+    // Send a request to the server to save the bookmark
+    fetch('/addBookmark', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            characterID: characterID,
+            userID: userID
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                console.log(data.message);
-            } else {
-                console.error("Error bookmarking character");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.message) {
+              console.log(data.message);
+          } else {
+              console.error("Error bookmarking character");
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
       });
-    }
+  });
+}
 
-    // Fetch and display the ratings
+// Fetch and display the ratings
+fetchAndDisplayUserRating(characterID);
+fetchAndDisplayAverageRating(characterID);
+
+
+
+// ----------- Rating Functionality -------------
+// Fetch the current user ID as soon as the script loads
+let userID;
+fetch('/getCurrentUserID')
+.then(response => response.json())
+.then(data => {
+  if (data.userID) {
+    userID = data.userID;
     fetchAndDisplayUserRating(characterID);
-    fetchAndDisplayAverageRating(characterID);
-
-    
-
-    // ----------- Rating Functionality -------------
-    // Fetch the current user ID as soon as the script loads
-    let userID;
-    fetch('/getCurrentUserID')
-    .then(response => response.json())
-    .then(data => {
-      if (data.userID) {
-        userID = data.userID;
-        fetchAndDisplayUserRating(characterID);
-      } else {
-        throw new Error(data.error || 'Error fetching userID');
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-    });
-
-    // Update the star display based on the selected rating
-    function updateStarDisplay() {
-    starElements.forEach((s, index) => {
-      if (index < selectedRating) {
-        s.classList.remove("far");
-        s.classList.add("fas");
-      } else {
-        s.classList.remove("fas");
-        s.classList.add("far");
-      }
-    });
-    }
-
-  const saveRatingButton = document.getElementById("save-rating-button");
-  if (saveRatingButton) {
-
+  } else {
+    throw new Error(data.error || 'Error fetching userID');
   }
+})
+.catch(error => {
+  console.error("Error:", error);
+});
+
+// Update the star display based on the selected rating
+function updateStarDisplay() {
+  starElements.forEach((s, index) => {
+    if (index < selectedRating) {
+      s.classList.remove("far");
+      s.classList.add("fas");
+    } else {
+      s.classList.remove("fas");
+      s.classList.add("far");
+    }
+  });
+}
+
+const saveRatingButton = document.getElementById("save-rating-button");
 saveRatingButton.addEventListener('click', function() {
 console.log("Save Rating button clicked");
 const characterID = showContainer.getAttribute("data-character-id");
 console.log("Character ID:", characterID);
 if (!characterID) {
-console.error("No character ID found");
-return;
+  console.error("No character ID found");
+  return;
 }
-
+  
 // Send a request to the server to save the rating
 fetch('/submitRating', {
 method: 'POST',
@@ -223,16 +220,16 @@ body: JSON.stringify({
 })
 .then(response => response.json())
 .then(data => {
-if (data.message) {
-  console.log(data.message);
-  fetchAndDisplayAverageRating(characterID);
-} else {
-  console.error("Error submitting rating");
-}
-})
-.catch(error => {
-console.error("Error:", error);
-});
+  if (data.message) {
+    console.log(data.message);
+    fetchAndDisplayAverageRating(characterID);
+  } else {
+    console.error("Error submitting rating");
+  }
+  })
+  .catch(error => {
+  console.error("Error:", error);
+  });
 });
 
 // Fetch and display the average rating
@@ -447,30 +444,30 @@ let userID;
 fetch('/getCurrentUserID')
 .then(response => response.json())
 .then(data => {
-if (data.userID) {
-  userID = data.userID;
-  fetchAndDisplayUserRating(characterID);
-} else {
-  throw new Error(data.error || 'Error fetching userID');
-}
+  if (data.userID) {
+    userID = data.userID;
+    fetchAndDisplayUserRating(characterID);
+  } else {
+    throw new Error(data.error || 'Error fetching userID');
+  }
 })
 .catch(error => {
-console.error("Error:", error);
+  console.error("Error:", error);
 });
 
 
 
 // Update the star display based on the selected rating
 function updateStarDisplay() {
-starElements.forEach((s, index) => {
-if (index < selectedRating) {
-  s.classList.remove("far");
-  s.classList.add("fas");
-} else {
-  s.classList.remove("fas");
-  s.classList.add("far");
-}
-});
+  starElements.forEach((s, index) => {
+  if (index < selectedRating) {
+    s.classList.remove("far");
+    s.classList.add("fas");
+  } else {
+    s.classList.remove("fas");
+    s.classList.add("far");
+  }
+  });
 }
 
 // Fetch and display the average rating

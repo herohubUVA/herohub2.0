@@ -14,6 +14,7 @@
   --backgroundColor: #f1f8fc;
   --darkOne: #312f3a;
   --darkTwo: #45424b;
+  --profileTextColor: #312f3a;
 }
 
 /* Defines color variables for dark theme */
@@ -23,6 +24,7 @@
   --backgroundColor: #192e3a;
   --darkOne: #f3f3f3;
   --darkTwo: #fff;
+  --profileTextColor: #f3f3f3;
 }
 
   
@@ -261,3 +263,7 @@
 }
 
 
+
+.profile-dropdown span {
+  color: var(--profileTextColor);
+}

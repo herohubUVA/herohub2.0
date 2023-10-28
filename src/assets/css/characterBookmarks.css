@@ -282,15 +282,15 @@ Volume Control Styling
 
 .bookmark-slots {
   display: flex;
-  justify-content: space-around; /* more space between icons */
-  width: 80%; /* control the total width of the icon group */
-  margin: 3em auto 0 auto; /* increased space from the message */
+  justify-content: space-around;
+  width: 80%;
+  margin: 3em auto 0 auto; 
 }
 
 .bookmark-slot {
   width: 70px;
-  height: 80px; /* making it more rectangular */
-  border-radius: 10px; /* slight rounding for aesthetics */
-  border: 2px solid #aaa; /* border color */
-  background-color: #f4f4f4; /* light background */
+  height: 80px;
+  border-radius: 10px;
+  border: 2px solid #aaa;
+  background-color: #f4f4f4;
 }

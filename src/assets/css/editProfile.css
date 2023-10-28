@@ -8,6 +8,7 @@
   --backgroundColor: #f1f8fc;
   --darkOne: #312f3a;
   --darkTwo: #45424b;
+  --h2TextColor: #45424b;
 }
 
 /* Defines color variables for dark theme */
@@ -17,6 +18,7 @@
   --backgroundColor: #192e3a;
   --darkOne: #f3f3f3;
   --darkTwo: #fff;
+  --h2TextColor: #f3f3f3;
 }
 
 *,
@@ -287,6 +289,7 @@ Volume Control Styling
 .edit-section h2 {
   font-size: 1.5rem;
   margin-bottom: 15px;
+  color: var(--h2TextColor);
 }
 
 .edit-section button {
