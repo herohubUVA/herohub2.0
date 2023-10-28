@@ -321,3 +321,14 @@ Volume Control Styling
 #delete-account:hover {
   background-color: #c9302c;
 }
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
+
+.small-image {
+  width: 50px; /* or any size that suits your design */
+  height: 50px; /* maintain aspect ratio */
+  margin-left: 15px; /* space between h2 and image */
+}
