@@ -17,15 +17,13 @@ declareThemeElements();
 function toggleAnimation() {
     let event;
     
-    // This will notify audioControls.js to stop current song and select new song for the upcoming theme
     if (dark) {
         event = new Event('themeChangedToLight');
     } else {
         event = new Event('themeChangedToDark');
     }
-    document.dispatchEvent(event); // Dispatch the custom event
+    document.dispatchEvent(event);
 
-    // You're toggling the 'dark' variable here
     dark = !dark;
 
     let clone = big_wrapper.cloneNode(true);

@@ -35,9 +35,41 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: 'http://localhost:4000/auth/google/callback'
-}, (accessToken, refreshToken, profile, done) => {
-  return done(null, profile);
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const email = profile.emails[0].value;
+    const [users] = await db.execute('SELECT * FROM User WHERE email = ?', [email]);
+
+    if (users.length > 0) {
+      // User found, log them in
+      return done(null, { id: users[0].userID, displayName: users[0].username, dateRegistered: users[0].dateRegistered, icon: users[0].icon });
+    } else {
+      // No user found with this email address
+
+      // Extract additional information from the profile
+      const username = profile.displayName;
+      const icon = profile.photos ? profile.photos[0].value : 'spiderman.png';  // Use a default icon if not provided
+
+      // Insert new user into the database
+      const [result] = await db.execute('INSERT INTO User (username, email, password, icon, dateRegistered) VALUES (?, ?, ?, ?, NOW())', 
+                                        [username, email, '', icon]);
+
+      // Create a user object to pass to done
+      const newUser = {
+        id: result.insertId,
+        displayName: username,
+        dateRegistered: new Date(),
+        icon: icon
+      };
+
+      return done(null, newUser);
+    }
+  } catch (error) {
+    console.error('Error during Google OAuth:', error);
+    return done(error);
+  }
 }));
+
 
 // ----- User Serialization for Session Handling -----
 passport.serializeUser((user, done) => {
