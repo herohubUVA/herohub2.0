@@ -71,6 +71,7 @@ a {
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 /* Defines styling for main text */
@@ -293,4 +294,10 @@ Volume Control Styling
   border-radius: 10px;
   border: 2px solid #aaa;
   background-color: #f4f4f4;
+}
+
+.empty-bookmarks-message {
+  font-size: 50px; /* Change the font size */
+  text-align: center; /* Center the text horizontally */
+  margin: 100px 0; /* Adjust vertical spacing */
 }

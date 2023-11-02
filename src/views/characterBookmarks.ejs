@@ -28,19 +28,32 @@
                 <div class="container">
                     <div class="left">
                         <div class="bookmarks-container">
-                            <% bookmarks.forEach(bookmark => { %>
-                                <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
-                                    <!-- Display the character details for each bookmarked character -->
-                                    Character ID: <%= bookmark.characterID %>
-                                    <!-- You can add more details as required -->
-                                    <button class="remove-bookmark-button">Remove Bookmark</button>
+                            <% if (bookmarks.length === 0) { %>
+                                <!-- Display a message if bookmarks array is empty -->
+                                <div class="empty-bookmarks-message">
+                                    You have no bookmarks! Let's fix that!
                                 </div>
-                            <% }) %>
+                            <% } else { %>
+                                <!-- Display bookmarks if not empty -->
+                                <% bookmarks.forEach(bookmark => { %>
+                                    <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
+                                        <!-- Display the character details for each bookmarked character -->
+                                        Name: <%= bookmark.characterName %>
+                                        <br>
+                                        Description: <%= bookmark.characterDescription %>
+                                        <br>
+                                        Character ID: <%= bookmark.characterID %>
+                                        <!-- You can add more details as required -->
+                                        <br>
+                                        <button class="remove-bookmark-button">Remove Bookmark</button>
+                                    </div>
+                                <% }) %>
+                            <% } %>
                         </div>                        
                     </div>
-
                 </div>
             </div>
+
 
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">

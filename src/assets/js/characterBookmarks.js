@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", function() {
               
               // Get the character ID from this bookmark element
               const characterID = bookmarkElement.getAttribute("data-character-id");
+              const characterName = bookmarkElement.getAttribute("data-character-name");
+
+              if (!characterName){
+                console.error("No character name found for removing bookmark" + characterID);
+              }
 
               if (!characterID) {
                   console.error("No character ID found for removing bookmark");
