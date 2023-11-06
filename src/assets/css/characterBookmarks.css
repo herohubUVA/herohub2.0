@@ -296,7 +296,27 @@ Volume Control Styling
 }
 
 .empty-bookmarks-message {
-  font-size: 50px; /* Change the font size */
-  text-align: center; /* Center the text horizontally */
-  margin: 100px 0; /* Adjust vertical spacing */
+  font-size: 50px; 
+  text-align: center; 
+  margin: 100px 0; 
+}
+
+.bookmark {
+  border: 1px solid #ccc; 
+  padding: 10px;
+  margin-bottom: 10px; 
+  background-color: #f2f2f2;
+}
+
+.remove-bookmark-button{
+  background-color: #ff4d4d; /* Background color for the button */
+  color: #fff; /* Text color for the button */
+  border: none; /* Remove the button border */
+  padding: 10px 20px; /* Add more padding to the button */
+  cursor: pointer; /* Change the cursor to a pointer on hover */
+  border-radius: 7px;
+}
+
+.remove-bookmark-button:hover {
+  background-color: #e60000;
 }

@@ -191,7 +191,6 @@ app.get('/characterBookmarks', async (req, res) => {
 });
 
 
-
 // Edit Profile Page (GET: /EditProfile)
 // -------------------------------------
 // An authenticated route that renders the user's profile editing page
@@ -821,6 +820,13 @@ app.post('/addBookmark', async (req, res) => {
   
   if (results[0].count >= 3) {
       return res.status(400).json({ error: 'User can only have 3 bookmarks at once.' });
+  }
+  
+  const checkQuery = "SELECT COUNT(*) as count FROM Bookmarks WHERE characterID = ? and userID = ?";
+  const [bookmarkResults] = await db.query(checkQuery, [characterID, userID]);
+
+  if (bookmarkResults[0].count > 0) {
+    return res.status(400).json({ error: 'Bookmark already exists for this user'});
   }
 
   // Insert new bookmark
