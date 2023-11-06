@@ -84,6 +84,8 @@ const jsonData = await response.json();
 
 jsonData.data["results"].forEach((element) => {
   characterID = element.id;
+  characterName = element.name; 
+  characterDescription = element.description; 
   console.log("Setting characterID:", characterID);
   showContainer.innerHTML = `<div class="card-container">
     <div class="container-character-image">

@@ -13,16 +13,37 @@ document.addEventListener("DOMContentLoaded", function() {
               
               // Get the character ID from this bookmark element
               const characterID = bookmarkElement.getAttribute("data-character-id");
-              const characterName = bookmarkElement.getAttribute("data-character-name");
-
-              if (!characterName){
-                console.error("No character name found for removing bookmark" + characterID);
-              }
 
               if (!characterID) {
                   console.error("No character ID found for removing bookmark");
                   return;
               }
+            //   fetch('/getCharacterInfo?characterID=${characterID}', {
+            //     method: 'GET', 
+            //     headers: {
+            //         'Content Type': 'application/json'
+            //     }
+            //   })
+
+            let userID = 25; // Replace with the actual userID
+            // let characterID; // Replace with the actual characterID
+
+            fetch(`/user/${userID}/bookmarks`)
+            .then((response) => {
+                if (!response.ok) {
+                throw new Error(`Request failed with status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Handle the bookmark information returned from the server
+                console.log(data);
+                // You can process the data and display it on your web page
+            })
+            .catch((error) => {
+                console.error(`Fetch error: ${error.message}`);
+                // Handle the error gracefully, e.g., display an error message on your web page
+            });
               
               // Send a request to your server to remove the bookmark
               fetch('/removeBookmark', {
@@ -50,6 +71,8 @@ document.addEventListener("DOMContentLoaded", function() {
                   console.error("Error:", error);
               });
           }
+
       });
   }
 });
+

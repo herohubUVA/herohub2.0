@@ -185,7 +185,7 @@ app.get('/characterBookmarks', async (req, res) => {
   if (!userID) {
       return res.status(401).json({ error: 'User not authenticated' });
   }
-  const fetchQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
+  const fetchQuery = "SELECT Characters.characterName, Characters.characterDescription, Characters.characterID FROM Bookmarks INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID WHERE Bookmarks.userID = ?;";
   const [bookmarks] = await db.query(fetchQuery, [userID]);
   res.render('characterBookmarks', { bookmarks: bookmarks, user: req.user });
 });
@@ -882,6 +882,8 @@ app.get('/fetchBookmarks', async (req, res) => {
       res.status(500).json({ error: "Error fetching bookmarks" });
   }
 });
+
+
 
 
 // Highest and Lowest Rated Characters Route (GET: /api/highest-lowest-rated-characters)
