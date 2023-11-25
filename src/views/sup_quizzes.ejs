@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character Bookmarks</title>
+
+    <!-- Accesses CSS files-->
+    <link rel="stylesheet" href="/assets/css/characterBookmarks.css" />
+    <link rel="stylesheet" href="/assets/css/navbar.css">
+    <style>
+        body {
+            text-align: center;
+        }
+
+        form {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 25px;
+            
+        }
+
+        input {
+            margin-bottom: 15px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        legend {
+            font-size: 30px; /* Set the desired font size */
+         
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        
+        fieldset {
+            border: none;
+            margin: 40pt;
+            padding: 40pt;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Optional: Adjust spacing between fieldsets */
+        }
+
+
+        div label {
+            margin-right: 10px; /* Adjust spacing between labels and radio buttons */
+        }
+
+
+        /* Custom styles for radio buttons */
+        input[type="radio"] {
+            appearance: none; /* Remove default appearance */
+           
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px; /* Set the width and height of the custom radio button */
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0); /* Border color for unchecked state */
+            border-radius: 50%; /* Make it a circle */
+            outline: none; /* Remove the default focus outline */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+   
+        }
+
+/* Custom styles for checked radio buttons */
+        input[type="radio"]:checked {
+            background-color: rgba(255, 255, 255, 0); /* Background color for checked state */
+            border-color: rgba(242, 242, 242, 0);
+        }
+
+
+        /* Style the custom radio button label */
+        input[type="radio"] + label::before {
+            /* content: '\2022'; Unicode character for a bullet (you can use other symbols) */
+            font-size: 20px;
+            color: #333; /* Color of the symbol for unchecked state */
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            margin-right: 10px; /* Space between the radio button and label */
+        }
+
+        /* Style the custom radio button label for checked state */
+        input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+       
+        div label {
+            display: inline-block;
+            gap: 10px; /*Adjust spacing between radio buttons */
+            background-color: #f4f4f4;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 165px; /* Set a fixed width */
+            height: 100px; /* Set a fixed height */
+        }
+
+        /* Additional styles for checked labels */
+        input[type="radio"]:checked + label {
+            background-color: rgb(221, 139, 57);
+            color: #fff;
+            border-color: rgb(221, 139, 57);
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="big-wrapper light">
+
+            <!-- Accesses navigation bar -->
+            <header>
+                <div class="container">
+                    <%- include('partials/navbar') %>
+                </div>
+            </header>
+
+  
+
+
+
+               
+            
+            <form action="quiz-result.html" method="post">
+
+                <fieldset>
+                    <legend>1. What is your preferred method of travel?</legend>
+                    <div>   
+                        <input type="radio" name="question1" id="q1_flight" value="Flight">
+                        <label for="q1_flight">Flight</label>
+            
+                        <input type="radio" name="question1" id="q1_running" value="running">
+                        <label for="q1_running">Running</label>
+            
+                        <input type="radio" name="question1" id="q1_driving" value="driving">
+                        <label for="q1_driving"> Driving </label>
+            
+                        <input type="radio" name="question1" id="q1_teleportation" value="Teleportation">
+                        <label for="q1_teleportation"> Teleportation </label>
+                    </div>
+                    </fieldset>
+               
+                <fieldset>
+                    <legend>2. Choose a weapon:</legend>
+                    <div>
+                        <input type="radio" name="question2" id="q2_magicstaff" value="magicstaff">
+                        <label for="q2_magicstaff"> Magic artifact</label>
+            
+                        <input type="radio" name="question2" id="q2_shield" value="shield">
+                        <label for="q2_shield">Shield</label>
+            
+                        <input type="radio" name="question2" id="q2_bow" value="bow">
+                        <label for="q2_bow">High Tech Gadgets</label>
+            
+                        <input type="radio" name="question2" id="q2_none" value="none">
+                        <label for="q2_none">I rely on my abilities</label>
+                    </div>
+                </fieldset>
+            
+                <fieldset>
+                    <legend> What motivates you to be a hero? </legend>
+                    <div>
+                        <input type="radio" name="question3" id="q3_justice" value="justice">
+                        <label for="q3_justice">Justice</label>
+            
+                        <input type="radio" name="question3" id="q3_power" value="power">
+                        <label for="q3_power">Power</label>
+            
+                        <input type="radio" name="question3" id="q3_love" value="love">
+                        <label for="q3_love">Love</label>
+            
+                        <input type="radio" name="question3" id="q3_adventure" value="adventure">
+                        <label for="q3_adventure">Adventure</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> What is your preferred fighting style? </legend>
+                    <div>
+                        <input type="radio" name="question4" id="q4_smash" value="smash">
+                        <label for="q4_smash">Hulking out and smashing things</label>
+            
+                        <input type="radio" name="question4" id="q4_martialarts" value="martialarts">
+                        <label for="q4_martialarts">Martial arts and acrobatics</label>
+            
+                        <input type="radio" name="question4" id="q4_tech" value="tech">
+                        <label for="q4_tech">High-tech gadgetry and strategy</label>
+            
+                        <input type="radio" name="question4" id="q4_magic" value="magic">
+                        <label for="q4_adventure">Using magic or psychic abilities</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> What is your preferred environment? </legend>
+                    <div>
+                        <input type="radio" name="question5" id="q5_urban" value="urban">
+                        <label for="q5_urban">Urban cityscape</label>
+            
+                        <input type="radio" name="question5" id="q5_cosmic" value="cosmic">
+                        <label for="q5_cosmic">Cosmic space</label>
+            
+                        <input type="radio" name="question5" id="q5_jungle" value="jungle">
+                        <label for="q5_jungle"> Hidden forest </label>
+            
+                        <input type="radio" name="question5" id="q5_suburbs" value="suburbs">
+                        <label for="q5_suburbs">The quiet suburbs</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> What is your greatest strength as a hero? </legend>
+                    <div>
+                        <input type="radio" name="question6" id="q6_intellect" value="intellect">
+                        <label for="q6_intellect">Genius-level intellect</label>
+            
+                        <input type="radio" name="question6" id="q6_determine" value="determine">
+                        <label for="q6_determine">Unyielding determination</label>
+            
+                        <input type="radio" name="question6" id="q6_responsible" value="responsible">
+                        <label for="q6_responsible">Sense of responsibility</label>
+            
+                        <input type="radio" name="question6" id="q6_power" value="power">
+                        <label for="q6_power">Overwhelming power</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> Select a color that represents you: </legend>
+                    <div>
+                        <input type="radio" name="question7" id="q7_green" value="green">
+                        <label for="q7_green">Green</label>
+            
+                        <input type="radio" name="question7" id="q7_blue" value="blue">
+                        <label for="q7_blue">Blue</label>
+            
+                        <input type="radio" name="question7" id="q7_red" value="red">
+                        <label for="q7_red">Red</label>
+            
+                        <input type="radio" name="question7" id="q7_yellow" value="yellow">
+                        <label for="q7_yellow">Yellow</label>
+                    </div>
+                </fieldset>
+
+                
+            
+                <button type="submit">Discover Your Hero</button>
+            
+            </form>
+            
+            
+            <!-- Music Play/Pause Control and Volume Bar -->
+            <div class="audio-controls">
+                <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
+                <div class="volume-control">
+                  <div class="volume-bar" data-level="0"></div>
+                  <div class="volume-bar" data-level="1"></div>
+                  <div class="volume-bar" data-level="2"></div>
+                  <div class="volume-bar" data-level="3"></div>
+                  <div class="volume-bar" data-level="4"></div>
+                  <div class="volume-bar" data-level="5"></div>
+                  <div class="volume-bar" data-level="6"></div>
+                  <div class="volume-bar" data-level="7"></div>
+                  <div class="volume-bar" data-level="8"></div>
+                  <div class="volume-bar" data-level="9"></div>
+                </div>
+            </div>
+            <audio id="storyPageSong" loop>
+                <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
+            </audio>
+
+            <!-- Theme Change Button -->
+            <div class="bottom-area">
+                <div class="container">
+                    <button class="toggle-btn">
+                        <i class="far fa-moon"></i>
+                        <i class="far fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Access Javascript Code -->
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <script src="/assets/js/themeToggler.js"></script>
+    <script src="/assets/js/audioControls.js"></script>
+    <script src="/assets/js/characterBookmarks.js"></script>
+</body>
+<script>
+    var userID = '<%= user.id %>'; // Assuming you pass the user object to your EJS render function
+</script>
+
+</html>
+
+
