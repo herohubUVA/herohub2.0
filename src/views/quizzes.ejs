@@ -5,13 +5,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hero Metrics</title>
+    <title>Character Bookmarks</title>
 
     <!-- Accesses CSS files-->
-    <link rel="stylesheet" href="/assets/css/heroMetrics.css" />
+    <link rel="stylesheet" href="/assets/css/characterBookmarks.css" />
     <link rel="stylesheet" href="/assets/css/navbar.css">
 </head>
 
+<style>
+  
+    fieldset {
+            /* border: none; */
+            border-color: coral;
+            border-radius: 10px;
+            margin: 20pt;
+            /* padding: 10pt; */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Optional: Adjust spacing between fieldsets */
+            width: 350px; /* Set the desired width for the fieldset */
+            height: 100px;
+    }
+
+    #unique-heading {
+        font-size: 40px; /* Set the desired font size */
+        color: chocolate; 
+        margin: auto;
+    }      
+
+
+</style>
 <body>
     <main>
         <div class="big-wrapper light">
@@ -22,30 +45,35 @@
                     <%- include('partials/navbar') %>
                 </div>
             </header>
-
-            <!-- Unique Content for Hero Metrics -->
+           
+            <!-- Unique Content for Story of the Day -->
             <div class="showcase-area">
                 <div class="container">
-                    <div class="chart-container">
-                        <canvas id="ratingsChart" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;"></canvas>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Hero Quiz </a> 
+                        </fieldset> 
                     </div>
-                    <div class="chart-container">
-                        <canvas id="mostCommentedChart" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;"></canvas>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Power Quiz</a> 
+                        </fieldset> 
                     </div>
-                    <div class="chart-container">
-                        <canvas id="mostBookmarkedChart" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;"></canvas>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank"> Team Quiz</a>
+                        </fieldset>
                     </div>
-                    <div id="ratingsOverTimeChartContainer">
-                        <canvas id="ratingsOverTimeChart" style="position: relative; height:30vh; width:80vw; margin-bottom: 2rem;"></canvas>
-                    </div>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Hero Name Quiz</a> 
+                        </fieldset> 
+                    </div>                      
+                    
+                
                 </div>
             </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-
+        </fieldset>
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
                 <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
@@ -83,9 +111,10 @@
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script src="/assets/js/heroMetrics.js"></script>
+    <script src="/assets/js/characterBookmarks.js"></script>
 </body>
+<script>
+    var userID = '<%= user.id %>'; // Assuming you pass the user object to your EJS render function
+</script>
 
 </html>

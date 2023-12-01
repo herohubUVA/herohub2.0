@@ -191,6 +191,8 @@ app.get('/characterBookmarks', async (req, res) => {
 });
 
 
+
+
 // Edit Profile Page (GET: /EditProfile)
 // -------------------------------------
 // An authenticated route that renders the user's profile editing page
@@ -798,6 +800,25 @@ app.get('/getUserRating/:characterID', async (req, res) => {
   }
 });
 
+
+// Quizzes Page (GET: /CharacterBookmarks)
+// ---------------------------------------------------
+// Renders the character bookmarks page and passes the user's information
+app.get('/quizzes', async (req, res) => {
+  const userID = req.user ? req.user.id : null;
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+  res.render('quizzes', {user: req.user });
+});
+
+app.get('/sup_quizzes', async (req, res) => {
+  const userID = req.user ? req.user.id : null;
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+  res.render('sup_quizzes', {user: req.user });
+});
 
 // Add Bookmark Route (POST: /addBookmark)
 // ---------------------------------------
