@@ -27,9 +27,18 @@
   box-sizing: border-box;
 }
 
-body {
+/* body {
   font-family: 'Bangers', sans-serif;
+  display: flex;
+} */
+
+body, .big-wrapper {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-height: 100vh; /* At least full viewport height */
 }
+
 
 .stop-scrolling {
   height: 100%;
@@ -64,11 +73,13 @@ a {
   width: 100%;
   margin: 0 auto;
   padding: 0 3rem;
+  align-items: center;
+  justify-content: center
 }
 
 .showcase-area .container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   justify-content: center;
 }
@@ -176,6 +187,8 @@ Defines animation for theme switch
     grid-template-columns: 1fr;
     justify-content: center;
     grid-gap: 2rem;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
   }
 
   .big-title {
@@ -288,9 +301,54 @@ Volume Control Styling
 }
 
 .bookmark-slot {
-  width: 70px;
+  width: 30px;
   height: 80px;
   border-radius: 10px;
   border: 2px solid #aaa;
   background-color: #f4f4f4;
+}
+
+.empty-bookmarks-message {
+  font-size: 50px; 
+  text-align: center; 
+  margin: 100px 0; 
+}
+
+.bookmark-count {
+  position: fixed; /* Fixed position relative to the viewport */
+  right: 20px; /* 20px from the right */
+  bottom: 20px; /* 20px from the bottom */
+}
+
+.bookmarks-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Creates three columns */
+  grid-gap: 5px; /* Space between grid items */
+  justify-content: center
+}
+
+.bookmark {
+  border: 1px solid #ccc; 
+  padding: 10px;
+  margin-bottom: 10px; 
+  background-color: #f2f2f2;
+  background-color: #f2f2f2;
+  width: 325px; /* Adjust the width of the tile */
+  height: auto; /* Height will adjust based on content */
+  align-items: center; /* Align children horizontally in the center */
+  justify-content: center; /* Align children vertically in the center */
+  text-align: center;
+}
+
+.remove-bookmark-button{
+  background-color: #ff4d4d; /* Background color for the button */
+  color: #fff; /* Text color for the button */
+  border: none; /* Remove the button border */
+  padding: 10px 20px; /* Add more padding to the button */
+  cursor: pointer; /* Change the cursor to a pointer on hover */
+  border-radius: 7px;
+}
+
+.remove-bookmark-button:hover {
+  background-color: #e60000;
 }

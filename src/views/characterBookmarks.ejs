@@ -23,24 +23,46 @@
                 </div>
             </header>
 
+
             <!-- Unique Content for Story of the Day -->
             <div class="showcase-area">
                 <div class="container">
-                    <div class="left">
-                        <div class="bookmarks-container">
-                            <% bookmarks.forEach(bookmark => { %>
-                                <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
-                                    <!-- Display the character details for each bookmarked character -->
-                                    Character ID: <%= bookmark.characterID %>
-                                    <!-- You can add more details as required -->
-                                    <button class="remove-bookmark-button">Remove Bookmark</button>
-                                </div>
-                            <% }) %>
-                        </div>                        
+                  <div class="center">
+                    <div class="bookmarks-container">
+                      <% if (bookmarks.length === 0) { %>
+                        <!-- Display a message if bookmarks array is empty -->
+                        <div class="empty-bookmarks-message">
+                          You have no bookmarks! Let's fix that!
+                        </div>
+                      <% } else { %>
+                        <!-- Display bookmarks if not empty -->
+                        <% console.log(bookmarks); %>
+                        <% bookmarks.forEach(bookmark => { %>
+                          <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
+                            <!-- Display the character details for each bookmarked character -->
+                            <br>
+                            <%= bookmark.characterName %>
+                            <br>
+                            <img src="<%= bookmark.characterImage %>" style="width: 200px; height: auto;">
+                            <br>
+                            <%= bookmark.characterDescription %>
+                            <!-- You can add more details as required -->
+                            <br>
+                            <br>
+                            <button class="remove-bookmark-button">Remove Bookmark</button>
+                          </div>
+                          <br>
+                          <br>
+                        <% }) %>
+                        <div class="bookmark-count">
+                          Total Bookmarks: <%= bookmarks.length %>
+                        </div>
+                      <% } %>
                     </div>
-
+                  </div>
                 </div>
-            </div>
+              </div>
+            
 
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
