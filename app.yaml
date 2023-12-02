@@ -7,7 +7,6 @@ env_variables:
   DB_PASS: 'bobthecat123'
   DB_NAME: 'hero-hub-db'
   INSTANCE_UNIX_SOCKET: '/cloudsql/herohub-399200:us-east4:hero-hub-db'
-
   GOOGLE_CLIENT_ID: '114252243657-tv5hhi3s85u8urb38j36m6kfbc9hfmeu.apps.googleusercontent.com'
   GOOGLE_CLIENT_SECRET: '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'
 
@@ -15,7 +14,6 @@ env_variables:
   MARVEL_PRIVATE_KEY: 'b17e64859983396bb77e7c0bd8925b43b1422d43'
 
   SESSION_SECRET: 'faa621dd8221d5025bc924066094c71182a7ce035ba557ae21a04a4b40369353'
-
 
 
 automatic_scaling:
@@ -43,3 +41,6 @@ handlers:
   - url: /.*
     script: auto
     secure: always
+
+beta_settings:
+  cloud_sql_instances: 'herohub-399200:us-east4:hero-hub-db'
