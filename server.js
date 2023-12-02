@@ -122,14 +122,14 @@ app.use(express.urlencoded({ extended: true }));
 // -----------------------
 // This route renders the authentication page
 app.get('/', (req, res) => {
-  res.render('Auth');
+  res.render('auth');
 });
 
 // Home Page (GET: /Home)
 // ----------------------
 // This route renders the home page and passes the user's information
 app.get('/Home', (req, res) => {
-  res.render('Home', { user: req.user });
+  res.render('home', { user: req.user });
 });
 
 // Character Encyclopedia Page (GET: /CharacterEncyclopedia)

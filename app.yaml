@@ -1,7 +1,46 @@
-runtime: nodejs18
-instance_class: F2
+runtime: nodejs
+env: flex
+
+env_variables:
+  NODE_ENV: 'production'
+  DB_USER: 'gchin'
+  DB_PASS: 'bobthecat123'
+  DB_NAME: 'hero-hub-db'
+  INSTANCE_UNIX_SOCKET: '/cloudsql/herohub-399200:us-east4:hero-hub-db'
+  GOOGLE_CLIENT_ID: '114252243657-tv5hhi3s85u8urb38j36m6kfbc9hfmeu.apps.googleusercontent.com'
+  GOOGLE_CLIENT_SECRET: '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'
+
+  MARVEL_PUBLIC_KEY: '74bf7f7fb78ba016a3176fdd7b14f420'
+  MARVEL_PRIVATE_KEY: 'b17e64859983396bb77e7c0bd8925b43b1422d43'
+
+  SESSION_SECRET: 'faa621dd8221d5025bc924066094c71182a7ce035ba557ae21a04a4b40369353'
+
 
 automatic_scaling:
-  target_cpu_utilization: 0.65
-  min_instances: 1
-  max_instances: 10
+  min_num_instances: 1
+  max_num_instances: 5
+
+resources:
+  cpu: 1
+  memory_gb: 1
+  disk_size_gb: 10
+
+handlers:
+  - url: /audio
+    static_dir: src/assets/audio
+
+  - url: /css
+    static_dir: src/assets/css
+
+  - url: /images
+    static_dir: src/assets/images
+
+  - url: /js
+    static_dir: src/assets/js
+
+  - url: /.*
+    script: auto
+    secure: always
+
+beta_settings:
+  cloud_sql_instances: 'herohub-399200:us-east4:hero-hub-db'
