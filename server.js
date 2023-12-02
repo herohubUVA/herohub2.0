@@ -205,10 +205,10 @@ app.get('/characterBookmarks', async (req, res) => {
     const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
     const apiKey = publicKey; 
     const characterDetailsPromises = bookmarkedCharacters.map(async (bookmark) => {
-      const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      const character = jsonData.data.results[0];
+    const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
+    const response = await fetch(url);
+    const jsonData = await response.json();
+    const character = jsonData.data.results[0];
 
       return {
         characterID: character.id,
@@ -589,9 +589,10 @@ app.post('/comments', ensureAuthenticated, async (req, res) => {
       // Check if the response contains the expected data structure
       if (jsonData.data && jsonData.data.results && jsonData.data.results.length > 0) {
         const characterName = jsonData.data.results[0].name;
+        const characterDescription = jsonData.data.result[0].description;
 
         // Insert the characterID and characterName into Characters table
-        await db.execute('INSERT INTO Characters (characterID, characterName) VALUES (?, ?)', [characterID, characterName]);
+        await db.execute('INSERT INTO Characters (characterID, characterName, characterDescription) VALUES (?, ?, ?)', [characterID, characterName, characterDescription]);
       } else {
         console.error("Marvel API response does not have the expected structure.");
         res.json({ success: false, message: 'Error adding comment. Character not found.' });

@@ -20,6 +20,8 @@
             <header>
                 <div class="container">
                     <%- include('partials/navbar') %>
+                    <br>
+                    <br>
                 </div>
             </header>
 
@@ -41,7 +43,9 @@
                           <div class="bookmark" data-character-id="<%= bookmark.characterID %>">
                             <!-- Display the character details for each bookmarked character -->
                             <br>
+                            <div class ="characterName">
                             <%= bookmark.characterName %>
+                            </div>
                             <br>
                             <img src="<%= bookmark.characterImage %>" style="width: 200px; height: auto;">
                             <br>
