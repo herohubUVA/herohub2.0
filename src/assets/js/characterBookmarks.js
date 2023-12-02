@@ -1,13 +1,29 @@
+function showRemovedBookmarkPopup() {
+    var popup = document.createElement('div');
+    popup.className = 'removed-bookmark-popup';
+    popup.textContent = 'Bookmark removed!';
+    document.body.appendChild(popup);
+    popup.style.display = 'block';
+
+    // Hide the popup after a few seconds
+    setTimeout(function() {
+        popup.style.dishowRemovedBookmarkPopup();
+              splay = 'none';
+        document.body.removeChild(popup);
+    }, 3000);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   const showContainer = document.querySelector(".bookmarks-container");
   console.log('Character Bookmark Page loaded successfully');
   console.log(showContainer);
 
+  
   if (showContainer) {
       showContainer.addEventListener('click', function(event) {
           if (event.target.classList.contains('remove-bookmark-button')) {
               console.log("Remove bookmark button clicked!");
-        
+              showRemovedBookmarkPopup();
               // Fetch the closest bookmark container to the clicked button
               const bookmarkElement = event.target.closest('.bookmark');
               
@@ -27,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let userID = 25; // Replace with the actual userID
             // let characterID; // Replace with the actual characterID
+
 
             fetch(`/user/${userID}/bookmarks`)
             .then((response) => {
@@ -75,4 +92,18 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 });
+
+// showContainer.innerHTML = "";
+// const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&name=${input.value}`;
+// const response = await fetch(url);
+// const jsonData = await response.json();
+
+// jsonData.data["results"].forEach((element) => {
+//     showContainer.innerHTML = `<div class="card-container">
+//     <div class="container-character-image">
+//     <img src="${
+//       element.thumbnail["path"] + "." + element.thumbnail["extension"]
+//     }"/></div>;
+// });
+
 
