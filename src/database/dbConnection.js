@@ -1,9 +1,11 @@
 const mysql = require('mysql2');
 
+require('dotenv').config();
+
 const pool = mysql.createPool({
-  host: '34.145.188.12',
-  user: 'gchin',
-  password: 'bobthecat123',
+  socketPath: process.env.INSTANCE_UNIX_SOCKET,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   database: 'HeroHub',
   waitForConnections: true,
   connectionLimit: 10,
