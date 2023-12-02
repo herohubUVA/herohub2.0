@@ -14,31 +14,57 @@ HeroHub is a web-based platform designed for Marvel enthusiasts to explore the e
 - **Support Page**: Find help and assistance on our dedicated support page.
 
 ## Installation
-1. Clone the repository to your local device:
-git clone [<repository-url>](https://github.com/herohubUVA/herohub2.0.git)https://github.com/herohubUVA/herohub2.0.git
 
-2. Navigate to the HeroHub directory:
-cd HeroHub
+### Clone the Repository
+Clone the repository to your local device:
+`git clone [<repository-url>](https://github.com/herohubUVA/herohub2.0.git)https://github.com/herohubUVA/herohub2.0.git`
 
-3. Install the required dependencies:
-npm install
+### Navigate to the Directory:
+Navigate to the directory you have cloned Hero Hub to.
+
+### Install Dependencies
+Install the required dependencies:
+`npm install`
+
+### Extra
+- Make sure that Google Cloud SDK is installed and configured for deployment.
 
 ## Setup
-1. Create a .env file in the root directory of the project, and add the necessary credentials for the Marvel API and Google Auth. Your .env file should include the following:
-DB_USER=
-DB_PASS=
-DB_NAME=
-INSTANCE_UNIX_SOCKET=
-GOOGLE_CLIENT_ID =
-GOOGLE_CLIENT_SECRET = 
-MARVEL_PUBLIC_KEY =
-MARVEL_PRIVATE_KEY=
-SESSION_SECRET=
 
-2. Start the application:
-npm start
+### Set Up Environment Variables
+Create a `.env` file in the root directory of the project and add the necessary credentials for the Marvel API, Google Auth, and your local database settings. Your `.env` file should include the following variables:
+```
+DB_USER=yourLocalDbUsername
+DB_PASS=yourLocalDbPassword
+DB_NAME=yourLocalDbName
+GOOGLE_CLIENT_ID=yourGoogleClientId
+GOOGLE_CLIENT_SECRET=yourGoogleClientSecret
+MARVEL_PUBLIC_KEY=yourMarvelPublicKey
+MARVEL_PRIVATE_KEY=yourMarvelPrivateKey
+SESSION_SECRET=yourSessionSecret
+```
 
-To log in or sign up, ensure that your current IP is registered under the list of Authorized Networks on Google Cloud Platform (GCP) for HeroHub. Alternatively, you can navigate manually as a guest by searching for http://localhost:4000/Home in your browser's search bar.
+### Start the Application
+Run the application in the root directory:
+`npm start`
+
+## Deploying Hero Hub on Google Cloud Platform
+
+### Set up Google Cloud Platform Environment Variables (if necessary)
+To do this, navigate to the App Engine section on the Google Cloud Console.
+
+### Configure app.yaml
+Make sure the `app.yaml` file has the necessary settings to deploy, including environment variables, settings for the cloud SQL instance, handling all the static content, etc.
+
+### Build the Application (if necessary)
+`npm run build`
+
+### Deploy to App Engine
+`gcloud app deploy`
+
+
+Once deployed, the URL for the application should be provided by the App Engine in the console.
+
 
 ## License
 HeroHub is MIT licensed.
