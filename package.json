@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": "20.x"
+    "node": "14.x"
   },
   "keywords": [],
   "author": "Glendon Chin",
