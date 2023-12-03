@@ -19,6 +19,40 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+function customAlert(msg) {
+  // Create the modal
+  var modal = document.createElement('div');
+  modal.style.width = '400px';
+  modal.style.height = '150px';
+  modal.style.backgroundColor = '#f8f8f8';
+  modal.style.position = 'fixed';
+  modal.style.top = '50%';
+  modal.style.left = '50%';
+  modal.style.transform = 'translate(-50%, -50%)';
+  modal.style.padding = '20px';
+  modal.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
+  modal.style.textAlign = 'center';
+
+  // Create the message text
+  var text = document.createElement('p');
+  text.textContent = msg;
+  modal.appendChild(text);
+
+  // Create the 'OK' button
+  var button = document.createElement('button');
+  button.textContent = 'OK';
+  button.style.marginTop = '20px';
+  
+  button.addEventListener('click', function() {
+      document.body.removeChild(modal);
+  });
+  modal.appendChild(button);
+
+  // Add the modal to the body
+  document.body.appendChild(modal);
+}
+
+
 // Access DOM elements
 let input = document.getElementById("input-box");
 let button = document.getElementById("submit-button");
@@ -125,6 +159,18 @@ jsonData.data["results"].forEach((element) => {
       </div>
     </div>`;
 
+    const bookmarkButton = document.querySelector('#bookmark-button');
+    if(bookmarkButton) {
+      bookmarkButton.addEventListener('click', function(event){
+        if(event.target.classList.contains('bookmark-button')){
+          customAlert("Bookmark Added!")
+        }
+        else {
+          customAlert("Character is already bookmarked!")
+        }
+      })
+    }
+
     // Event listener for rating stars
     starElements = document.querySelectorAll(".stars .fa-star");
 
@@ -139,8 +185,8 @@ jsonData.data["results"].forEach((element) => {
     showContainer.setAttribute("data-character-id", characterID);
 
     // Add the bookmark button event listener
-    const bookmarkButton = document.getElementById("bookmark-button");
-if (bookmarkButton) {
+    // const bookmarkButton = document.getElementById("bookmark-button");
+    if (bookmarkButton) {
     bookmarkButton.addEventListener('click', function() {
         const characterID = showContainer.getAttribute("data-character-id");
         if (!characterID) {
@@ -159,18 +205,15 @@ if (bookmarkButton) {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.message === "Bookmark added successfully!") {
-                showBookmarkPopup(data.message, true);
-            } else if (data.error && data.error === "Bookmark already exists") {
-                showBookmarkPopup("You already have this bookmark!", false);
-            } else {
-                showBookmarkPopup("Error bookmarking character", false);
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            showBookmarkPopup("Error bookmarking character", false);
-        });
+          if (data.message) {
+              console.log(data.message);
+          } else {
+              console.error("Error bookmarking character");
+          }
+      })
+      .catch(error => {
+          console.error("Error:", error);
+      });
     });
 }
 

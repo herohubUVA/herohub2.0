@@ -1,3 +1,36 @@
+
+function customAlert(msg) {
+    // Create the modal
+    var modal = document.createElement('div');
+    modal.style.width = '400px';
+    modal.style.height = '150px';
+    modal.style.backgroundColor = '#f8f8f8';
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.padding = '20px';
+    modal.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
+    modal.style.textAlign = 'center';
+
+    // Create the message text
+    var text = document.createElement('p');
+    text.textContent = msg;
+    modal.appendChild(text);
+
+    // Create the 'OK' button
+    var button = document.createElement('button');
+    button.textContent = 'OK';
+    button.style.marginTop = '20px';
+    button.addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    modal.appendChild(button);
+
+    // Add the modal to the body
+    document.body.appendChild(modal);
+}
+
 function showRemovedBookmarkPopup() {
     var popup = document.createElement('div');
     popup.className = 'removed-bookmark-popup';
@@ -26,11 +59,9 @@ function showRemovedBookmarkPopup() {
 
     // Event listener to close the popup when the close button is clicked
     closeButton.addEventListener('click', function() {
-        popup.style.display = 'none';
         document.body.removeChild(popup);
     });
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
   const showContainer = document.querySelector(".bookmarks-container");
@@ -42,7 +73,8 @@ document.addEventListener("DOMContentLoaded", function() {
       showContainer.addEventListener('click', function(event) {
           if (event.target.classList.contains('remove-bookmark-button')) {
               console.log("Remove bookmark button clicked!");
-              showRemovedBookmarkPopup();
+            //   showRemovedBookmarkPopup();
+                customAlert("Bookmark removed!")
               // Fetch the closest bookmark container to the clicked button
               const bookmarkElement = event.target.closest('.bookmark');
               
@@ -99,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
                       // Remove the bookmark element from the DOM
                       bookmarkElement.remove();
-                      location.reload();
                   } else {
                       console.error("Error removing bookmark");
                   }
