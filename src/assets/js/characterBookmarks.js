@@ -92,18 +92,3 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 });
-
-// showContainer.innerHTML = "";
-// const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&name=${input.value}`;
-// const response = await fetch(url);
-// const jsonData = await response.json();
-
-// jsonData.data["results"].forEach((element) => {
-//     showContainer.innerHTML = `<div class="card-container">
-//     <div class="container-character-image">
-//     <img src="${
-//       element.thumbnail["path"] + "." + element.thumbnail["extension"]
-//     }"/></div>;
-// });
-
-

@@ -196,7 +196,9 @@ app.get('/characterBookmarks', async (req, res) => {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
-  const fetchBookmarksQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
+  // const fetchBookmarksQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
+  const fetchBookmarksQuery = "SELECT Characters.characterName, Characters.characterDescription, Characters.characterID FROM Bookmarks INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID WHERE Bookmarks.userID = ?;";
+//   const [bookmarks] = await db.query(fetchQuery, [userID]);
   try {
     const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
     const timestamp = Date.now().toString();
@@ -589,7 +591,7 @@ app.post('/comments', ensureAuthenticated, async (req, res) => {
       // Check if the response contains the expected data structure
       if (jsonData.data && jsonData.data.results && jsonData.data.results.length > 0) {
         const characterName = jsonData.data.results[0].name;
-        const characterDescription = jsonData.data.result[0].description;
+        const characterDescription = jsonData.data.result[0].description; 
 
         // Insert the characterID and characterName into Characters table
         await db.execute('INSERT INTO Characters (characterID, characterName, characterDescription) VALUES (?, ?, ?)', [characterID, characterName, characterDescription]);

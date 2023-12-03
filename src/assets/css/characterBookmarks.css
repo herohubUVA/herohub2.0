@@ -131,11 +131,6 @@ a {
   line-height: 39px;
 }
 
-.far fa-moon {
-  left: 20px;
-  bottom: 20px; 
-}
-
 .big-wrapper.light .toggle-btn i:last-child {
   display: none;
 }
@@ -336,6 +331,12 @@ Volume Control Styling
   grid-gap: 5px; /* Space between grid items */
   justify-content: center;
   padding-left: 100px;
+}
+
+.bookmarks-title{
+  text-align: center;
+  margin-left: 100px; 
+  margin-bottom: 20px;
 }
 
 .bookmark {
