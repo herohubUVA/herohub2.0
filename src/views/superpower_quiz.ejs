@@ -124,9 +124,15 @@
 
         /* Additional styles for checked labels */
         input[type="radio"]:checked + label {
-            background-color: rgb(221, 139, 57);
+            background-color: #F57500;
             color: #fff;
-            border-color: rgb(221, 139, 57);
+            border-color: #F57500;
+        }
+        #result {
+            margin-top: 20px; /* Add space above the result */
+            font-size: 50px;
+            color: red;
+            /* Add any other styling you need */
         }
 
 
@@ -135,6 +141,69 @@
 
 <body>
     <main>
+        <script>
+             function calculateResult() {
+        const form = document.getElementById('superpowerQuiz');
+        console.log("Function called");
+        let answers = {
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0
+        };
+    
+        // Loop through each question
+        // for (let i = 1; i <= 5; i++) {
+        //     const question = form['question' + i];
+        //     const selectedValue = question.value;
+        //     answers[selectedValue]++;
+        // }
+        
+        for (let i = 1; i <= 5; i++) {
+            console.log("Checking question", i);
+            const question = document.querySelector(`input[name="question${i}"]:checked`);
+
+            if (question) {
+                const selectedValue = question.value;
+                console.log("Selected value for question " + i + ": " + selectedValue);
+                answers[selectedValue]++;
+            }
+        }
+    
+        // Find the key (A, B, C, or D) with the highest count
+        let maxKey = '';
+        let maxCount = 0;
+        for (let key in answers) {
+            if (answers[key] > maxCount) {
+                maxCount = answers[key];
+                maxKey = key;
+            }
+        }
+    
+        // Display the result based on the key with the highest count
+        let resultText = '';
+        switch(maxKey) {
+            case 'A':
+                resultText = 'Your superpower is Flight!';
+                break;
+            case 'B':
+                resultText = 'Your superpower is Super Speed!';
+                break;
+            case 'C':
+                resultText = 'Your superpower is Teleportation!';
+                break;
+            case 'D':
+                resultText = 'Your superpower is Invisibility or Shadow Manipulation!';
+                break;
+            default:
+                resultText = 'Please select an option for each question.';
+        }
+        console.log(resultText);
+        document.getElementById('result').innerText = resultText;
+    
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    }
+        </script>
         <div class="big-wrapper light">
 
             <!-- Accesses navigation bar -->
@@ -144,140 +213,102 @@
                 </div>
             </header>
 
-  
-
-
-
-               
-            
-            <form action="quiz-result.html" method="post">
+            <div id="result"></div>
+            <form id="superpowerQuiz" action="/submit" method="post">
 
                 <fieldset>
-                    <legend>1. What is your preferred method of travel?</legend>
+                    <legend>How do you prefer to travel?</legend>
                     <div>   
-                        <input type="radio" name="question1" id="q1_flight" value="Flight">
-                        <label for="q1_flight">Flight</label>
+                        <input type="radio" name="question1" id="q1a" value="A">
+                        <label for="q1a">Flying through the skies</label>
             
-                        <input type="radio" name="question1" id="q1_running" value="running">
-                        <label for="q1_running">Running</label>
+                        <input type="radio" name="question1" id="q1b" value="B">
+                        <label for="q1b">Running at incredible speeds</label>
             
-                        <input type="radio" name="question1" id="q1_driving" value="driving">
-                        <label for="q1_driving"> Driving </label>
+                        <input type="radio" name="question1" id="q1c" value="C">
+                        <label for="q1c"> Moving through shadows  </label>
             
-                        <input type="radio" name="question1" id="q1_teleportation" value="Teleportation">
-                        <label for="q1_teleportation"> Teleportation </label>
+                        <input type="radio" name="question1" id="q1d" value=“D">
+                        <label for="q1d"> Teleporting instantly to my destination </label>
                     </div>
                     </fieldset>
                
                 <fieldset>
-                    <legend>2. Choose a weapon:</legend>
+                    <legend>In a group project, you usually...</legend>
                     <div>
-                        <input type="radio" name="question2" id="q2_magicstaff" value="magicstaff">
-                        <label for="q2_magicstaff"> Magic artifact</label>
+                        <input type="radio" name="question2" id="q2a" value="A">
+                        <label for="q2a"> Take the lead and guide the team</label>
             
-                        <input type="radio" name="question2" id="q2_shield" value="shield">
-                        <label for="q2_shield">Shield</label>
+                        <input type="radio" name="question2" id="q2b" value="B">
+                        <label for="q2b">Work hard and focus on the details</label>
             
-                        <input type="radio" name="question2" id="q2_bow" value="bow">
-                        <label for="q2_bow">High Tech Gadgets</label>
+                        <input type="radio" name="question2" id="q2c" value="C">
+                        <label for="q2c">Find creative and innovative solutions</label>
             
-                        <input type="radio" name="question2" id="q2_none" value="none">
-                        <label for="q2_none">I rely on my abilities</label>
+                        <input type="radio" name="question2" id="q2d" value="D">
+                        <label for="q2d">Work behind the scenes and support others</label>
                     </div>
                 </fieldset>
             
                 <fieldset>
-                    <legend> What motivates you to be a hero? </legend>
+                    <legend> Your favorite kind of movie is... </legend>
                     <div>
-                        <input type="radio" name="question3" id="q3_justice" value="justice">
-                        <label for="q3_justice">Justice</label>
+                        <input type="radio" name="question3" id="q3a" value="A">
+                        <label for="q3a">Action-packed and adventurous</label>
             
-                        <input type="radio" name="question3" id="q3_power" value="power">
-                        <label for="q3_power">Power</label>
+                        <input type="radio" name="question3" id="q3b" value="B">
+                        <label for="q3b">Fast-paced and thrilling</label>
             
-                        <input type="radio" name="question3" id="q3_love" value="love">
-                        <label for="q3_love">Love</label>
+                        <input type="radio" name="question3" id="q3c" value="C">
+                        <label for="q3c">Sci-fi with imaginative concepts</label>
             
-                        <input type="radio" name="question3" id="q3_adventure" value="adventure">
-                        <label for="q3_adventure">Adventure</label>
+                        <input type="radio" name="question3" id="q3d" value="D">
+                        <label for="q3d">Mystery with deep, hidden meanings</label>
                     </div>
                 </fieldset>
 
                 <fieldset>
-                    <legend> What is your preferred fighting style? </legend>
+                    <legend> If you could live in any environment, it would be... </legend>
                     <div>
-                        <input type="radio" name="question4" id="q4_smash" value="smash">
-                        <label for="q4_smash">Hulking out and smashing things</label>
+                        <input type="radio" name="question4" id="q4a" value="A">
+                        <label for="q4a">High up in the mountains</label>
             
-                        <input type="radio" name="question4" id="q4_martialarts" value="martialarts">
-                        <label for="q4_martialarts">Martial arts and acrobatics</label>
+                        <input type="radio" name="question4" id="q4b" value="B">
+                        <label for="q4b"> In a bustling and busy city</label>
             
-                        <input type="radio" name="question4" id="q4_tech" value="tech">
-                        <label for="q4_tech">High-tech gadgetry and strategy</label>
+                        <input type="radio" name="question4" id="q4c" value="C">
+                        <label for="q4c">On a remote island with futuristic technology</label>
             
-                        <input type="radio" name="question4" id="q4_magic" value="magic">
-                        <label for="q4_adventure">Using magic or psychic abilities</label>
+                        <input type="radio" name="question4" id="q4d" value="D">
+                        <label for="q4d">In a quiet, secluded forest</label>
                     </div>
                 </fieldset>
 
                 <fieldset>
-                    <legend> What is your preferred environment? </legend>
+                    <legend> Your ideal weekend activity is... </legend>
                     <div>
-                        <input type="radio" name="question5" id="q5_urban" value="urban">
-                        <label for="q5_urban">Urban cityscape</label>
+                        <input type="radio" name="question5" id="q5a" value="A">
+                        <label for="q5a">Skydiving or paragliding</label>
             
-                        <input type="radio" name="question5" id="q5_cosmic" value="cosmic">
-                        <label for="q5_cosmic">Cosmic space</label>
+                        <input type="radio" name="question5" id="q5b" value="B">
+                        <label for="q5b">Running a marathon or cycling</label>
             
-                        <input type="radio" name="question5" id="q5_jungle" value="jungle">
-                        <label for="q5_jungle"> Hidden forest </label>
+                        <input type="radio" name="question5" id="q5c" value="C">
+                        <label for="q5c">Attending a tech workshop or a science fair</label>
             
-                        <input type="radio" name="question5" id="q5_suburbs" value="suburbs">
-                        <label for="q5_suburbs">The quiet suburbs</label>
+                        <input type="radio" name="question5" id="q5d" value="D">
+                        <label for="q5d">Exploring a cave or an old castle</label>
                     </div>
                 </fieldset>
 
-                <fieldset>
-                    <legend> What is your greatest strength as a hero? </legend>
-                    <div>
-                        <input type="radio" name="question6" id="q6_intellect" value="intellect">
-                        <label for="q6_intellect">Genius-level intellect</label>
+                <button type="button" onclick="calculateResult()">Submit</button>
+    
+        </form>
+                    
+        <p id="result"></p>
             
-                        <input type="radio" name="question6" id="q6_determine" value="determine">
-                        <label for="q6_determine">Unyielding determination</label>
-            
-                        <input type="radio" name="question6" id="q6_responsible" value="responsible">
-                        <label for="q6_responsible">Sense of responsibility</label>
-            
-                        <input type="radio" name="question6" id="q6_power" value="power">
-                        <label for="q6_power">Overwhelming power</label>
-                    </div>
-                </fieldset>
 
-                <fieldset>
-                    <legend> Select a color that represents you: </legend>
-                    <div>
-                        <input type="radio" name="question7" id="q7_green" value="green">
-                        <label for="q7_green">Green</label>
-            
-                        <input type="radio" name="question7" id="q7_blue" value="blue">
-                        <label for="q7_blue">Blue</label>
-            
-                        <input type="radio" name="question7" id="q7_red" value="red">
-                        <label for="q7_red">Red</label>
-            
-                        <input type="radio" name="question7" id="q7_yellow" value="yellow">
-                        <label for="q7_yellow">Yellow</label>
-                    </div>
-                </fieldset>
-
-                
-            
-                <button type="submit">Discover Your Hero</button>
-            
-            </form>
-            
-            
+        
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
                 <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
@@ -312,14 +343,13 @@
     </main>
 
     <!-- Access Javascript Code -->
+    <script src="/assets/js/superhero_quiz.js"></script>
+    <script src="/assets/js/result.js"></script>
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
-    <script src="/assets/js/characterBookmarks.js"></script>
+    
 </body>
-<script>
-    var userID = '<%= user.id %>'; // Assuming you pass the user object to your EJS render function
-</script>
 
 </html>
 

@@ -1,0 +1,83 @@
+<!-- result.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/assets/css/storyOfTheDay.css" />
+  <link rel="stylesheet" href="/assets/css/navbar.css">
+  <!-- ... your head section remains unchanged ... -->
+  <style>
+    body {
+      /* Default styles for the body */
+      text-align: center;
+    }
+
+    /* Apply dynamic styles based on the hero result */
+    body.captain-america-style {
+      background-color: #0000FF; /* Example style for Captain America */
+      color: #FFFFFF;
+    }
+
+    body.iron-man-style {
+      background-color: #FF0000; /* Example style for Iron Man */
+      color: #FFFFFF;
+    }
+
+    body.hulk-style{
+      background-color: #00FF00; /* Example style for Hulk */
+      color: #FFFFFF;
+    }
+
+    body.witch-style{
+      background-color: rgb(190, 5, 33); /* Example style for Scarlett Witch */
+      color: #f7f7f7;
+    }
+
+    body.spider-style {
+      background-color: #FFD700; /* Example style for Spiderman */
+      color: #000000;
+    }
+
+    body.widow-style {
+      background-color: #000000; /* Example style for Black Widow */
+      color: #FFFFFF;
+    }
+
+    body.thor-style {
+      background-color: #FF4500; /* Example style for Thor */
+      color: #FFFFFF;
+    }
+
+    body.shield-style {
+        background-color: #ca4646; /* Example style for Black Widow */
+        color: #5b0808;
+
+    }
+    img {
+      max-width: 30%; /* Maximum width of 100% of its container */
+      max-height: 1000px; /* Adjust this value as needed */
+      height: auto; /* Maintain aspect ratio */
+      display: block; /* To remove any extra space below the image */
+      margin: 0 auto; /* Center align the image */
+      padding-top: 100px;
+    }
+
+
+    /* Add styles for other heroes as needed */
+  </style>
+</head>
+
+<body class="<%= heroStyleClass %>">
+  
+  <main>
+    <!-- Your existing HTML content here -->
+    <h1>Your Hero Result:</h1>
+    <p>The hero for you is: <%= heroResult %></p>
+  <img src="<%= heroImageUrl %>">
+  </main>
+ 
+  <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+  <script src="/assets/js/themeToggler.js"></script>
+  <script src="/assets/js/audioControls.js"></script>
+  <script src="/assets/js/result.js"></script>
+</body>
+</html>
