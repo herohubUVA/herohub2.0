@@ -40,6 +40,20 @@ body {
   font-family: 'Bangers', sans-serif;
 }
 
+.button {
+  color: #fff; /* Change the text color */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border: none; /* Remove the border */
+  border-radius: 5px; /* Add some rounded corners */
+  cursor: pointer; /* Change cursor to a pointer on hover */
+  transition: background-color 0.3s ease; /* Add a smooth transition for the background color change */
+}
+
+/* Hover effect for the submit button */
+.button:hover {
+  background-color: #0056b3; /* Change the background color on hover */
+}
+
 .stop-scrolling {
   height: 100%;
   overflow: hidden;
@@ -528,7 +542,7 @@ color: #171821;
 
 /* Hover effect for bookmark button */
 .bookmark-btn:hover {
-  transform: scale(1.2);
+  background-color: #0056b3;
 }
 
 .button-container {
@@ -547,8 +561,9 @@ color: #171821;
 }
 
 .custom-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #0056b3;
+  /* transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .average-rating {
@@ -562,3 +577,5 @@ color: #171821;
   width: 100%;
   padding: 20px;
 }
+
+

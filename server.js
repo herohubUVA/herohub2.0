@@ -90,12 +90,14 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+
 // ----- Authentication Middleware -----
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-      return next();
+    console.log("User is authenticated");
+    return next();
   } else {
-    res.status(401).json({ success: false, message: "Not authenticated" });
+    res.redirect('/Auth');
   }
 }
 
