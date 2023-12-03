@@ -352,6 +352,19 @@ Volume Control Styling
   text-align: center;
 }
 
+.removed-bookmark-popup {
+  background-color: rgba(255, 0, 0, 0.7); /* Red with 70% opacity */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Makes sure it appears above other elements */
+  display: none; /* Initially hidden */
+}
+
 .remove-bookmark-button{
   background-color: #ff4d4d; /* Background color for the button */
   color: #fff; /* Text color for the button */
