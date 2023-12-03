@@ -24,12 +24,6 @@ function showRemovedBookmarkPopup() {
     document.body.appendChild(popup);
     popup.style.display = 'block';
 
-    // Hide the popup after a few seconds automatically
-    // var timeout = setTimeout(function() {
-    //     popup.style.display = 'none';
-    //     document.body.removeChild(popup);
-    // }, 10000);
-
     // Event listener to close the popup when the close button is clicked
     closeButton.addEventListener('click', function() {
         popup.style.display = 'none';

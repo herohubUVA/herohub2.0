@@ -28,10 +28,22 @@
 
             <!-- Unique Content for Story of the Day -->
             <div class="showcase-area">
-                <div class="container">
+                <div class="container">              
                   <div class="center">
                     <% if (bookmarks.length != 0) { %>
                     <h1 class="bookmarks-title"><%= bookmarks[0].username %>'s Bookmarks</h1>
+                    <select id="sort-method" onchange="sortBookmarks()">
+                      <option value="date">Sort by Date Added</option>
+                      <option value="name">Sort Alphabetically</option>
+                    </select>
+                    <br>
+                    <br>
+                    <script>
+                      function sortBookmarks() {
+                        var sortMethod = document.getElementById('sort-method').value;
+                        window.location.href = `/characterBookmarks?sortBy=${sortMethod}`;
+                      }
+                    </script>    
                     <% } %>
                     <div class="bookmarks-container">
                       <% if (bookmarks.length === 0) { %>

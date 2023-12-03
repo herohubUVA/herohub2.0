@@ -183,21 +183,44 @@ app.get('/StoryOfTheDay', async (req, res) => {
 
 app.get('/characterBookmarks', async (req, res) => {
   const userID = req.user ? req.user.id : null;
+  const sortBy = req.query.sortBy; 
   if (!userID) {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
+//   const fetchBookmarksQuery = `
+//   SELECT 
+//     Characters.characterName, 
+//     Characters.characterDescription, 
+//     Characters.characterID,
+//     User.username
+//   FROM Bookmarks 
+//   INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
+//   INNER JOIN User ON Bookmarks.userID = User.userID
+//   WHERE Bookmarks.userID = ?;
+// `;
+
+  let orderByClause = '';
+  if (sortBy === 'name') {
+    orderByClause = 'ORDER BY Characters.characterName';
+  } else { // Default to sorting by date if sortBy is 'date' or undefined
+    orderByClause = 'ORDER BY Bookmarks.dateAdded DESC';
+  }
+
+
   const fetchBookmarksQuery = `
-  SELECT 
-    Characters.characterName, 
-    Characters.characterDescription, 
-    Characters.characterID,
-    User.username
-  FROM Bookmarks 
-  INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
-  INNER JOIN User ON Bookmarks.userID = User.userID
-  WHERE Bookmarks.userID = ?;
-`;
+      SELECT 
+        Characters.characterName, 
+        Characters.characterDescription, 
+        Characters.characterID,
+        User.username,
+        Bookmarks.dateAdded
+      FROM Bookmarks 
+      INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
+      INNER JOIN User ON Bookmarks.userID = User.userID
+      WHERE Bookmarks.userID = ?
+      ${orderByClause};
+    `;
 
   try {
     const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);

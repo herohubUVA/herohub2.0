@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Exo:wght@100&display=swap');
 
+.bookmark-success-popup {
+  /* Styles for success message */
+  background-color: green;
+  color: white;
+  /* Other styles... */
+}
+
+.bookmark-failure-popup {
+  /* Styles for failure message */
+  background-color: red;
+  color: white;
+  /* Other styles... */
+}
 
 /* Defines color variables for light theme */
 .light {
@@ -364,6 +377,42 @@ Volume Control Styling
   z-index: 1000; /* Makes sure it appears above other elements */
   display: none; /* Initially hidden */
 }
+
+#sort-method {
+  margin-left: 100px;
+  padding: 10px;
+  border: 2px solid #ddd; /* Light grey border */
+  border-radius: 5px; /* Rounded corners */
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  font-size: 16px; /* Font size */
+  color: #333; /* Text color */
+  cursor: pointer; /* Changes cursor to pointer on hover */
+  outline: none; /* Removes the default focus outline */
+}
+
+#sort-method:hover {
+  border-color: #bbb; /* Darker border on hover */
+}
+
+#sort-method:focus {
+  border-color: #888; /* Different border color when focused */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4); /* More pronounced shadow when focused */
+}
+
+/* Styling options */
+#sort-method option {
+  padding: 10px;
+  background-color: white;
+  color: #333;
+}
+
+/* Style for different browsers */
+#sort-method:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #333;
+}
+
 
 .remove-bookmark-button{
   background-color: #ff4d4d; /* Background color for the button */
