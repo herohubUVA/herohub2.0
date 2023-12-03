@@ -1,3 +1,15 @@
+function showBookmarkPopup(message, isSuccess) {
+  var popup = document.createElement('div');
+  popup.className = isSuccess ? 'bookmark-success-popup' : 'bookmark-failure-popup';
+  popup.textContent = message;
+  document.body.appendChild(popup);
+  popup.style.display = 'block';
+
+  setTimeout(function() {
+      popup.style.display = 'none';
+      document.body.removeChild(popup);
+  }, 3000);
+}
 
 // DOM Content Loaded Event Listener
 document.addEventListener("DOMContentLoaded", () => {
@@ -128,38 +140,38 @@ jsonData.data["results"].forEach((element) => {
 
     // Add the bookmark button event listener
     const bookmarkButton = document.getElementById("bookmark-button");
-    if (bookmarkButton) {
-      bookmarkButton.addEventListener('click', function() {
-      console.log("Bookmark button clicked!");
-      const characterID = showContainer.getAttribute("data-character-id");
-      if (!characterID) {
-        console.error("No character ID found for bookmarking");
-      return;
-    }
-    console.log("Sending bookmark for characterID:", characterID, "and userID:", userID);
-    // Send a request to the server to save the bookmark
-    fetch('/addBookmark', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            characterID: characterID,
-            userID: userID
+if (bookmarkButton) {
+    bookmarkButton.addEventListener('click', function() {
+        const characterID = showContainer.getAttribute("data-character-id");
+        if (!characterID) {
+            console.error("No character ID found for bookmarking");
+            return;
+        }
+        fetch('/addBookmark', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                characterID: characterID,
+                userID: userID // Make sure userID is defined in your script
+            })
         })
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.message) {
-              console.log(data.message);
-          } else {
-              console.error("Error bookmarking character");
-          }
-      })
-      .catch(error => {
-          console.error("Error:", error);
-      });
-  });
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Bookmark added successfully!") {
+                showBookmarkPopup(data.message, true);
+            } else if (data.error && data.error === "Bookmark already exists") {
+                showBookmarkPopup("You already have this bookmark!", false);
+            } else {
+                showBookmarkPopup("Error bookmarking character", false);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showBookmarkPopup("Error bookmarking character", false);
+        });
+    });
 }
 
 // Fetch and display the ratings
