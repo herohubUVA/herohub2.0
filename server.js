@@ -180,54 +180,6 @@ app.get('/StoryOfTheDay', async (req, res) => {
 // Character Bookmarks Page (GET: /CharacterBookmarks)
 // ---------------------------------------------------
 // Renders the character bookmarks page and passes the user's information
-// app.get('/characterBookmarks', async (req, res) => {
-//   const userID = req.user ? req.user.id : null;
-//   if (!userID) {
-//       return res.status(401).json({ error: 'User not authenticated' });
-//   }
-//   const fetchQuery = "SELECT Characters.characterName, Characters.characterDescription, Characters.characterID FROM Bookmarks INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID WHERE Bookmarks.userID = ?;";
-//   const [bookmarks] = await db.query(fetchQuery, [userID]);
-//   res.render('characterBookmarks', { bookmarks: bookmarks, user: req.user });
-// });
-
-// app.get('/characterBookmarks', async (req, res) => {
-//   const userID = req.user ? req.user.id : null;
-//   if (!userID) {
-//     return res.status(401).json({ error: 'User not authenticated' });
-//   }
-
-//   // const fetchBookmarksQuery = "SELECT characterID FROM Bookmarks WHERE userID = ?";
-//   const fetchBookmarksQuery = "SELECT Characters.characterName, Characters.characterDescription, Characters.characterID FROM Bookmarks INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID WHERE Bookmarks.userID = ?;";
-// //   const [bookmarks] = await db.query(fetchQuery, [userID]);
-//   try {
-//     const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
-//     const timestamp = Date.now().toString();
-//     const publicKey = process.env.MARVEL_PUBLIC_KEY;
-//     const privateKey = process.env.MARVEL_PRIVATE_KEY;
-//     const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
-//     const apiKey = publicKey; 
-//     const characterDetailsPromises = bookmarkedCharacters.map(async (bookmark) => {
-//     const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
-//     const response = await fetch(url);
-//     const jsonData = await response.json();
-//     const character = jsonData.data.results[0];
-
-//       return {
-//         characterID: character.id,
-//         characterName: character.name,
-//         characterDescription: character.description,
-//         characterImage: `${character.thumbnail.path}.${character.thumbnail.extension}`
-//       };
-//     });
-
-//     const bookmarksWithImages = await Promise.all(characterDetailsPromises);
-
-//     res.render('characterBookmarks', { bookmarks: bookmarksWithImages, user: req.user });
-//   } catch (error) {
-//     console.error("Error:", error);
-//     res.status(500).json({ error: 'Error fetching bookmarks' });
-//   }
-// });
 
 app.get('/characterBookmarks', async (req, res) => {
   const userID = req.user ? req.user.id : null;
@@ -235,7 +187,17 @@ app.get('/characterBookmarks', async (req, res) => {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
-  const fetchBookmarksQuery = "SELECT Characters.characterName, Characters.characterDescription, Characters.characterID FROM Bookmarks INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID WHERE Bookmarks.userID = ?;";
+  const fetchBookmarksQuery = `
+  SELECT 
+    Characters.characterName, 
+    Characters.characterDescription, 
+    Characters.characterID,
+    User.username
+  FROM Bookmarks 
+  INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
+  INNER JOIN User ON Bookmarks.userID = User.userID
+  WHERE Bookmarks.userID = ?;
+`;
 
   try {
     const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
@@ -252,6 +214,7 @@ app.get('/characterBookmarks', async (req, res) => {
       const characterFromAPI = jsonData.data.results[0];
 
       return {
+        username: bookmark.username,
         characterID: bookmark.characterID, // From Database
         characterName: bookmark.characterName, // From Database
         characterDescription: bookmark.characterDescription, // From Database
