@@ -1,17 +1,42 @@
 function showRemovedBookmarkPopup() {
     var popup = document.createElement('div');
     popup.className = 'removed-bookmark-popup';
-    popup.textContent = 'Bookmark removed!';
+    
+    // Create a span element for the close button
+    var closeButton = document.createElement('span');
+    closeButton.textContent = '×'; // Unicode character for 'X'
+    closeButton.className = 'close-button';
+    
+    // Style for the close button
+    closeButton.style.float = 'right';
+    closeButton.style.fontSize = '20px';
+    closeButton.style.cursor = 'pointer';
+
+    // Append the close button to the popup
+    popup.appendChild(closeButton);
+
+    // Add the main text of the popup
+    var text = document.createElement('span');
+    text.textContent = 'Bookmark removed!';
+    popup.appendChild(text);
+
+    // Append the popup to the body
     document.body.appendChild(popup);
     popup.style.display = 'block';
 
-    // Hide the popup after a few seconds
-    setTimeout(function() {
-        popup.style.dishowRemovedBookmarkPopup();
-              splay = 'none';
+    // Hide the popup after a few seconds automatically
+    // var timeout = setTimeout(function() {
+    //     popup.style.display = 'none';
+    //     document.body.removeChild(popup);
+    // }, 10000);
+
+    // Event listener to close the popup when the close button is clicked
+    closeButton.addEventListener('click', function() {
+        popup.style.display = 'none';
         document.body.removeChild(popup);
-    }, 3000);
+    });
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
   const showContainer = document.querySelector(".bookmarks-container");
@@ -80,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                       // Remove the bookmark element from the DOM
                       bookmarkElement.remove();
+                      location.reload();
                   } else {
                       console.error("Error removing bookmark");
                   }
@@ -92,18 +118,3 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   }
 });
-
-// showContainer.innerHTML = "";
-// const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&name=${input.value}`;
-// const response = await fetch(url);
-// const jsonData = await response.json();
-
-// jsonData.data["results"].forEach((element) => {
-//     showContainer.innerHTML = `<div class="card-container">
-//     <div class="container-character-image">
-//     <img src="${
-//       element.thumbnail["path"] + "." + element.thumbnail["extension"]
-//     }"/></div>;
-// });
-
-

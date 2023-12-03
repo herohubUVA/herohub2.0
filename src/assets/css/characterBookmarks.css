@@ -131,11 +131,6 @@ a {
   line-height: 39px;
 }
 
-.far fa-moon {
-  left: 20px;
-  bottom: 20px; 
-}
-
 .big-wrapper.light .toggle-btn i:last-child {
   display: none;
 }
@@ -338,6 +333,12 @@ Volume Control Styling
   padding-left: 100px;
 }
 
+.bookmarks-title{
+  text-align: center;
+  margin-left: 100px; 
+  margin-bottom: 20px;
+}
+
 .bookmark {
   border: 1px solid #ccc; 
   padding: 10px;
@@ -349,6 +350,19 @@ Volume Control Styling
   align-items: center; /* Align children horizontally in the center */
   justify-content: center; /* Align children vertically in the center */
   text-align: center;
+}
+
+.removed-bookmark-popup {
+  background-color: rgba(255, 0, 0, 0.7); /* Red with 70% opacity */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Makes sure it appears above other elements */
+  display: none; /* Initially hidden */
 }
 
 .remove-bookmark-button{
