@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character Bookmarks</title>
+
+    <!-- Accesses CSS files-->
+    <link rel="stylesheet" href="/assets/css/characterBookmarks.css" />
+    <link rel="stylesheet" href="/assets/css/navbar.css">
+    <style>
+        body {
+            text-align: center;
+        }
+
+        form {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 25px;
+            
+        }
+
+        input {
+            margin-bottom: 15px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        legend {
+            font-size: 30px; /* Set the desired font size */
+         
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        
+        fieldset {
+            border: none;
+            margin: 40pt;
+            padding: 40pt;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Optional: Adjust spacing between fieldsets */
+        }
+
+
+        div label {
+            margin-right: 10px; /* Adjust spacing between labels and radio buttons */
+        }
+
+
+        /* Custom styles for radio buttons */
+        input[type="radio"] {
+            appearance: none; /* Remove default appearance */
+           
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px; /* Set the width and height of the custom radio button */
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0); /* Border color for unchecked state */
+            border-radius: 50%; /* Make it a circle */
+            outline: none; /* Remove the default focus outline */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+   
+        }
+
+/* Custom styles for checked radio buttons */
+        input[type="radio"]:checked {
+            background-color: rgba(255, 255, 255, 0); /* Background color for checked state */
+            border-color: rgba(242, 242, 242, 0);
+        }
+
+
+        /* Style the custom radio button label */
+        input[type="radio"] + label::before {
+            /* content: '\2022'; Unicode character for a bullet (you can use other symbols) */
+            font-size: 20px;
+            color: #333; /* Color of the symbol for unchecked state */
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            margin-right: 10px; /* Space between the radio button and label */
+        }
+
+        /* Style the custom radio button label for checked state */
+        input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+       
+        div label {
+            display: inline-block;
+            gap: 10px; /*Adjust spacing between radio buttons */
+            background-color: #f4f4f4;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 165px; /* Set a fixed width */
+            height: 100px; /* Set a fixed height */
+        }
+
+        /* Additional styles for checked labels */
+        input[type="radio"]:checked + label {
+            background-color: #F57500;
+            color: #fff;
+            border-color: #F57500;
+        }
+        #result {
+            margin-top: 20px; /* Add space above the result */
+            font-size: 50px;
+            color: red;
+            d
+            /* Add any other styling you need */
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <main>
+        <script>
+             function calculateResult() {
+        const form = document.getElementById('superpowerQuiz');
+        console.log("Function called");
+        let answers = {
+            A: 0,
+            B: 0,
+            C: 0,
+            D: 0
+        };
+    
+        
+        for (let i = 1; i <= 5; i++) {
+            console.log("Checking question", i);
+            const question = document.querySelector(`input[name="question${i}"]:checked`);
+
+            if (question) {
+                const selectedValue = question.value;
+                console.log("Selected value for question " + i + ": " + selectedValue);
+                answers[selectedValue]++;
+            }
+        }
+    
+        // Find the key (A, B, C, or D) with the highest count
+        let maxKey = '';
+        let maxCount = 0;
+        for (let key in answers) {
+            if (answers[key] > maxCount) {
+                maxCount = answers[key];
+                maxKey = key;
+            }
+        }
+    
+        // Display the result based on the key with the highest count
+        let resultText = '';
+        switch(maxKey) {
+            case 'A':
+                resultText = 'You belong to the X-Men, dedicated to promoting mutant rights and coexistence with humans';
+                break;
+            case 'B':
+                resultText = 'You are an Avenger, ready to defend the world from formidable threats alongside other powerful heroes.';
+                break;
+            case 'C':
+                resultText = 'You are a member of X-Force, known for taking on dangerous and covert missions, often by any means necessary.';
+                break;
+            case 'D':
+                resultText = 'Your superpower is Invisibility or Shadow Manipulation!';
+                break;
+            default:
+                resultText = 'You are part of the Fantastic Four, a family of explorers and heroes who use their unique powers to protect the Earth and explore the unknown.';
+        }
+        console.log(resultText);
+        document.getElementById('result').innerText = resultText;
+    
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    }
+        </script>
+        <div class="big-wrapper light">
+
+            <!-- Accesses navigation bar -->
+            <header>
+                <div class="container">
+                    <%- include('partials/navbar') %>
+                </div>
+            </header>
+
+            <div id="result"></div>
+            <form id="superpowerQuiz" action="/submit" method="post">
+
+                <fieldset>
+                    <legend>What kind of superpower would you most like to have?</legend>
+                    <div>   
+                        <input type="radio" name="question1" id="q1a" value="A">
+                        <label for="q1a">Telepathy and telekinesis</label>
+            
+                        <input type="radio" name="question1" id="q1b" value="B">
+                        <label for="q1b">Super strength and durability</label>
+            
+                        <input type="radio" name="question1" id="q1c" value="C">
+                        <label for="q1c">Stealth and combat skills</label>
+            
+                        <input type="radio" name="question1" id="q1d" value=“D">
+                        <label for="q1d"> Elasticity and shape-shifting </label>
+                    </div>
+                    </fieldset>
+               
+                <fieldset>
+                    <legend>What's your preferred method of transportation?</legend>
+                    <div>
+                        <input type="radio" name="question2" id="q2a" value="A">
+                        <label for="q2a"> Flying on my own </label>
+            
+                        <input type="radio" name="question2" id="q2b" value="B">
+                        <label for="q2b">  Super-speed </label>
+            
+                        <input type="radio" name="question2" id="q2c" value="C">
+                        <label for="q2c"> Teleportation </label>
+            
+                        <input type="radio" name="question2" id="q2d" value="D">
+                        <label for="q2d"> Fantasticar (a high-tech vehicle) </label>
+                    </div>
+                </fieldset>
+            
+                <fieldset>
+                    <legend> Which of these values is most important to you? </legend>
+                    <div>
+                        <input type="radio" name="question3" id="q3a" value="A">
+                        <label for="q3a">  Equality and acceptance for all mutants </label>
+            
+                        <input type="radio" name="question3" id="q3b" value="B">
+                        <label for="q3b"> Protecting the world from major threats </label>
+            
+                        <input type="radio" name="question3" id="q3c" value="C">
+                        <label for="q3c"> Getting the job done by any means necessary </label>
+            
+                        <input type="radio" name="question3" id="q3d" value="D">
+                        <label for="q3d"> Family and teamwork </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> How do you handle conflicts with villains? </legend>
+                    <div>
+                        <input type="radio" name="question4" id="q4a" value="A">
+                        <label for="q4a"> Try to understand their motivations and find common ground </label>
+            x
+                        <input type="radio" name="question4" id="q4b" value="B">
+                        <label for="q4b"> Confront them head-on with brute force </label>
+            
+                        <input type="radio" name="question4" id="q4c" value="C">
+                        <label for="q4c">Use cunning and strategy to outsmart them</label>
+            
+                        <input type="radio" name="question4" id="q4d" value="D">
+                        <label for="q4d">Rely on teamwork and your unique abilities</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend> Which of these words best describes your personality? </legend>
+                    <div>
+                        <input type="radio" name="question5" id="q5a" value="A">
+                        <label for="q5a">Compassionate</label>
+            
+                        <input type="radio" name="question5" id="q5b" value="B">
+                        <label for="q5b">Courageous</label>
+            
+                        <input type="radio" name="question5" id="q5c" value="C">
+                        <label for="q5c">Pragmatic</label>
+            
+                        <input type="radio" name="question5" id="q5d" value="D">
+                        <label for="q5d">Adaptable</label>
+                    </div>
+                </fieldset>
+
+                <button type="button" onclick="calculateResult()">Submit</button>
+    
+        </form>
+                    
+        <p id="result"></p>
+            
+
+        
+            <!-- Music Play/Pause Control and Volume Bar -->
+            <div class="audio-controls">
+                <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
+                <div class="volume-control">
+                  <div class="volume-bar" data-level="0"></div>
+                  <div class="volume-bar" data-level="1"></div>
+                  <div class="volume-bar" data-level="2"></div>
+                  <div class="volume-bar" data-level="3"></div>
+                  <div class="volume-bar" data-level="4"></div>
+                  <div class="volume-bar" data-level="5"></div>
+                  <div class="volume-bar" data-level="6"></div>
+                  <div class="volume-bar" data-level="7"></div>
+                  <div class="volume-bar" data-level="8"></div>
+                  <div class="volume-bar" data-level="9"></div>
+                </div>
+            </div>
+            <audio id="storyPageSong" loop>
+                <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
+            </audio>
+
+            <!-- Theme Change Button -->
+            <div class="bottom-area">
+                <div class="container">
+                    <button class="toggle-btn">
+                        <i class="far fa-moon"></i>
+                        <i class="far fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Access Javascript Code -->
+    <script src="/assets/js/superhero_quiz.js"></script>
+    <script src="/assets/js/result.js"></script>
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <script src="/assets/js/themeToggler.js"></script>
+    <script src="/assets/js/audioControls.js"></script>
+    
+</body>
+
+</html>
+
+

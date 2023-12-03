@@ -12,6 +12,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
 const cors = require('cors');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
 // ----- Server Initialization -----
 const app = express();
@@ -29,6 +30,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // ----- Passport Google OAuth2.0 Setup -----
 passport.use(new GoogleStrategy({
@@ -143,7 +146,6 @@ app.get('/CharacterEncyclopedia', (req, res) => {
 app.get('/StoryTest', (req, res) => {
   res.render('characterEncyclopedia', { user: req.user });
 });
-
 
 
 
@@ -804,21 +806,82 @@ app.get('/getUserRating/:characterID', async (req, res) => {
 // Quizzes Page (GET: /CharacterBookmarks)
 // ---------------------------------------------------
 // Renders the character bookmarks page and passes the user's information
-app.get('/quizzes', async (req, res) => {
-  const userID = req.user ? req.user.id : null;
-  if (!userID) {
-      return res.status(401).json({ error: 'User not authenticated' });
-  }
+app.get('/quizzes', (req, res) => {
   res.render('quizzes', {user: req.user });
 });
 
-app.get('/sup_quizzes', async (req, res) => {
-  const userID = req.user ? req.user.id : null;
-  if (!userID) {
-      return res.status(401).json({ error: 'User not authenticated' });
-  }
-  res.render('sup_quizzes', {user: req.user });
+app.get('/superhero_quiz', (req, res) => {
+
+  res.render('superhero_quiz', {user: req.user });
 });
+
+
+app.get('/superpower_quiz', (req, res) => {
+
+  res.render('superpower_quiz', {user: req.user });
+});
+
+app.get('/team_quiz', (req, res) => {
+
+  res.render('team_quiz', {user: req.user });
+});
+
+app.get('/nemisis_quiz', (req, res) => {
+  res.render('nemisis_quiz', {user: req.user });
+});
+
+
+
+const getHeroImage = (heroStyleClass) => {
+  // Logic to determine the image URL based on heroStyleClass
+  // For example:
+  switch(heroStyleClass) {
+    case 'captain-america-style':
+      return 'assets/images/captain_america_quiz.webp';
+    case 'iron-man-style':
+      return 'assets/images/Ironman_quiz.jpeg';
+    case 'hulk-style':
+      return 'asset/images/hulk_quiz.jpg';
+    case 'widow-style':
+      return 'assets/images/blackwidow_quiz.jpeg';
+    case 'spider-style':
+      return 'assets/images/Spiderman_quiz.jpeg';
+    case 'thor-style':
+      return 'assets/images/thor_quiz.jpg';
+    case 'witch-style':
+      return 'assets/images/scarlett_witch.jpeg';
+    default:
+      return 'assets/images/agent_shield.jpg';
+  }
+};
+
+
+app.get('/result_superhero', (req, res) => {
+  const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
+  console.log('In result server');
+  // Map hero results to corresponding styles
+  const resultStyles = {
+    'Captain America': 'captain-america-style',
+    'Iron Man': 'iron-man-style',
+    'Hulk': 'hulk-style',
+    'Scarlett Witch': 'witch-style',
+    'Spiderman': 'spider-style',
+    'Black Widow': 'widow-style',
+    'Thor': 'thor-style',
+  };
+
+
+  // Get the style class based on the hero result
+  const heroStyleClass = resultStyles[heroResult] || 'shield-style';
+  const heroImageUrl = getHeroImage(heroStyleClass);
+  // Render the result page with the hero result and style class
+
+  res.render('result_superhero', { heroResult, heroStyleClass, heroImageUrl});
+});
+
+
+
+
 
 // Add Bookmark Route (POST: /addBookmark)
 // ---------------------------------------

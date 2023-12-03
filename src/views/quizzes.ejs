@@ -16,7 +16,7 @@
   
     fieldset {
             /* border: none; */
-            border-color: coral;
+            border-color: #F57500;
             border-radius: 10px;
             margin: 20pt;
             /* padding: 10pt; */
@@ -29,9 +29,26 @@
 
     #unique-heading {
         font-size: 40px; /* Set the desired font size */
-        color: chocolate; 
+        color: #F57500; 
         margin: auto;
-    }      
+    }   
+    
+    
+   
+    .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
+
+  #intro {
+    font-size: 45px; /* Set the desired font size */
+    color: red; /* Set the desired text color */
+    text-align: center; /* Center the text horizontally */
+    margin-top: 20px; /* Adjust the top margin to center vertically */
+  }
+
 
 
 </style>
@@ -45,35 +62,29 @@
                     <%- include('partials/navbar') %>
                 </div>
             </header>
-           
+            <p id="intro"> Take our quizzes to see how you fit into the Marvel Universe!</p>
             <!-- Unique Content for Story of the Day -->
-            <div class="showcase-area">
                 <div class="container">
-                    <div class="left">
-                        <fieldset>
-                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Hero Quiz </a> 
-                        </fieldset> 
-                    </div>
-                    <div class="left">
-                        <fieldset>
-                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Power Quiz</a> 
-                        </fieldset> 
-                    </div>
-                    <div class="left">
-                        <fieldset>
-                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank"> Team Quiz</a>
-                        </fieldset>
-                    </div>
-                    <div class="left">
-                        <fieldset>
-                        <a id="unique-heading" href="http://localhost:4000/sup_quizzes" target="_blank">Super Hero Name Quiz</a> 
-                        </fieldset> 
-                    </div>                      
                     
-                
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/superhero_quiz">Super Hero Quiz </a> 
+                        </fieldset> 
+                    </div>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/superpower_quiz">Super Power Quiz</a> 
+                        </fieldset> 
+                    </div>
+                    <div class="left">
+                        <fieldset>
+                        <a id="unique-heading" href="http://localhost:4000/team_quiz"> Team Quiz</a>
+                        </fieldset>
+                    </div>                           
                 </div>
-            </div>
-        </fieldset>
+            
+
+    </div>
             <!-- Music Play/Pause Control and Volume Bar -->
             <div class="audio-controls">
                 <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
@@ -111,10 +122,8 @@
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="/assets/js/themeToggler.js"></script>
     <script src="/assets/js/audioControls.js"></script>
-    <script src="/assets/js/characterBookmarks.js"></script>
+    <script src="/assets/js/quizzes.js"></script>
 </body>
-<script>
-    var userID = '<%= user.id %>'; // Assuming you pass the user object to your EJS render function
-</script>
+
 
 </html>
