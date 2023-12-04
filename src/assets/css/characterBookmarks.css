@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Exo:wght@100&display=swap');
 
+.center {
+  width: 1200px;
+  height: auto;
+
+}
+
 .bookmark-success-popup {
   /* Styles for success message */
   background-color: green;

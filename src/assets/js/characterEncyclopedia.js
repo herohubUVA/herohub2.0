@@ -52,7 +52,6 @@ function customAlert(msg) {
   document.body.appendChild(modal);
 }
 
-
 // Access DOM elements
 let input = document.getElementById("input-box");
 let button = document.getElementById("submit-button");
