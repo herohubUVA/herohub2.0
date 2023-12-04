@@ -290,7 +290,7 @@ app.get('/Support', (req, res) => {
 });
 
 app.get('/websiteReview', (req, res) => {
-  res.render('support', { user: req.user });
+  res.render('websiteReview', { user: req.user });
 });
 // Authentication Page (GET: /Auth)
 // -------------------------------
@@ -922,7 +922,57 @@ app.post('/submit_quiz', (req, res) => {
     'Black Widow': 'widow-style',
     'Thor': 'thor-style',
   };
+app.get('/result_superhero', async (req, res) => {
+  // const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
+  // const userID = req.query.userID; 
+  const { answers, userID } = req.body;
+  console.log('Before');
+  // console.log('Before');
+  console.log('userID Check', userID);
+  // Map hero results to corresponding styles
+  const resultStyles = {
+    'Captain America': 'captain-america-style',
+    'Iron Man': 'iron-man-style',
+    'Hulk': 'hulk-style',
+    'Scarlett Witch': 'witch-style',
+    'Spiderman': 'spider-style',
+    'Black Widow': 'widow-style',
+    'Thor': 'thor-style',
+  };
 
+  try {
+    const safeUserID = userID || null;
+    // Check if userID is undefined and handle it by setting it to null
+    if (typeof userID === 'undefined') {
+      throw new Error('UserID is undefined');
+    }
+    
+    const safeHeroResult = heroResult || null;
+
+    if (typeof heroResult === 'undefined') {
+      throw new Error('heroResult is undefined');
+    }
+   
+
+    const [result] = await db.execute('UPDATE quizHero SET characterName = ? WHERE  userID = ?', [heroResult, userID]);
+
+    // Check if any rows were affected
+    if (result.affectedRows === 0) {
+      const insertQuery = "INSERT INTO quizHero (userID, characterName) VALUES (?, ?) ON DUPLICATE KEY UPDATE characterName = VALUES(characterName);";
+      await db.query(insertQuery, [userID, heroResult]);
+    }
+
+    // Get the style class based on the hero result
+    const heroStyleClass = resultStyles[heroResult] || 'shield-style';
+    const heroImageUrl = getHeroImage(heroStyleClass);
+    console.log('Check');
+    // Render the result page with the hero result and style class
+    res.render('result_superhero', { heroResult, heroStyleClass, heroImageUrl });
+  } catch (error) {
+    console.error("Detailed Error:", error);
+    res.status(500).json({ message: "Error storing quiz result", error: error.message });
+  }
+});
 
   // Get the style class based on the hero result
   const heroStyleClass = resultStyles[heroResult] || 'shield-style';
@@ -946,6 +996,7 @@ app.get('/result_superhero', (req, res) => {
     'Thor': 'thor-style',
   };
 
+  
 
   // Get the style class based on the hero result
   const heroStyleClass = resultStyles[heroResult] || 'shield-style';
