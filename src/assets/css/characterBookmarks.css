@@ -6,6 +6,11 @@
 
 }
 
+.empty-bookmarks-message {
+  width:  900px;
+  height: auto;
+}
+
 .bookmark-success-popup {
   /* Styles for success message */
   background-color: green;

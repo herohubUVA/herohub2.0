@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support</title>
+
+    <!-- Accesses CSS files-->
+    <link rel="stylesheet" href="/assets/css/support.css" />
+    <link rel="stylesheet" href="/assets/css/navbar.css">
+</head>
+
+<body>
+    <main>
+        <div class="big-wrapper light">
+
+            <!-- Accesses navigation bar -->
+            <header>
+                <div class="container">
+                    <%- include('partials/navbar') %>
+                </div>
+            </header>
+
+            <!-- Unique Content for Support -->
+            <div class="showcase-area">
+                <div class="container">
+                  <div class="left">
+                    <div class="contact-form">
+                      <div class="text-and-form">
+                        <h2>Contact Support</h2>
+                        <form id="supportForm" action="/support" method="post">
+                          <label for="name">Name:</label>
+                          <input type="text" id="name" name="name" required><br>
+                          <label for="email">Email:</label>
+                          <input type="email" id="email" name="email" required><br>
+                          <label for="message">Message:</label>
+                          <textarea id="message" name="message" required></textarea><br>
+                          <button type="submit">Submit</button>
+                        </form>
+                      </div>
+                      <img class="contact-image" src="/assets/images/ducks.gif" alt="ducks" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+            <!-- Music Play/Pause Control and Volume Bar -->
+            <div class="audio-controls">
+                <img src="/assets/images/play.png" alt="Play Music Button" class="play-button" />
+                <div class="volume-control">
+                  <div class="volume-bar" data-level="0"></div>
+                  <div class="volume-bar" data-level="1"></div>
+                  <div class="volume-bar" data-level="2"></div>
+                  <div class="volume-bar" data-level="3"></div>
+                  <div class="volume-bar" data-level="4"></div>
+                  <div class="volume-bar" data-level="5"></div>
+                  <div class="volume-bar" data-level="6"></div>
+                  <div class="volume-bar" data-level="7"></div>
+                  <div class="volume-bar" data-level="8"></div>
+                  <div class="volume-bar" data-level="9"></div>
+                </div>
+            </div>
+            <audio id="storyPageSong" loop>
+                <source src="/assets/audio/marvelOpening.mp3" type="audio/mp3" />
+            </audio>
+
+            <!-- Theme Change Button -->
+            <div class="bottom-area">
+                <div class="container">
+                    <button class="toggle-btn">
+                        <i class="far fa-moon"></i>
+                        <i class="far fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Access Javascript Code -->
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <script src="/assets/js/themeToggler.js"></script>
+    <script src="/assets/js/audioControls.js"></script>
+    <script src="/assets/js/support.js"></script>
+</body>
+
+</html>
