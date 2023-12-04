@@ -279,16 +279,15 @@ Volume Control Styling
 
 /* CSS for the chart container */
 .chart-container {
-  width: 45%;
-  margin: 20px 0;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer; /* Add a pointer cursor for the chart */
-  transition: all 0.3s; /* Add smooth transition for resizing */
+  flex: 1 1 45%; /* Allows two charts per row */
+  padding: 1rem;
+  margin: 1rem;
+  background: var(--backgroundColor);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
 }
+
 
 /* CSS for full-screen mode */
 .chart-container.full-screen {
