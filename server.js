@@ -93,12 +93,14 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+
 // ----- Authentication Middleware -----
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-      return next();
+    console.log("User is authenticated");
+    return next();
   } else {
-    res.status(401).json({ success: false, message: "Not authenticated" });
+    res.redirect('/Auth');
   }
 }
 
@@ -190,18 +192,6 @@ app.get('/characterBookmarks', async (req, res) => {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
-//   const fetchBookmarksQuery = `
-//   SELECT 
-//     Characters.characterName, 
-//     Characters.characterDescription, 
-//     Characters.characterID,
-//     User.username
-//   FROM Bookmarks 
-//   INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
-//   INNER JOIN User ON Bookmarks.userID = User.userID
-//   WHERE Bookmarks.userID = ?;
-// `;
-
   let orderByClause = '';
   if (sortBy === 'name') {
     orderByClause = 'ORDER BY Characters.characterName';
@@ -238,6 +228,7 @@ app.get('/characterBookmarks', async (req, res) => {
       const jsonData = await response.json();
       const characterFromAPI = jsonData.data.results[0];
 
+      
       return {
         username: bookmark.username,
         characterID: bookmark.characterID, // From Database
@@ -255,7 +246,6 @@ app.get('/characterBookmarks', async (req, res) => {
     res.status(500).json({ error: 'Error fetching bookmarks' });
   }
 });
-
 
 
 // Edit Profile Page (GET: /EditProfile)
@@ -299,6 +289,9 @@ app.get('/Support', (req, res) => {
   res.render('support', { user: req.user });
 });
 
+app.get('/websiteReview', (req, res) => {
+  res.render('support', { user: req.user });
+});
 // Authentication Page (GET: /Auth)
 // -------------------------------
 // Renders the authentication page (Sign Up / Log In)
@@ -1143,6 +1136,20 @@ app.post('/support', async (req, res) => {
     const { name, email, message } = req.body;
     const [results] = await db.execute(
       'INSERT INTO SupportRequests (name, email, message) VALUES (?, ?, ?)',
+      [name, email, message]
+    );
+    res.status(200).send('Support request submitted successfully');
+  } catch (error) {
+    console.error('Error handling support request:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/websiteReview', async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+    const [results] = await db.execute(
+      'INSERT INTO websiteReview (name, email, message) VALUES (?, ?, ?)',
       [name, email, message]
     );
     res.status(200).send('Support request submitted successfully');
