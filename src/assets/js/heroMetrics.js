@@ -86,28 +86,28 @@ function initializeHeroCharts() {
         return data.filter((entry, index) => index % step === 0);
     }
 
-    // Initialize an empty line chart for ratings over time
-    const ratingsOverTimeChart = createLineChart(ctxRatingsOverTime, [], [], '', '', '');
+    // // Initialize an empty line chart for ratings over time
+    // const ratingsOverTimeChart = createLineChart(ctxRatingsOverTime, [], [], '', '', '');
 
-    // Add a click event listener to the chart container
-    chartContainer.addEventListener('click', () => {
-        chartContainer.classList.toggle('full-screen');
+    // // Add a click event listener to the chart container
+    // chartContainer.addEventListener('click', () => {
+    //     chartContainer.classList.toggle('full-screen');
 
-        // Adjust the chart size on entering/exiting full-screen mode
-        if (chartContainer.classList.contains('full-screen')) {
-            // Enlarge the chart to cover the screen
-            ratingsOverTimeChart.options.responsive = true; // Enable responsiveness
-            ratingsOverTimeChart.canvas.style.width = '100%';
-            ratingsOverTimeChart.canvas.style.height = '100%';
-            ratingsOverTimeChart.resize(); // Trigger chart resize
-        } else {
-            // Restore the original chart size
-            ratingsOverTimeChart.options.responsive = false; // Disable responsiveness
-            ratingsOverTimeChart.canvas.style.width = ''; // Remove inline style
-            ratingsOverTimeChart.canvas.style.height = ''; // Remove inline style
-            ratingsOverTimeChart.resize(); // Trigger chart resize
-        }
-    });
+    //     // Adjust the chart size on entering/exiting full-screen mode
+    //     if (chartContainer.classList.contains('full-screen')) {
+    //         // Enlarge the chart to cover the screen
+    //         ratingsOverTimeChart.options.responsive = true; // Enable responsiveness
+    //         ratingsOverTimeChart.canvas.style.width = '100%';
+    //         ratingsOverTimeChart.canvas.style.height = '100%';
+    //         ratingsOverTimeChart.resize(); // Trigger chart resize
+    //     } else {
+    //         // Restore the original chart size
+    //         ratingsOverTimeChart.options.responsive = false; // Disable responsiveness
+    //         ratingsOverTimeChart.canvas.style.width = ''; // Remove inline style
+    //         ratingsOverTimeChart.canvas.style.height = ''; // Remove inline style
+    //         ratingsOverTimeChart.resize(); // Trigger chart resize
+    //     }
+    // });
 
     // Fetch and create chart for highest and lowest-rated characters
     fetch('/api/highest-lowest-rated-characters')

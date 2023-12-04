@@ -185,67 +185,146 @@ app.get('/StoryOfTheDay', async (req, res) => {
 // ---------------------------------------------------
 // Renders the character bookmarks page and passes the user's information
 
-app.get('/characterBookmarks', async (req, res) => {
-  const userID = req.user ? req.user.id : null;
-  const sortBy = req.query.sortBy; 
-  if (!userID) {
-    return res.status(401).json({ error: 'User not authenticated' });
-  }
+// app.get('/characterBookmarks', async (req, res) => {
+//   const userID = req.user ? req.user.id : null;
+//   const sortBy = req.query.sortBy; 
+//   if (!userID) {
+//     return res.status(401).json({ error: 'User not authenticated' });
+//   }
 
-  let orderByClause = '';
-  if (sortBy === 'name') {
-    orderByClause = 'ORDER BY Characters.characterName';
-  } else { // Default to sorting by date if sortBy is 'date' or undefined
-    orderByClause = 'ORDER BY Bookmarks.dateAdded DESC';
-  }
+//   let orderByClause = '';
+//   if (sortBy === 'name') {
+//     orderByClause = 'ORDER BY Characters.characterName';
+//   } else { // Default to sorting by date if sortBy is 'date' or undefined
+//     orderByClause = 'ORDER BY Bookmarks.dateAdded DESC';
+//   }
 
 
-  const fetchBookmarksQuery = `
-      SELECT 
-        Characters.characterName, 
-        Characters.characterDescription, 
-        Characters.characterID,
-        User.username,
-        Bookmarks.dateAdded
-      FROM Bookmarks 
-      INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
-      INNER JOIN User ON Bookmarks.userID = User.userID
-      WHERE Bookmarks.userID = ?
-      ${orderByClause};
-    `;
+//   const fetchBookmarksQuery = `
+//       SELECT 
+//         Characters.characterName, 
+//         Characters.characterDescription, 
+//         Characters.characterID,
+//         User.username,
+//         Bookmarks.dateAdded
+//       FROM Bookmarks 
+//       INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
+//       INNER JOIN User ON Bookmarks.userID = User.userID
+//       WHERE Bookmarks.userID = ?
+//       ${orderByClause};
+//     `;
 
-  try {
-    const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
-    const timestamp = Date.now().toString();
-    const publicKey = process.env.MARVEL_PUBLIC_KEY;
-    const privateKey = process.env.MARVEL_PRIVATE_KEY;
-    const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
-    const apiKey = publicKey;
+//   try {
+//     const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
+//     const timestamp = Date.now().toString();
+//     const publicKey = process.env.MARVEL_PUBLIC_KEY;
+//     const privateKey = process.env.MARVEL_PRIVATE_KEY;
+//     const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+//     const apiKey = publicKey;
 
-    const characterDetailsPromises = bookmarkedCharacters.map(async (bookmark) => {
-      const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      const characterFromAPI = jsonData.data.results[0];
+//     const characterDetailsPromises = bookmarkedCharacters.map(async (bookmark) => {
+//       const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
+//       const response = await fetch(url);
+//       const jsonData = await response.json();
+//       const characterFromAPI = jsonData.data.results[0];
 
       
-      return {
-        username: bookmark.username,
-        characterID: bookmark.characterID, // From Database
-        characterName: bookmark.characterName, // From Database
-        characterDescription: bookmark.characterDescription, // From Database
-        characterImage: `${characterFromAPI.thumbnail.path}.${characterFromAPI.thumbnail.extension}` // From API
-      };
-    });
+//       return {
+//         username: bookmark.username,
+//         characterID: bookmark.characterID, // From Database
+//         characterName: bookmark.characterName, // From Database
+//         characterDescription: bookmark.characterDescription, // From Database
+//         characterImage: `${characterFromAPI.thumbnail.path}.${characterFromAPI.thumbnail.extension}` // From API
+//       };
+//     });
 
-    const bookmarksWithImages = await Promise.all(characterDetailsPromises);
+//     const bookmarksWithImages = await Promise.all(characterDetailsPromises);
 
-    res.render('characterBookmarks', { bookmarks: bookmarksWithImages, user: req.user });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: 'Error fetching bookmarks' });
-  }
-});
+//     res.render('characterBookmarks', { bookmarks: bookmarksWithImages, user: req.user });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).json({ error: 'Error fetching bookmarks' });
+//   }
+// });
+
+    app.get('/characterBookmarks', async (req, res) => {
+      const userID = req.user ? req.user.id : null;
+        const sortBy = req.query.sortBy; 
+        if (!userID) {
+          return res.status(401).json({ error: 'User not authenticated' });
+        }
+      
+        let orderByClause = '';
+        if (sortBy === 'name') {
+          orderByClause = 'ORDER BY Characters.characterName';
+        } else { // Default to sorting by date if sortBy is 'date' or undefined
+          orderByClause = 'ORDER BY Bookmarks.dateAdded DESC';
+        }
+      
+      
+        const fetchBookmarksQuery = `
+            SELECT 
+              Characters.characterName, 
+              Characters.characterDescription, 
+              Characters.characterID,
+              User.username,
+              Bookmarks.dateAdded
+            FROM Bookmarks 
+            INNER JOIN Characters ON Bookmarks.characterID = Characters.characterID 
+            INNER JOIN User ON Bookmarks.userID = User.userID
+            WHERE Bookmarks.userID = ?
+            ${orderByClause};
+          `;
+    
+          try {
+            const [bookmarkedCharacters] = await db.query(fetchBookmarksQuery, [userID]);
+            const timestamp = Date.now().toString();
+            const publicKey = process.env.MARVEL_PUBLIC_KEY;
+            const privateKey = process.env.MARVEL_PRIVATE_KEY;
+            const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+            const apiKey = publicKey;
+        
+            const characterDetailsPromises = bookmarkedCharacters.map(async (bookmark) => {
+              // Check if characterID exists in the Characters table
+              const characterCheckQuery = 'SELECT * FROM Characters WHERE characterID = ?';
+              const [characterCheckResult] = await db.query(characterCheckQuery, [bookmark.characterID]);
+        
+              const url = `https://gateway.marvel.com:443/v1/public/characters/${bookmark.characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
+              const response = await fetch(url);
+              const jsonData = await response.json();
+              const characterFromAPI = jsonData.data.results[0];
+      
+              if (characterCheckResult.length > 0) {
+                // If character exists in the database, use its details
+                return {
+                  username: bookmark.username,
+                  characterID: bookmark.characterID,
+                  characterName: bookmark.characterName,
+                  characterDescription: bookmark.characterDescription,
+                  characterImage: `${characterFromAPI.thumbnail.path}.${characterFromAPI.thumbnail.extension}` // Replace with actual image URL from the database
+                };
+              } else {
+                // If character does not exist in the database, fetch from API
+            
+                return {
+                  username: bookmark.username,
+                  characterID: bookmark.characterID,
+                  characterName: characterFromAPI.name, // From API
+                  characterDescription: characterFromAPI.description, // From API
+                  characterImage: `${characterFromAPI.thumbnail.path}.${characterFromAPI.thumbnail.extension}` // From API
+                };
+              }
+            });
+        
+            const bookmarksWithImages = await Promise.all(characterDetailsPromises);
+        
+            res.render('characterBookmarks', { bookmarks: bookmarksWithImages, user: req.user });
+          } catch (error) {
+            console.error("Error:", error);
+            res.status(500).json({ error: 'Error fetching bookmarks' });
+          }
+        });
+    
 
 
 // Edit Profile Page (GET: /EditProfile)
@@ -1100,16 +1179,36 @@ app.post('/addBookmark', async (req, res) => {
     return res.status(400).json({ error: 'Bookmark already exists for this user'});
   }
 
+  const timestamp = Date.now().toString();
+  const publicKey = process.env.MARVEL_PUBLIC_KEY;
+  const privateKey = process.env.MARVEL_PRIVATE_KEY;
+  const apiKey = publicKey; // Use the publicKey as the API key
+  const hashValue = crypto.createHash('md5').update(timestamp + privateKey + publicKey).digest('hex');
+
+  const url = `https://gateway.marvel.com:443/v1/public/characters/${characterID}?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}`;
+  const response = await fetch(url);
+  const jsonData = await response.json();
+
+  // Check if the response contains the expected data structure
+  if (jsonData.data && jsonData.data.results && jsonData.data.results.length > 0) {
+    const characterName = jsonData.data.results[0].name;
+    const characterDescription = jsonData.data.results[0].description; 
+
   // Insert new bookmark
   const insertQuery = "INSERT INTO Bookmarks (dateAdded, characterID, userID) VALUES (NOW(), ?, ?)";
   try {
       await db.query(insertQuery, [characterID, userID]);
       res.status(200).json({ message: 'Character bookmarked successfully!' });
   } catch (error) {
-      console.error("Detailed Error:", error);
-      res.status(500).json({ error: "Error adding bookmark" });
+    await db.execute('INSERT INTO Characters (characterID, characterName, characterDescription) VALUES (?, ?, ?)', [characterID, characterName, characterDescription]);
+    await db.query(insertQuery, [characterID, userID]);
+      // console.error("Detailed Error:", error);
+      // res.status(500).json({ error: "Error adding bookmark" });
   }
+}
 });
+
+
 
 // Put Things in the Quizzes Table (POST: /superhero_quiz)
 // ------------------------------------------------
