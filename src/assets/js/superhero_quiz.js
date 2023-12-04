@@ -2,10 +2,12 @@ document.getElementById('quiz-form').addEventListener('submit', async function (
     console.log('Superhero Quizzes Page loaded successfully');
     const form = document.getElementById('quiz-form');
     e.preventDefault();
-
+    
+  // }
         // Collect user answers
         const formData = new FormData(form);
         const answers = {};
+      
 
         formData.forEach((value, key) => {
             answers[key] = value;
@@ -55,14 +57,21 @@ document.getElementById('quiz-form').addEventListener('submit', async function (
         // Send answers to the server for processing
         const response = await fetch(this.action, {
           method: this.method,
-          body: formData,
+          body: JSON.stringify({ result }),
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
-          },
-          window.location.href = `/result_superhero?hero=${result}&style=${heroStyleClass}`;
+          }, 
         });
+        if (response.ok) {
+          window.location.href = `/result_superhero?hero=${result}&style=${heroStyleClass}`;
+      } else {
+          // Handle errors here
+          console.error('Error submitting form');
+      }
+         
        
 
     });
+
 
