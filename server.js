@@ -767,6 +767,51 @@ const ensureCharacterExists = async (characterID) => {
 };
 
 
+// Submit Story Rating:
+
+const updateStoryQuery = `
+    UPDATE Story
+    SET averageRating = (SELECT AVG(rating) FROM StoryRating WHERE storyID = ?),
+        totalRatings = (SELECT COUNT(*) FROM StoryRating WHERE storyID = ?)
+    WHERE storyID = ?;
+`;
+
+
+
+const insertOrUpdateRatingQuery = `
+    INSERT INTO StoryRating (storyID, userID, rating, reviewDate) 
+    VALUES (?, ?, ?, ?) 
+    ON DUPLICATE KEY UPDATE 
+    rating = VALUES(rating), reviewDate = VALUES(reviewDate);
+`;
+
+app.post('/submitStoryRating', async (req, res) => {
+  const { storyID, rating } = req.body; // Extracting storyID and rating from the request body
+  const userID = req.session.userID; // Assuming userID is stored in the session
+
+  // Validate the input
+  if (!storyID || typeof rating !== 'number') {
+      return res.status(400).json({ error: "Story ID and rating are required" });
+  }
+
+  try {
+      // Current date for the reviewDate
+      const currentDate = new Date();
+
+      // Your insert query might differ based on your table structure
+      const insertQuery = "INSERT INTO StoryRating (storyID, userID, rating, reviewDate) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating);";
+      await db.query(insertQuery, [storyID, userID, rating, currentDate]);
+
+      // Optionally, you could also update the average rating and total ratings in your Stories table
+      // This would involve another query to calculate the new averages and update the Stories table
+
+      res.status(200).json({ message: "Rating submitted successfully!" });
+  } catch (error) {
+      console.error("Detailed Error:", error);
+      res.status(500).json({ message: "Error submitting rating", error: error.message });
+  }
+});
+
 
 // Submit Rating Route (POST: /submitRating)
 // -----------------------------------------
@@ -909,8 +954,25 @@ const getHeroImage = (heroStyleClass) => {
   }
 };
 
-app.post('/submit_quiz', (req, res) => {
-  const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
+app.post('/submit_quiz', async (req, res) => {
+  const { result } = req.body;
+  
+  console.log("Results", result);
+  const checkUserQuery = 'SELECT * FROM quizHero WHERE characterName = ?';
+  const [results] = await db.query(checkUserQuery, [result]);
+    console.log(results);
+    if (results.length == 0) {
+      console.log("Inserting ", result);
+      const insertQuizQuery = 'INSERT INTO quizHero (characterName, count) VALUES (?, ?)';
+      const [res] = await db.query(insertQuizQuery, [result, 1]);
+    }
+    else {
+      console.log("Updating", result);
+      const updateQuizQuery = 'UPDATE quizHero SET count = count + 1 WHERE characterName = ?'
+      const [res] = await db.query(updateQuizQuery, [result]);
+    }
+  
+    const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
   console.log('Submit');
   // Map hero results to corresponding styles
   const resultStyles = {
@@ -973,6 +1035,7 @@ app.get('/result_superhero', async (req, res) => {
     res.status(500).json({ message: "Error storing quiz result", error: error.message });
   }
 });
+
 
   // Get the style class based on the hero result
   const heroStyleClass = resultStyles[heroResult] || 'shield-style';
