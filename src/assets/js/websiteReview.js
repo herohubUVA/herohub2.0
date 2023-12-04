@@ -2,6 +2,7 @@ document.getElementById('websiteReviewForm').addEventListener('submit', async fu
     e.preventDefault();
   
     const formData = new URLSearchParams(new FormData(this)).toString();
+    console.log(formData);
     const response = await fetch(this.action, {
       method: this.method,
       body: formData,
