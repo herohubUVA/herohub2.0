@@ -1,5 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+    .intro {
+        max-width: 600px; /* Adjust the maximum width as needed */
+        margin: 0 auto; /* Center-align the box horizontally */
+        padding: 20px; /* Add padding for spacing */
+        border-radius: 5px;
+        text-align: center;
+        font-size: larger;
+    }
+
+    .form-title{
+      margin-left: 200px;
+    }
+    .contact-form {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        width: 600px;
+    }
+
+    .contact-form h2 {
+        font-size: 24px;
+        color: #333;
+    }
+
+    .center {
+      margin-left: 300px;
+    }
+
+    .contact-form label {
+        font-weight: bold;
+        margin-left: 65px;
+    }
+
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        margin-left: 65px;
+    }
+
+    .contact-form textarea {
+        height: 150px;
+    }
+
+    .contact-form button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-left: 65px;
+    }
+
+    .contact-form button:hover {
+        background-color: #0056b3;
+    }
+</style>
 
 <head>
     <meta charset="UTF-8" />
@@ -24,23 +87,27 @@
             </header>
 
             <!-- Unique Content for Support -->
+            <div class = "intro">
+              Thank you so much for visiting our website and learning all about marvel characters. 
+              This website was designed with love by Glendon Chin, Courtney Nguyen, Aaron Parson, and Kiki Wong. 
+              We would love to get your review!
+            </div>
             <div class="showcase-area">
                 <div class="container">
-                  <div class="left">
+                  <div class="center">
                     <div class="contact-form">
                       <div class="text-and-form">
-                        <h2>Website Review</h2>
+                        <h2 class = "form-title">Website Review</h2>
                         <form id="websiteReviewForm" action="/websiteReview" method="post">
                           <label for="name">Name:</label>
                           <input type="text" id="name" name="name" required><br>
                           <label for="email">Email:</label>
                           <input type="email" id="email" name="email" required><br>
-                          <label for="message">Message:</label>
+                          <label for="message">Describe your overall satisfaction with the website. How can we help you learn more about the the marvel universe? What is your likelihood to return and reccomend this website to others? </label>
                           <textarea id="message" name="message" required></textarea><br>
                           <button type="submit">Submit</button>
                         </form>
                       </div>
-                      <img class="contact-image" src="/assets/images/ducks.gif" alt="ducks" />
                     </div>
                   </div>
                 </div>
