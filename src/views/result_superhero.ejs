@@ -5,7 +5,42 @@
   <link rel="stylesheet" href="/assets/css/storyOfTheDay.css" />
   <link rel="stylesheet" href="/assets/css/navbar.css">
   <!-- ... your head section remains unchanged ... -->
+  
   <style>
+    
+    .home-button {
+      /* Your styling here */
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      color: #007bff;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .home-button:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    h1.heroResult {
+        font-size: 3em; /* Larger font size 
+        color: #DAA520; /* Gold color, adjust as needed */
+        text-shadow: 2px 2px 4px #000000; /* Black shadow for depth */
+      }
+      
+      img {
+        width: 400px; /* Existing styles... */
+        height: auto;
+        /* ... */
+      }
+  
     body {
       /* Default styles for the body */
       text-align: center;
@@ -48,7 +83,6 @@
     }
 
     body.shield-style {
-        background-color: #ca4646; /* Example style for Black Widow */
         color: #5b0808;
 
     }
@@ -70,11 +104,12 @@
   
   <main>
     <!-- Your existing HTML content here -->
-    <h1>Your Hero Result:</h1>
+    <h1 class = "heroResult">Your Hero Result:</h1>
     <p>The hero for you is: <%= heroResult %></p>
+    <a href="/Home" class="home-button">Return to Home</a>
   <img src="<%= heroImageUrl %>">
   </main>
- 
+
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
   <script src="/assets/js/themeToggler.js"></script>
   <script src="/assets/js/audioControls.js"></script>
