@@ -1,9 +1,7 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.getElementById('quiz-form').addEventListener('submit', async function (e) {
     console.log('Superhero Quizzes Page loaded successfully');
     const form = document.getElementById('quiz-form');
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+    e.preventDefault();
 
         // Collect user answers
         const formData = new FormData(form);
@@ -51,25 +49,20 @@ document.addEventListener("DOMContentLoaded", function() {
         // Now you can use the 'result' variable as needed
         // console.log('Grooop');
         // res.redirect(`/result?hero=${encodeURIComponent(result)}`); 
-        window.location.href = `/result_superhero?hero=${result}&style=${heroStyleClass}`;
+        // 
       
 
         // Send answers to the server for processing
-        fetch('/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ answers }), // Send answers directly without wrapping
-        })
-        // .then(response => response.json())
-        .then(data => {
-            // Display the result on the page
-            console.log('WHOOP WHOOP');
-            const resultContainer = document.getElementById('result');
-            resultContainer.textContent = `You are: ${data.result}`; 
-           
-        })
-        .catch(error => console.error('Error:', error));
+        const response = await fetch(this.action, {
+          method: this.method,
+          body: formData,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+          },
+          window.location.href = `/result_superhero?hero=${result}&style=${heroStyleClass}`;
+        });
+       
+
     });
-});
+

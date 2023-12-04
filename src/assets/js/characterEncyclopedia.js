@@ -161,12 +161,12 @@ jsonData.data["results"].forEach((element) => {
     const bookmarkButton = document.querySelector('#bookmark-button');
     if(bookmarkButton) {
       bookmarkButton.addEventListener('click', function(event){
-        if(event.target.classList.contains('bookmark-button')){
-          customAlert("Bookmark Added!")
-        }
-        else {
-          customAlert("Character is already bookmarked!")
-        }
+        // if(event.target.classList.contains('bookmark-button')){
+        //   customAlert("Bookmark Added!")
+        // }
+        // else {
+        //   customAlert("Character is already bookmarked!")
+        // }
       })
     }
 

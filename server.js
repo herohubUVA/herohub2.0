@@ -883,9 +883,6 @@ app.get('/team_quiz', (req, res) => {
   res.render('team_quiz', {user: req.user });
 });
 
-app.get('/nemisis_quiz', (req, res) => {
-  res.render('nemisis_quiz', {user: req.user });
-});
 
 
 
@@ -912,6 +909,28 @@ const getHeroImage = (heroStyleClass) => {
   }
 };
 
+app.post('/submit_quiz', (req, res) => {
+  const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
+  console.log('Submit');
+  // Map hero results to corresponding styles
+  const resultStyles = {
+    'Captain America': 'captain-america-style',
+    'Iron Man': 'iron-man-style',
+    'Hulk': 'hulk-style',
+    'Scarlett Witch': 'witch-style',
+    'Spiderman': 'spider-style',
+    'Black Widow': 'widow-style',
+    'Thor': 'thor-style',
+  };
+
+
+  // Get the style class based on the hero result
+  const heroStyleClass = resultStyles[heroResult] || 'shield-style';
+  const heroImageUrl = getHeroImage(heroStyleClass);
+  // Render the result page with the hero result and style class
+
+  res.render('result_superhero', { heroResult, heroStyleClass, heroImageUrl});
+});
 
 app.get('/result_superhero', (req, res) => {
   const heroResult = req.query.hero || 'Shield Agent'; // Default to 'Shield Agent' if no hero result is provided
@@ -935,9 +954,6 @@ app.get('/result_superhero', (req, res) => {
 
   res.render('result_superhero', { heroResult, heroStyleClass, heroImageUrl});
 });
-
-
-
 
 
 // Add Bookmark Route (POST: /addBookmark)
@@ -974,6 +990,28 @@ app.post('/addBookmark', async (req, res) => {
   const insertQuery = "INSERT INTO Bookmarks (dateAdded, characterID, userID) VALUES (NOW(), ?, ?)";
   try {
       await db.query(insertQuery, [characterID, userID]);
+      res.status(200).json({ message: 'Character bookmarked successfully!' });
+  } catch (error) {
+      console.error("Detailed Error:", error);
+      res.status(500).json({ error: "Error adding bookmark" });
+  }
+});
+
+// Put Things in the Quizzes Table (POST: /superhero_quiz)
+// ------------------------------------------------
+app.post('/superhero_quiz', async (req, res) => {
+  console.log("post superhero_quiz")
+  const { characterName } = req.body;
+  const userID = req.user ? req.user.id : null;
+
+  if (!userID) {
+      return res.status(401).json({ error: 'User not authenticated' });
+  }
+
+  // Insert new bookmark
+  const insertQuery = "INSERT INTO quizHero (userID, characterName) VALUES (?, ?)";
+  try {
+      await db.query(insertQuery, [userID, characterName]);
       res.status(200).json({ message: 'Character bookmarked successfully!' });
   } catch (error) {
       console.error("Detailed Error:", error);
@@ -1029,8 +1067,6 @@ app.get('/fetchBookmarks', async (req, res) => {
       res.status(500).json({ error: "Error fetching bookmarks" });
   }
 });
-
-
 
 
 // Highest and Lowest Rated Characters Route (GET: /api/highest-lowest-rated-characters)
