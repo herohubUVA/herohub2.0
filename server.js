@@ -172,7 +172,7 @@ app.get('/StoryOfTheDay', async (req, res) => {
       const [rows] = await db.execute('SELECT * FROM evergreen_stories ORDER BY RAND() LIMIT 1');
       story = rows[0];
   }
-
+  console.log(story);
   if (!story) {
       // If still no story, handle the error gracefully
       console.log("Story is still not defined after fetching from DB:", story);
@@ -866,8 +866,8 @@ const insertOrUpdateRatingQuery = `
 
 app.post('/submitStoryRating', async (req, res) => {
   const { storyID, rating } = req.body; // Extracting storyID and rating from the request body
-  const userID = req.session.userID; // Assuming userID is stored in the session
-
+  console.log("StoryID", storyID);
+  console.log("Rating", rating);
   // Validate the input
   if (!storyID || typeof rating !== 'number') {
       return res.status(400).json({ error: "Story ID and rating are required" });
@@ -1019,7 +1019,7 @@ const getHeroImage = (heroStyleClass) => {
     case 'iron-man-style':
       return 'assets/images/Ironman_quiz.jpeg';
     case 'hulk-style':
-      return 'asset/images/hulk_quiz.jpg';
+      return 'assets/images/hulk_quiz.jpeg';
     case 'widow-style':
       return 'assets/images/blackwidow_quiz.jpeg';
     case 'spider-style':
